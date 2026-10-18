@@ -1,0 +1,4 @@
+Pon aquí las fotos de los lugares.
+Cada foto se llama con el número (id) del lugar, por ejemplo 0.jpg, 1.jpg, 25.jpg.
+La lista con los números está en el archivo lugares.csv.
+Formato: JPG, de unos 1200 píxeles de ancho.
