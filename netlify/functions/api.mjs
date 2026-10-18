@@ -1,5 +1,5 @@
-// Servidor de "Chiloé a tu Manera" (V 1.13).
-// Maneja cuentas, perfiles (administrador / usuario registrado), secciones, lugares, fotos, sugerencias, favoritos y mareas.
+// Servidor de "Chiloé a tu Manera" (V 1.16).
+// Maneja cuentas, perfiles (administrador / usuario registrado), secciones, lugares, fotos, sugerencias, favoritos, mareas y recorridos.
 // Los datos se guardan en Netlify Blobs. Quien no inicia sesión es "visualizador": solo puede mirar.
 import { getStore } from '@netlify/blobs';
 import { scrypt as _scrypt, randomBytes, timingSafeEqual, createHmac, createHash } from 'node:crypto';
@@ -189,6 +189,69 @@ function cleanTides(input) {
   return out.sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));
 }
 
+/* ---------- recorridos con camino (V 1.15) ---------- */
+// El administrador puede crear y editar recorridos desde la web. Se guarda todo junto: la lista de recorridos y los tramos
+// del camino (líneas codificadas). Si no hay nada guardado, la app usa public/rutas.json.
+const CRUCES = [null, 'barco', 'lancha'];
+const inChiloe = (la, lo) => la >= BOUNDS.latMin && la <= BOUNDS.latMax && lo >= BOUNDS.lngMin && lo <= BOUNDS.lngMax;
+function coord(v, min, max, label) {
+  const n = numOrNull(v, min, max, label);
+  if (n === null) throw new HttpError(400, label + ' es obligatoria.');
+  return Math.round(n * 1e6) / 1e6;
+}
+function cleanTramo(t, id) {
+  if (!t || typeof t !== 'object') throw new HttpError(400, 'Falta un tramo del camino (' + id + ').');
+  if (t.t === 'b') {
+    const pt = (a) => {
+      if (!Array.isArray(a) || a.length !== 2) throw new HttpError(400, 'Un tramo de lancha no tiene sus dos puntos.');
+      return [coord(a[0], BOUNDS.latMin, BOUNDS.latMax, 'La latitud'), coord(a[1], BOUNDS.lngMin, BOUNDS.lngMax, 'La longitud')];
+    };
+    return { t: 'b', a: pt(t.a), b: pt(t.b) };
+  }
+  if (t.t !== 'c' && t.t !== 'f') throw new HttpError(400, 'Un tramo tiene un tipo desconocido.');
+  if (typeof t.e !== 'string' || !/^[?-~]{4,80000}$/.test(t.e)) throw new HttpError(400, 'El camino de un tramo no es válido.');
+  return { t: t.t, e: t.e };
+}
+export function cleanRutas(input) {
+  const b = input || {};
+  if (!Array.isArray(b.rutas) || b.rutas.length > 40) throw new HttpError(400, 'Los recorridos deben ser una lista de hasta 40.');
+  if (!b.tramos || typeof b.tramos !== 'object' || Array.isArray(b.tramos)) throw new HttpError(400, 'Faltan los tramos del camino.');
+  const ids = new Set(), used = new Set(), rutas = [];
+  for (const r of b.rutas) {
+    if (!r || typeof r !== 'object') throw new HttpError(400, 'Un recorrido tiene formato incorrecto.');
+    const id = String(r.id || '');
+    if (!/^[a-z0-9-]{1,40}$/.test(id)) throw new HttpError(400, 'Un recorrido tiene un identificador no válido.');
+    if (ids.has(id)) throw new HttpError(400, 'Hay dos recorridos con el mismo identificador.');
+    ids.add(id);
+    const nombre = clean(r.nombre, 80);
+    if (nombre.length < 2) throw new HttpError(400, 'Todo recorrido necesita un nombre.');
+    const cruce = r.cruce === undefined || r.cruce === '' ? null : r.cruce;
+    if (CRUCES.indexOf(cruce) < 0) throw new HttpError(400, 'El tipo de cruce no es válido.');
+    if (!Array.isArray(r.paradas) || r.paradas.length < 2 || r.paradas.length > 15) throw new HttpError(400, 'Un recorrido necesita entre 2 y 15 paradas.');
+    const paradas = r.paradas.map((s) => {
+      const n = clean(s && s.n, 80);
+      if (n.length < 1) throw new HttpError(400, 'Todas las paradas necesitan un nombre.');
+      const out = { n, lat: coord(s.lat, BOUNDS.latMin, BOUNDS.latMax, 'La latitud de una parada'), lng: coord(s.lng, BOUNDS.lngMin, BOUNDS.lngMax, 'La longitud de una parada') };
+      const lugar = clean(s.lugar, 120), nota = clean(s.nota, 300);
+      if (lugar) out.lugar = lugar;
+      if (nota) out.nota = nota;
+      return out;
+    });
+    if (!Array.isArray(r.tramos) || r.tramos.length < 1 || r.tramos.length > 40) throw new HttpError(400, 'Un recorrido necesita su camino calculado.');
+    const tramos = r.tramos.map((tid) => {
+      tid = String(tid);
+      if (!/^[A-Za-z0-9_-]{1,60}$/.test(tid) || !Object.prototype.hasOwnProperty.call(b.tramos, tid)) throw new HttpError(400, 'Un recorrido usa un tramo que no existe.');
+      used.add(tid);
+      return tid;
+    });
+    const km = numOrNull(r.km, 0, 3000, 'Los kilómetros'), min = numOrNull(r.min, 0, 5000, 'Los minutos');
+    rutas.push({ id, nombre, resumen: clean(r.resumen, 300), km: Math.round((km || 0) * 10) / 10, min: Math.round(min || 0), cruce, tramos, paradas });
+  }
+  const tramos = {};
+  for (const tid of used) tramos[tid] = cleanTramo(b.tramos[tid], tid);
+  return { rutas, tramos };
+}
+
 /* ---------- mareas siempre al día ---------- */
 // Se entregan desde AYER hasta 30 días después de hoy (hora de Chile). Los días que el administrador cargó a mano
 // (o los de la tabla inicial) se respetan; todos los demás se calculan solos (mareas-calc.mjs).
@@ -364,6 +427,10 @@ export function createApi(kv, opts) {
       const cur = await readPlaces();
       const sec = await readCats();
       return send(200, { places: cur.places, cats: sec.cats });
+    }
+    if (method === 'GET' && path === '/rutas') {
+      const r = await data.getJSON('rutas');
+      return send(200, r ? { custom: true, rutas: r.data.rutas, tramos: r.data.tramos, at: r.data.at } : { custom: false });
     }
     if (method === 'GET' && path === '/mareas') {
       const r = await data.getJSON('mareas');
@@ -568,6 +635,17 @@ export function createApi(kv, opts) {
       const w = await data.setJSON('secciones', { cats, at: now() }, cur.etag ? { onlyIfMatch: cur.etag } : { onlyIfNew: true });
       if (w && w.modified === false) throw new HttpError(409, 'Otra persona cambió las secciones al mismo tiempo. Recarga la página e inténtalo de nuevo.');
       return send(200, { cats, places: (await readPlaces()).places });
+    }
+    if (method === 'PUT' && path === '/rutas') {
+      await needAdmin(req);
+      const b = cleanRutas(await readBody(req));
+      await data.setJSON('rutas', { rutas: b.rutas, tramos: b.tramos, at: now() });
+      return send(200, { custom: true, rutas: b.rutas, tramos: b.tramos });
+    }
+    if (method === 'DELETE' && path === '/rutas') {
+      await needAdmin(req);
+      await data.del('rutas');
+      return send(200, { custom: false });
     }
     if (method === 'PUT' && path === '/mareas') {
       await needAdmin(req);

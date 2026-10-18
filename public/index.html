@@ -310,7 +310,7 @@ details.sg[open]>summary{margin-bottom:10px}
 input[type=file]{width:100%;font:inherit;font-size:14px;color:var(--muted);padding:8px;background:var(--surface);border:1px dashed var(--line2);border-radius:14px}
 input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right:10px;padding:10px 14px;border:0;border-radius:10px;background:var(--accent);color:var(--on-accent);cursor:pointer;min-height:40px}
 
-/* recorridos (V 1.14) */
+/* recorridos (V 1.16) */
 .rintro{margin:6px 0 14px;color:var(--muted);font-size:15px}
 .rcard{display:flex;gap:13px;align-items:center;width:100%;margin:0 0 10px;padding:14px;border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:var(--shadow-s);text-align:left;transition:transform .12s}
 .rcard:active{transform:scale(.99)}
@@ -340,6 +340,21 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
 .rfic{flex:none;height:36px;margin-right:4px;padding:0 13px;border-radius:18px;border:1px solid var(--line2);background:var(--surface);font-weight:600;font-size:13px}
 .rh{margin:20px 0 4px;font-family:var(--f-display);font-size:15px;font-weight:700;color:var(--muted)}
 .racts{display:grid;gap:10px;margin:18px 0 6px}
+.radm{margin:0 0 14px;display:grid;gap:10px}
+.rest{padding:12px 0;border-bottom:1px solid var(--line)}
+.rest:last-child{border-bottom:0}
+.rest-h{display:flex;gap:8px;align-items:center}
+.rest-h input{flex:1 1 auto;min-width:0;height:44px}
+.rest-h input[readonly]{background:var(--surface2)}
+.rest .rnum{margin-top:0}
+.rbt{flex:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--line2);background:var(--surface);font-size:15px;line-height:1}
+.rbt:active{transform:scale(.96)}
+.rbt:disabled{opacity:.3}
+.rbt.x{color:var(--danger)}
+.rest input.nota{height:40px;margin-top:8px;font-size:14px}
+.rest-f{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;font-size:13px;color:var(--muted)}
+.rest-f button{flex:none;height:36px;padding:0 14px;border-radius:18px;border:1px solid var(--line2);background:var(--surface);font-weight:600;font-size:13px;color:var(--ink)}
+.rchip.cust{background:color-mix(in srgb,var(--accent) 14%,#fff);color:var(--accent)}
 .rn{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;font-family:var(--f-display);font-weight:800;font-size:14px;transition:transform .15s}
 .rn.s{background:var(--ink)}
 .rn.sel{transform:scale(1.25);box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 30%,transparent),0 4px 12px rgba(0,0,0,.4)}
@@ -407,7 +422,7 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
     <button type="button" class="btn soft" id="guest" style="margin-top:10px">Solo mirar, sin cuenta</button>
     <p class="note">Sin cuenta puedes ver el mapa, los lugares y las mareas. Con una cuenta también guardas favoritos en todos tus aparatos y puedes sugerir lugares.</p>
     <button type="button" class="linkbtn" id="setup-link" hidden>Primera vez: configurar al administrador</button>
-    <div class="ver">V 1.15</div>
+    <div class="ver">V 1.16</div>
   </div>
 </section>
 
@@ -514,6 +529,25 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
     </form>
   </div>
 </section>
+<section id="rtedit" class="ovl" hidden aria-label="Crear o editar recorrido">
+  <div class="ovl-top gut"><button type="button" class="back" id="re-back"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Volver</button><h2 id="re-title">Recorrido</h2></div>
+  <div class="ovl-body gut">
+    <form id="re-form" novalidate>
+      <div class="fl"><label for="re-name">Nombre del recorrido *</label><input id="re-name" type="text" maxlength="80" autocomplete="off" placeholder="Ej: Ruta de las iglesias"></div>
+      <div class="fl"><label for="re-sum">Descripción corta</label><textarea id="re-sum" maxlength="300" placeholder="Qué se ve en este recorrido"></textarea></div>
+      <div class="sg">
+        <h3>Paradas</h3>
+        <div class="sm">Siempre sale desde Castro. Usa las flechas para cambiar el orden. El camino se calcula solo al guardar.</div>
+        <div id="re-stops"></div>
+        <div class="fl" style="margin-top:12px"><label for="re-add">Agregar un lugar de la guía</label><select id="re-add"></select></div>
+        <div class="acts"><button type="button" class="btn" id="re-addmap">Agregar un punto del mapa</button></div>
+      </div>
+      <div id="re-msg" class="fmsg" role="alert" aria-live="polite"></div>
+      <button type="submit" class="btn main" id="re-go" style="width:100%">Calcular camino y guardar</button>
+      <button type="button" class="btn" id="re-del" style="width:100%;margin-top:10px" hidden>Borrar este recorrido</button>
+    </form>
+  </div>
+</section>
 <section id="picker" class="ovl" hidden aria-label="Elegir ubicación en el mapa">
   <div class="ovl-top gut"><button type="button" class="back" id="pk-back"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Volver</button><h2>Elegir ubicación</h2></div>
   <div class="pk-wrap"><div id="pk-map" role="application" aria-label="Mapa para elegir la ubicación"></div><div class="pk-pin" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11zM12 7.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 1 0 0-5z" fill-rule="evenodd"/></svg></div></div>
@@ -546,7 +580,7 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
     <button type="button" class="mi" id="accbtn" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a4 4 0 1 0 0 8 4 4 0 1 0 0-8zM4 20a8 8 0 0 1 16 0"/></svg>Mi cuenta</button>
     <button type="button" class="mi" id="loginbtn" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4h4v16h-4M8 8l-4 4 4 4M4 12h11"/></svg>Crear cuenta o entrar</button>
     <button type="button" class="mi" id="out" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/></svg>Cerrar sesión</button>
-    <p class="credit">V 1.15 · Mapa © colaboradores de OpenStreetMap · Costa: chile-geojson · Leaflet · Mareas: TICON-4 (CC BY 4.0) y Neaps</p>
+    <p class="credit">V 1.16 · Mapa © colaboradores de OpenStreetMap · Costa: chile-geojson · Leaflet · Mareas: TICON-4 (CC BY 4.0) y Neaps</p>
   </div>
 </section>
 </main>
@@ -864,15 +898,22 @@ function choose(id,pan){
 }
 
 
-/* ---------- recorridos (V 1.14) ---------- */
+/* ---------- recorridos (V 1.16) ---------- */
 var rt=null,rlayer=null,RUTAS=null,rtSel=null,ROUTE_COLOR='#0E5A6B';
 function decPoly(str){var i=0,la=0,lo=0,out=[];while(i<str.length){var b,sh=0,r=0;do{b=str.charCodeAt(i++)-63;r|=(b&31)<<sh;sh+=5;}while(b>=32);la+=(r&1)?~(r>>1):(r>>1);sh=0;r=0;do{b=str.charCodeAt(i++)-63;r|=(b&31)<<sh;sh+=5;}while(b>=32);lo+=(r&1)?~(r>>1):(r>>1);out.push([la/1e5,lo/1e5]);}return out;}
 function fmtKm(n){return n.toFixed(1).replace('.',',')+' km';}
 function fmtMin(m){return m<60?m+' min':Math.floor(m/60)+' h'+(m%60?' '+(m%60)+' min':'');}
 function cruceTxt(c){return c==='barco'?'Cruce en barco':c==='lancha'?'Cruce en lancha':'';}
-function loadRutas(){
-  if(RUTAS)return Promise.resolve(RUTAS);
-  return fetch("rutas.json?v=1.14").then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.json();}).then(function(j){RUTAS=j;return j;});
+var RUTAS_BASE=null;
+function loadRutas(force){
+  if(RUTAS&&!force)return Promise.resolve(RUTAS);
+  var base=RUTAS_BASE?Promise.resolve(RUTAS_BASE):fetch("rutas.json?v=1.16").then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.json();}).then(function(j){RUTAS_BASE=j;return j;});
+  return base.then(function(b){
+    return api('GET','/rutas').then(function(g){return g&&g.custom&&g.rutas?{custom:true,rutas:g.rutas,tramos:g.tramos}:null;},function(){return null;}).then(function(c){
+      RUTAS=c||{custom:false,rutas:b.rutas.map(function(r){return JSON.parse(JSON.stringify(r));}),tramos:b.tramos};
+      return RUTAS;
+    });
+  });
 }
 function rchips(r){
   var h='<span class="rchip">'+fmtKm(r.km)+'</span><span class="rchip">≈ '+fmtMin(r.min)+'</span>';
@@ -882,6 +923,7 @@ function rchips(r){
 function renderRoutes(){
   var list=RUTAS.rutas.slice().sort(function(a,b){return a.km-b.km;});
   var h='<p class="rintro">Elige un recorrido para ver el camino en el mapa y los lugares donde pasar. Todos salen desde Castro.</p>';
+  if(isAdm())h+='<div class="radm"><button type="button" class="btn main" data-rnew="1">'+svg('M12 5v14M5 12h14')+'Crear un recorrido</button>'+(RUTAS.custom?'<button type="button" class="btn" data-rreset="1">Volver a los recorridos originales</button>':'')+'</div>';
   h+=list.map(function(r){
     return '<button type="button" class="rcard" data-route="'+esc(r.id)+'"><span class="ico">'+svg('M6 15.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 1 0 0-5zM18 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 1 0 0-5zM8.5 18H16a3 3 0 0 0 0-6H8a3 3 0 0 1 0-6h7.5')+'</span><span class="nm"><b>'+esc(r.nombre)+'</b><p>'+esc(r.resumen)+'</p><span class="rchips" style="margin:0">'+rchips(r)+'<span class="rchip">'+r.paradas.length+' paradas</span></span></span></button>';
   }).join('');
@@ -987,8 +1029,185 @@ function renderRoute(){
     return '<div class="rstop'+(rtSel===i?' sel':'')+'" data-rs="'+i+'"><button type="button" class="rmain" data-rstop="'+i+'"><span class="rnum'+(i===0?' s':'')+'">'+(i+1)+'</span><span style="min-width:0"><b>'+esc(s.n)+'</b>'+(s.nota?'<span class="t">'+esc(s.nota)+'</span>':'')+'</span></button>'+(pl?'<button type="button" class="rfic" data-open="'+esc(pl.id)+'">Ficha</button>':'')+'</div>';
   }).join('');
   if(r.near.length){h+='<h3 class="rh">Lugares cerca del camino</h3>'+r.near.map(card).join('');}
-  h+='<div class="racts"><a class="btn main" target="_blank" rel="noopener" href="'+esc(gmapsUrl(r))+'">'+svg(IC.nav)+'Abrir en Google Maps</a><button type="button" class="btn soft" data-rfit="1">'+svg(IC.pin)+'Ver todo el camino</button><button type="button" class="btn" data-rexit="1">Salir del recorrido</button></div>';
+  h+='<div class="racts"><a class="btn main" target="_blank" rel="noopener" href="'+esc(gmapsUrl(r))+'">'+svg(IC.nav)+'Abrir en Google Maps</a><button type="button" class="btn soft" data-rfit="1">'+svg(IC.pin)+'Ver todo el camino</button><button type="button" class="btn" data-rexit="1">Salir del recorrido</button>'+(isAdm()?'<button type="button" class="btn soft" data-redit="'+esc(r.id)+'">Editar este recorrido</button>':'')+'</div>';
   var sc=$('list').scrollTop;$('list').innerHTML=h;$('list').scrollTop=sc;
+}
+
+/* ---------- editor de recorridos (solo administrador, V 1.16) ---------- */
+var re=null;
+function slugId(t){return String(t||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,30).replace(/-+$/,'')||'recorrido';}
+function sigStops(a){return a.map(function(q){return (+q.lat).toFixed(5)+','+(+q.lng).toFixed(5);}).join('|');}
+function plainRuta(r){
+  return {id:r.id,nombre:r.nombre,resumen:r.resumen||'',km:r.km,min:r.min,cruce:r.cruce||null,tramos:r.tramos.slice(),
+    paradas:r.paradas.map(function(q){var o={n:q.n,lat:q.lat,lng:q.lng};if(q.lugar)o.lugar=q.lugar;if(q.nota)o.nota=q.nota;return o;})};
+}
+function encPoly(pts){
+  var la=0,lo=0,out='';
+  function e(v){v=v<0?~(v<<1):(v<<1);var o='';while(v>=32){o+=String.fromCharCode((32|(v&31))+63);v>>=5;}return o+String.fromCharCode(v+63);}
+  pts.forEach(function(q){var a=Math.round(q[0]*1e5),b=Math.round(q[1]*1e5);out+=e(a-la)+e(b-lo);la=a;lo=b;});
+  return out;
+}
+function simplify(pts,tol){
+  if(pts.length<3)return pts;
+  var keep=new Array(pts.length),st=[[0,pts.length-1]];keep[0]=keep[pts.length-1]=true;
+  while(st.length){
+    var r=st.pop(),a=r[0],b=r[1],best=0,at=-1;
+    for(var i=a+1;i<b;i++){var d=segDist(pts[a],pts[b],pts[i]);if(d>best){best=d;at=i;}}
+    if(at>0&&best>tol){keep[at]=true;st.push([a,at],[at,b]);}
+  }
+  return pts.filter(function(_,i){return keep[i];});
+}
+function osrmLeg(a,b){
+  var u='https://router.project-osrm.org/route/v1/driving/'+a.lng+','+a.lat+';'+b.lng+','+b.lat+'?overview=false&steps=true&geometries=polyline';
+  return fetch(u).then(function(r){return r.json().catch(function(){return {};});}).then(function(j){
+    if(j&&j.code==='Ok'&&j.routes&&j.routes[0])return j.routes[0];
+    if(j&&(j.code==='NoRoute'||j.code==='NoSegment'))return null;
+    throw new Error('osrm');
+  });
+}
+function haversine(a,b){var k=Math.PI/180,x=(b[1]-a[1])*k*Math.cos((a[0]+b[0])/2*k),y=(b[0]-a[0])*k;return Math.hypot(x,y)*6371000;}
+// Calcula el camino de una lista de paradas: devuelve los tramos nuevos, km, minutos y tipo de cruce.
+function computeRoute(ps,id,progress){
+  var defs={},ids=[],km=0,min=0,ferry=false,boat=false,straight=0,n=0,chain=Promise.resolve();
+  function add(t,pts){
+    var tid='u'+id+'-'+(++n);ids.push(tid);
+    defs[tid]=t==='b'?{t:'b',a:pts[0],b:pts[pts.length-1]}:{t:t,e:encPoly(simplify(pts,6))};
+  }
+  for(var i=0;i<ps.length-1;i++)(function(i){
+    chain=chain.then(function(){
+      progress('Calculando el camino '+(i+1)+' de '+(ps.length-1)+'…');
+      return osrmLeg(ps[i],ps[i+1]);
+    }).then(function(rt){
+      if(!rt){ // sin camino por tierra ni barco: se dibuja una línea recta (lancha)
+        var d=haversine([ps[i].lat,ps[i].lng],[ps[i+1].lat,ps[i+1].lng]);
+        add('b',[[ps[i].lat,ps[i].lng],[ps[i+1].lat,ps[i+1].lng]]);boat=true;straight++;km+=d/1000;min+=d/1000/20*60;return;
+      }
+      km+=rt.distance/1000;min+=rt.duration/60;
+      var cur=null;
+      rt.legs.forEach(function(lg){lg.steps.forEach(function(st){
+        var t=st.mode==='ferry'?'f':'c',pts=decPoly(st.geometry);
+        if(t==='f')ferry=true;
+        if(cur&&cur.t===t){cur.pts=cur.pts.concat(pts.slice(1));}
+        else{if(cur)add(cur.t,cur.pts);cur={t:t,pts:pts};}
+      });});
+      if(cur)add(cur.t,cur.pts);
+    });
+  })(i);
+  return chain.then(function(){
+    return {tramos:ids,defs:defs,km:Math.round(km*10)/10,min:Math.round(min),cruce:ferry?'barco':boat?'lancha':null,straight:straight};
+  });
+}
+function guideOptions(){
+  var by={};ALL.forEach(function(p){if(p.lat!=null&&p.sub!=='Recorrido'){(by[p.town]=by[p.town]||[]).push(p);}});
+  var h='<option value="">Elegir un lugar…</option>';
+  Object.keys(by).sort().forEach(function(t){
+    h+='<optgroup label="'+esc(t)+'">'+by[t].sort(function(a,b){return a.name.localeCompare(b.name);}).map(function(p){return '<option value="'+esc(p.id)+'">'+esc(p.name)+'</option>';}).join('')+'</optgroup>';
+  });
+  return h;
+}
+function openRouteEditor(id){
+  if(!isAdm())return;
+  loadRutas().then(function(){
+    var r=null;if(id)RUTAS.rutas.forEach(function(x){if(x.id===id)r=x;});
+    var castro=RUTAS.rutas.length&&RUTAS.rutas[0].paradas[0]?RUTAS.rutas[0].paradas[0]:{n:'Castro (Plaza de Armas)',lat:-42.4802,lng:-73.7634,nota:'Punto de partida'};
+    re={id:r?r.id:null,src:r,sig:r?sigStops(r.paradas):'',
+      paradas:r?plainRuta(r).paradas:[{n:castro.n,lat:castro.lat,lng:castro.lng,nota:'Punto de partida'}]};
+    $('re-title').textContent=r?'Editar recorrido':'Nuevo recorrido';
+    $('re-name').value=r?r.nombre:'';$('re-sum').value=r?r.resumen||'':'';$('re-msg').textContent='';
+    $('re-add').innerHTML=guideOptions();$('re-del').hidden=!r;$('re-go').textContent='Calcular camino y guardar';$('re-go').disabled=false;
+    reRender();openOvl('rtedit','#re-name');$('rtedit').querySelector('.ovl-body').scrollTop=0;
+  }).catch(function(){toast('No pudimos cargar los recorridos. Revisa tu conexión.');});
+}
+function reRender(){
+  var last=re.paradas.length-1;
+  $('re-stops').innerHTML=re.paradas.map(function(q,i){
+    var first=i===0;
+    return '<div class="rest" data-i="'+i+'"><div class="rest-h"><span class="rnum'+(first?' s':'')+'">'+(i+1)+'</span>'+
+      '<input type="text" data-f="n" maxlength="80" autocomplete="off" aria-label="Nombre de la parada '+(i+1)+'" value="'+esc(q.n)+'"'+(first?' readonly':'')+'>'+
+      (first?'':'<button type="button" class="rbt" data-up="1" aria-label="Subir la parada '+(i+1)+'"'+(i===1?' disabled':'')+'>▲</button><button type="button" class="rbt" data-dn="1" aria-label="Bajar la parada '+(i+1)+'"'+(i===last?' disabled':'')+'>▼</button><button type="button" class="rbt x" data-rm="1" aria-label="Quitar la parada '+(i+1)+'">✕</button>')+'</div>'+
+      (first?'':'<input type="text" class="nota" data-f="nota" maxlength="300" autocomplete="off" placeholder="Nota (opcional): qué ver o hacer aquí" aria-label="Nota de la parada '+(i+1)+'" value="'+esc(q.nota||'')+'">')+
+      '<div class="rest-f"><span>'+(first?'Punto de partida':q.lugar?'Lugar de la guía':'Punto elegido en el mapa')+'</span>'+(first?'':'<button type="button" data-mv="1">Mover en el mapa</button>')+'</div></div>';
+  }).join('');
+}
+function reAdd(q){
+  if(re.paradas.length>=15){$('re-msg').textContent='Un recorrido puede tener hasta 15 paradas.';return false;}
+  $('re-msg').textContent='';re.paradas.push(q);reRender();
+  var rows=$('re-stops').querySelectorAll('.rest');rows[rows.length-1].scrollIntoView({block:'center'});
+  return true;
+}
+$('re-stops').addEventListener('input',function(e){
+  var t=e.target,row=t.closest('.rest');if(!row||!t.getAttribute('data-f'))return;
+  var q=re.paradas[+row.getAttribute('data-i')],f=t.getAttribute('data-f');
+  if(f==='nota'){if(t.value.trim())q.nota=t.value;else delete q.nota;}else q.n=t.value;
+});
+$('re-stops').addEventListener('click',function(e){
+  var t=e.target.closest('button');if(!t)return;
+  var row=t.closest('.rest'),i=+row.getAttribute('data-i'),a=re.paradas;
+  if(t.hasAttribute('data-up')&&i>1){var x=a[i];a[i]=a[i-1];a[i-1]=x;reRender();}
+  else if(t.hasAttribute('data-dn')&&i<a.length-1){var y=a[i];a[i]=a[i+1];a[i+1]=y;reRender();}
+  else if(t.hasAttribute('data-rm')&&i>0){a.splice(i,1);reRender();}
+  else if(t.hasAttribute('data-mv')){
+    var q=a[i];
+    openPicker([q.lat,q.lng],15,function(la,ln){q.lat=+la.toFixed(6);q.lng=+ln.toFixed(6);delete q.lugar;reRender();});
+  }
+});
+$('re-add').addEventListener('change',function(){
+  var p=BYID[this.value];this.value='';if(!p)return;
+  reAdd({n:p.name,lat:p.lat,lng:p.lng,lugar:p.name});
+});
+$('re-addmap').addEventListener('click',function(){
+  var l=re.paradas[re.paradas.length-1];
+  openPicker([l.lat,l.lng],12,function(la,ln){
+    if(reAdd({n:'Nuevo punto',lat:+la.toFixed(6),lng:+ln.toFixed(6)})){var inp=$('re-stops').querySelector('.rest:last-child input[data-f="n"]');if(inp){inp.focus();inp.select();}}
+  });
+});
+$('re-back').addEventListener('click',function(){closeOvl('rtedit');});
+function saveRoute(e){
+  e.preventDefault();
+  var msg=$('re-msg'),btn=$('re-go'),ps=re.paradas;msg.textContent='';
+  var nombre=$('re-name').value.trim().replace(/\s+/g,' ');
+  if(nombre.length<2){msg.textContent='Escribe el nombre del recorrido.';return;}
+  if(ps.length<2){msg.textContent='Agrega al menos una parada además de Castro.';return;}
+  for(var i=0;i<ps.length;i++){ps[i].n=ps[i].n.trim();if(!ps[i].n){msg.textContent='La parada '+(i+1)+' necesita un nombre.';return;}}
+  var id=re.id;
+  if(!id){var base=slugId(nombre),k=1;id=base;while(RUTAS.rutas.some(function(x){return x.id===id;}))id=base.slice(0,26)+'-'+(++k);}
+  var same=!!re.src&&sigStops(ps)===re.sig,label='Calcular camino y guardar';
+  btn.disabled=true;
+  var work=same?Promise.resolve({tramos:re.src.tramos.slice(),defs:{},km:re.src.km,min:re.src.min,cruce:re.src.cruce||null,straight:0}):computeRoute(ps,id,function(t){btn.textContent=t;});
+  work.catch(function(){throw new Error('No pudimos calcular el camino. Revisa tu conexión e inténtalo otra vez.');}).then(function(c){
+    btn.textContent='Guardando…';
+    var nuevo={id:id,nombre:nombre,resumen:$('re-sum').value.trim().replace(/\s+/g,' '),km:c.km,min:c.min,cruce:c.cruce,tramos:c.tramos,
+      paradas:ps.map(function(q){var o={n:q.n,lat:q.lat,lng:q.lng};if(q.lugar)o.lugar=q.lugar;if(q.nota&&q.nota.trim())o.nota=q.nota.trim();return o;})};
+    var lista=RUTAS.rutas.map(plainRuta),pos=-1;
+    lista.forEach(function(x,j){if(x.id===id)pos=j;});
+    if(pos<0)lista.push(nuevo);else lista[pos]=nuevo;
+    var tr={};
+    lista.forEach(function(x){x.tramos.forEach(function(t){tr[t]=c.defs[t]||RUTAS.tramos[t];});});
+    return api('PUT','/rutas',{rutas:lista,tramos:tr}).then(function(){return c;});
+  }).then(function(c){
+    return loadRutas(true).then(function(){
+      closeOvl('rtedit');
+      toast(c.straight?'Guardado. Un tramo no tiene camino y se dibujó como línea recta.':'Recorrido guardado');
+      startRoute(id);
+    });
+  }).catch(function(err){msg.textContent=fail(err);}).then(function(){btn.disabled=false;btn.textContent=label;});
+}
+$('re-form').addEventListener('submit',saveRoute);
+$('re-del').addEventListener('click',function(){
+  if(!re||!re.id||!twice(this,'Toca otra vez para borrar'))return;
+  var id=re.id,btn=this;btn.disabled=true;
+  var lista=RUTAS.rutas.filter(function(x){return x.id!==id;}).map(plainRuta),tr={};
+  lista.forEach(function(x){x.tramos.forEach(function(t){tr[t]=RUTAS.tramos[t];});});
+  var go=lista.length?api('PUT','/rutas',{rutas:lista,tramos:tr}):Promise.reject(new Error('Debe quedar al menos un recorrido.'));
+  go.then(function(){return loadRutas(true);}).then(function(){
+    closeOvl('rtedit');toast('Recorrido borrado');
+    if(rt&&rt.id===id)endRoute();
+    if(!$('routes').hidden)renderRoutes();else openRoutes();
+  }).catch(function(err){$('re-msg').textContent=fail(err);}).then(function(){btn.disabled=false;btn.textContent='Borrar este recorrido';btn.removeAttribute('data-sure');});
+});
+function resetRutas(t){
+  if(!twice(t,'Toca otra vez para confirmar'))return;
+  api('DELETE','/rutas').then(function(){return loadRutas(true);}).then(function(){renderRoutes();toast('Recorridos originales restaurados');}).catch(function(err){toast(fail(err));});
 }
 
 /* ---------- lista y tabla ---------- */
@@ -1046,7 +1265,7 @@ function refresh(doFit){renderChips();drawMarkers();renderList();if(doFit){$('li
 var lastFocus=null,photoCache={},curId=null;
 function openOvl(id,focusSel){lastFocus=document.activeElement;var o=$(id);o.hidden=false;var b=o.querySelector(focusSel||'.back,[data-close]');if(b)b.focus();}
 function closeOvl(id){$(id).hidden=true;if(lastFocus&&lastFocus.focus&&document.contains(lastFocus))lastFocus.focus();}
-function closeAll(){['detail','sheet','tides','routes','panel','editor','picker','account','menu'].forEach(function(i){$(i).hidden=true;});}
+function closeAll(){['detail','sheet','tides','routes','panel','editor','rtedit','picker','account','menu'].forEach(function(i){$(i).hidden=true;});}
 function photoSrc(p){return p.photo>0?'/api/foto/'+encodeURIComponent(p.id)+'?v='+p.photo:'fotos/'+encodeURIComponent(p.id)+'.jpg';}
 function photoHtml(p){
   return '<div class="dhero k-'+p.cat+'" id="ph"><img src="'+esc(photoSrc(p))+'" alt="Foto de '+esc(p.name)+'" onerror="this.remove();document.getElementById(\'ph0\').hidden=false"><span class="phold" id="ph0" hidden>'+svg(CATS[p.cat].d,'big')+'Sin foto todavía</span></div>';
@@ -1480,10 +1699,10 @@ $('e-photo').addEventListener('change',function(){
 $('e-rmphoto').addEventListener('click',function(){ed.photoData=null;ed.photoRemove=true;$('e-photo').value='';edPhotoShow('');});
 
 /* ---------- selector de ubicación en el mapa ---------- */
-var pkMap=null;
+var pkMap=null,pkDone=null;
 function townCenter(n){for(var i=0;i<TOWNS.length;i++)if(TOWNS[i][0]===n)return [TOWNS[i][1],TOWNS[i][2]];return [-42.47,-73.78];}
-function openPicker(){
-  var la=num($('e-lat').value),ln=num($('e-lng').value),has=la!==null&&ln!==null&&isFinite(la)&&isFinite(ln);
+function openPicker(center,zoom,done){
+  pkDone=done;
   openOvl('picker','#pk-back');
   if(!pkMap){
     pkMap=L.map('pk-map',{zoomSnap:0.5,minZoom:8,maxZoom:18,maxBounds:[[-43.5,-74.8],[-41.4,-72.5]],maxBoundsViscosity:0.8,attributionControl:false});
@@ -1491,14 +1710,18 @@ function openPicker(){
     tl.once('tileload',function(){$('pk-map').classList.add('has-tiles');});
     tl.addTo(pkMap);L.geoJSON(LAND,{interactive:false,className:'land'}).addTo(pkMap);
   }
-  var c=has?[la,ln]:townCenter($('e-town').value);
-  setTimeout(function(){pkMap.invalidateSize();pkMap.setView(c,has?16:13,{animate:false});},60);
+  setTimeout(function(){pkMap.invalidateSize();pkMap.setView(center,zoom,{animate:false});},60);
 }
-$('e-pick').addEventListener('click',openPicker);
+$('e-pick').addEventListener('click',function(){
+  var la=num($('e-lat').value),ln=num($('e-lng').value),has=la!==null&&ln!==null&&isFinite(la)&&isFinite(ln);
+  openPicker(has?[la,ln]:townCenter($('e-town').value),has?16:13,function(a,b){
+    $('e-lat').value=a.toFixed(6);$('e-lng').value=b.toFixed(6);$('e-link').value='';$('e-linkmsg').textContent='';locText();
+  });
+});
 $('pk-back').addEventListener('click',function(){closeOvl('picker');});
 $('pk-ok').addEventListener('click',function(){
-  var c=pkMap.getCenter();
-  $('e-lat').value=c.lat.toFixed(6);$('e-lng').value=c.lng.toFixed(6);$('e-link').value='';$('e-linkmsg').textContent='';locText();closeOvl('picker');
+  var c=pkMap.getCenter(),f=pkDone;pkDone=null;
+  closeOvl('picker');if(f)f(c.lat,c.lng);
 });
 
 /* ---------- mi cuenta ---------- */
@@ -1546,10 +1769,16 @@ $('tides').addEventListener('click',function(e){var t=e.target.closest('[data-cl
 $('routebtn').addEventListener('click',openRoutes);
 $('routebtn2').addEventListener('click',function(){closeMenu();openRoutes();});
 $('rtexit').addEventListener('click',endRoute);
-$('routes').addEventListener('click',function(e){var t=e.target.closest('[data-route]');if(t)startRoute(t.getAttribute('data-route'));});
+$('routes').addEventListener('click',function(e){
+  var t=e.target.closest('[data-route],[data-rnew],[data-rreset]');if(!t)return;
+  if(t.hasAttribute('data-rnew'))openRouteEditor(null);
+  else if(t.hasAttribute('data-rreset'))resetRutas(t);
+  else startRoute(t.getAttribute('data-route'));
+});
 $('list').addEventListener('click',function(e){
-  var t=e.target.closest('[data-rstop],[data-rexit],[data-rfit]');if(!t||!rt)return;
+  var t=e.target.closest('[data-rstop],[data-rexit],[data-rfit],[data-redit]');if(!t||!rt)return;
   if(t.hasAttribute('data-rstop'))pickStop(+t.getAttribute('data-rstop'));
+  else if(t.hasAttribute('data-redit'))openRouteEditor(t.getAttribute('data-redit'));
   else if(t.hasAttribute('data-rexit'))endRoute();
   else{rtSel=null;drawRoute();fitRoute();renderList();}
 });
@@ -1567,7 +1796,7 @@ $('s-photo').addEventListener('change',function(){var f=this.files&&this.files[0
 $('q').addEventListener('input',function(){if(rt)return;q=this.value;sel=null;drawMarkers();renderList();renderSubs();});
 $('q').addEventListener('change',function(){fit();});
 document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'){var o=['menu','picker','editor','account','sheet','panel','tides','routes','detail'].filter(function(i){return !$(i).hidden;})[0];if(o){if(o==='menu')closeMenu();else closeOvl(o);}}
+  if(e.key==='Escape'){var o=['menu','picker','rtedit','editor','account','sheet','panel','tides','routes','detail'].filter(function(i){return !$(i).hidden;})[0];if(o){if(o==='menu')closeMenu();else closeOvl(o);}}
   if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.tagName==='TR'&&e.target.getAttribute('data-open')){e.preventDefault();openDetail(e.target.getAttribute('data-open'));}
 });
 $('app').addEventListener('click',function(e){

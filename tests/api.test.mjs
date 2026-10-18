@@ -440,3 +440,52 @@ test('secciones: dos cambios al mismo tiempo no se pisan', async () => {
   const final = (await browser(api).call('GET', '/lugares')).body.cats;
   assert.equal(final.length, 5);
 });
+
+/* ---------- recorridos editables (V 1.16) ---------- */
+const rutaOk = () => ({
+  rutas: [{ id: 'prueba', nombre: 'Prueba', resumen: 'Un paseo', km: 12.34, min: 30, cruce: null, tramos: ['t1'],
+    paradas: [{ n: 'Castro (Plaza de Armas)', lat: -42.4824, lng: -73.7625, nota: 'Punto de partida' }, { n: 'Dalcahue', lat: -42.3784, lng: -73.6504, lugar: 'Feria de Dalcahue' }] }],
+  tramos: { t1: { t: 'c', e: '_p~iF~ps|U_ulLnnqC_mqNvxq`@' }, sobrante: { t: 'c', e: '_p~iF~ps|U' } },
+});
+
+test('recorridos: nadie los guarda salvo el administrador; sin nada guardado se usa el archivo original', async () => {
+  const { api, admin } = await withAdmin();
+  const v = browser(api);
+  assert.deepEqual((await v.call('GET', '/rutas')).body, { custom: false });
+  assert.equal((await v.call('PUT', '/rutas', rutaOk())).status, 401);
+  assert.equal((await v.call('DELETE', '/rutas')).status, 401);
+  const ok = await admin.call('PUT', '/rutas', rutaOk());
+  assert.equal(ok.status, 200);
+  const g = (await v.call('GET', '/rutas')).body;
+  assert.equal(g.custom, true);
+  assert.equal(g.rutas[0].km, 12.3);
+  assert.deepEqual(Object.keys(g.tramos), ['t1']);          // los tramos que ningún recorrido usa no se guardan
+  assert.equal(g.rutas[0].paradas[1].lugar, 'Feria de Dalcahue');
+  assert.equal((await admin.call('DELETE', '/rutas')).status, 200);
+  assert.deepEqual((await v.call('GET', '/rutas')).body, { custom: false });
+});
+
+test('recorridos: se rechazan datos mal formados', async () => {
+  const { admin } = await withAdmin();
+  const mut = (f) => { const b = rutaOk(); f(b); return b; };
+  const bad = [
+    mut((b) => { b.rutas = 'x'; }),
+    mut((b) => { b.rutas[0].id = 'Mayúsculas y espacios'; }),
+    mut((b) => { b.rutas.push(JSON.parse(JSON.stringify(b.rutas[0]))); }),                // id repetido
+    mut((b) => { b.rutas[0].nombre = ' '; }),
+    mut((b) => { b.rutas[0].cruce = 'avión'; }),
+    mut((b) => { b.rutas[0].paradas = [b.rutas[0].paradas[0]]; }),                          // una sola parada
+    mut((b) => { b.rutas[0].paradas[1].lat = -10; }),                                       // fuera de Chiloé
+    mut((b) => { b.rutas[0].paradas[1].lng = 'x'; }),
+    mut((b) => { b.rutas[0].paradas[1].n = ''; }),
+    mut((b) => { b.rutas[0].tramos = ['no-existe']; }),
+    mut((b) => { b.rutas[0].tramos = []; }),
+    mut((b) => { b.tramos.t1 = { t: 'c', e: 'con espacios <script>' }; }),
+    mut((b) => { b.tramos.t1 = { t: 'z', e: 'abcd' }; }),
+    mut((b) => { b.tramos.t1 = { t: 'b', a: [-42.3, -73.3] }; }),
+    mut((b) => { b.tramos = []; }),
+  ];
+  for (const b of bad) assert.equal((await admin.call('PUT', '/rutas', b)).status, 400, JSON.stringify(b).slice(0, 120));
+  const lancha = mut((b) => { b.tramos.t1 = { t: 'b', a: [-42.3317, -73.3751], b: [-42.3028, -73.2719] }; b.rutas[0].cruce = 'lancha'; });
+  assert.equal((await admin.call('PUT', '/rutas', lancha)).status, 200);
+});
