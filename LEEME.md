@@ -1,4 +1,4 @@
-# Chiloé a tu Manera – V 1.8
+# Chiloé a tu Manera – V 1.9
 
 Guía de Chiloé con mapa, lugares, horarios, teléfonos, valoraciones y mareas de Castro.
 Se publica sola en Netlify cada vez que se sube un cambio a la rama `main` de este repositorio.
