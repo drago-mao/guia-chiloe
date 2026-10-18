@@ -3,11 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#2F6DB5">
+<meta name="theme-color" content="#0E5A6B">
 <meta name="description" content="Guía interactiva de Chiloé: dónde comer, qué visitar, dónde comprar y servicios, con mapa.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232F6DB5'/%3E%3Crect x='5' y='12' width='8' height='12' fill='%23D8432F'/%3E%3Crect x='14' y='7' width='9' height='17' fill='%23F0B323'/%3E%3Crect x='24' y='15' width='4' height='9' fill='%232E9E6B'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='4 6 92 92'%3E%3Cpath d='M50 88C34 72 22 58 22 42A28 28 0 0 1 78 42C78 58 66 72 50 88Z' fill='%230E5A6B'/%3E%3Ccircle cx='50' cy='42' r='16' fill='%23E0A030'/%3E%3Cpath d='M50 32L62 43H58V52H42V43H38Z' fill='%230E5A6B'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
 <title>Chiloé a tu Manera</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600&family=Manrope:wght@400;500;600;700&family=Outfit:wght@300;600&display=swap">
 <style>
 /* Diseño: mapa a pantalla completa, buscador y categorías flotando sobre el mapa, lista en una hoja inferior que se arrastra. Tres estilos con las mismas piezas. */
 :root{
@@ -52,6 +54,11 @@ label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:0 0
 .hero{position:relative;flex:0 0 230px;overflow:hidden;background-image:radial-gradient(circle at 50% 0,transparent 12px,rgba(255,255,255,.11) 12.5px,rgba(255,255,255,.11) 13.5px,transparent 14px),radial-gradient(circle at 50% 0,transparent 12px,rgba(255,255,255,.11) 12.5px,rgba(255,255,255,.11) 13.5px,transparent 14px);background-size:28px 18px;background-position:0 0,14px 9px;padding-top:max(18px,env(safe-area-inset-top,0px))}
 .hero h1{font-size:40px;line-height:1;color:#fff;margin-top:34px}
 .hero p{margin:8px 0 0;font-size:15px;color:rgba(255,255,255,.78);max-width:260px}
+.wm{display:flex;align-items:center;gap:6px;font-family:'Outfit',var(--f-body);letter-spacing:-.01em}
+.wm svg{flex:none}
+.wmt{display:block}
+.wm b{display:block;font-weight:600;font-size:44px;line-height:1;letter-spacing:-.02em}
+.wm i{display:block;font-style:normal;font-weight:300;font-size:21px;line-height:1.1;margin-top:4px;color:rgba(255,255,255,.92)}
 .skins{position:absolute;right:max(16px,env(safe-area-inset-right,0px));top:max(16px,env(safe-area-inset-top,0px));display:flex;gap:6px;z-index:2}
 .skins button{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.55);padding:0}
 .skins button[aria-pressed="true"]{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.28)}
@@ -85,8 +92,8 @@ path.land{fill:var(--land);fill-opacity:1;stroke:var(--coast);stroke-width:1.2;s
 .ftop{position:absolute;left:0;right:0;top:0;z-index:1100;padding-top:max(12px,env(safe-area-inset-top,0px));pointer-events:none}
 .ftop>*{pointer-events:auto}
 .bar{display:flex;align-items:center;gap:6px;height:54px;border-radius:27px;background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--shadow);border:1px solid var(--line);padding:0 5px 0 16px}
-.logo{display:flex;gap:2px;align-items:flex-end;height:20px;flex:none}
-.logo i{display:block;width:6px;border-radius:2px 2px 0 0}
+.logo{display:flex;align-items:center;width:28px;height:28px;flex:none}
+.logo svg{display:block;width:28px;height:28px}
 .bar input{flex:1;min-width:0;height:48px;border:0;background:transparent;box-shadow:none;padding:0 6px;font-size:16px;border-radius:0}
 .bar input:focus{box-shadow:none}
 .dot{position:absolute;top:9px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--danger);border:2px solid var(--surface)}
@@ -234,8 +241,9 @@ select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(
   .cats{margin:0;padding-left:16px}
 }
 .brand{display:none;align-items:center;gap:12px;padding-top:18px;padding-bottom:14px}
-.brand .mark{width:40px;height:40px;border-radius:12px;background-color:var(--hero1);background-image:radial-gradient(circle at 50% 0,transparent 5px,rgba(255,255,255,.25) 5.5px,rgba(255,255,255,.25) 6.5px,transparent 7px),radial-gradient(circle at 50% 0,transparent 5px,rgba(255,255,255,.25) 5.5px,rgba(255,255,255,.25) 6.5px,transparent 7px);background-size:12px 8px;background-position:0 0,6px 4px;flex:none}
-.brand b{display:block;font-family:var(--f-display);font-size:22px;line-height:1.05}
+.brand .mark{display:block;width:40px;height:40px;flex:none}
+.brand b{display:block;font-family:'Outfit',var(--f-body);font-weight:600;font-size:20px;line-height:1.1;letter-spacing:-.01em}
+.brand b em{font-style:normal;font-weight:300;color:var(--accent)}
 .brand span{font-size:12px;color:var(--muted)}
 
 /* mareas */
@@ -289,7 +297,7 @@ select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(
       <div class="agua"></div>
       <div class="pal" style="left:30px"></div><div class="pal" style="left:100px"></div><div class="pal" style="left:170px"></div><div class="pal" style="left:240px"></div><div class="pal" style="left:310px"></div>
     </div>
-    <h1 style="position:relative">Chiloé<br>a tu manera</h1>
+    <h1 class="wm" style="position:relative"><svg viewBox="0 0 100 100" width="100" height="100" aria-hidden="true"><ellipse cx="50" cy="91" rx="28" ry="6" fill="none" stroke="#E0A030" stroke-width="1.6" opacity=".7"/><ellipse cx="50" cy="91" rx="14" ry="3" fill="none" stroke="#E0A030" stroke-width="2.2"/><path d="M50 88C34 72 22 58 22 42A28 28 0 0 1 78 42C78 58 66 72 50 88Z" fill="#EEF2F3"/><circle cx="50" cy="42" r="16" fill="#E0A030"/><path d="M50 32L62 43H58V52H42V43H38Z" fill="#0E5A6B"/><rect x="48" y="46" width="4" height="6" fill="#E0A030"/></svg><span class="wmt"><b>chiloé</b><i>a tu manera</i></span></h1>
   </div>
   <div class="card-login gut">
     <div class="seg" role="group" aria-label="Modo de acceso">
@@ -305,7 +313,7 @@ select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(
     </form>
     <button type="button" class="btn soft" id="guest" style="margin-top:10px">Entrar como invitado</button>
     <p class="note">Tu cuenta se guarda solo en este teléfono. Para usarla en otros aparatos hará falta un servicio de cuentas.</p>
-    <div class="ver">V 1.6</div>
+    <div class="ver">V 1.7</div>
   </div>
 </section>
 
@@ -313,7 +321,7 @@ select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(
   <div id="map" role="application" aria-label="Mapa de Chiloé"></div>
   <div class="ftop gut" id="ftop">
     <div class="bar" id="bar">
-      <span class="logo" aria-hidden="true"><i style="height:11px;background:var(--c-comer)"></i><i style="height:18px;background:var(--c-comprar)"></i><i style="height:14px;background:var(--c-servicios)"></i></span>
+      <span class="logo" aria-hidden="true"><svg viewBox="4 6 92 92"><path d="M50 88C34 72 22 58 22 42A28 28 0 0 1 78 42C78 58 66 72 50 88Z" fill="#0E5A6B"/><circle cx="50" cy="42" r="16" fill="#E0A030"/><path d="M50 32L62 43H58V52H42V43H38Z" fill="#0E5A6B"/><rect x="48" y="46" width="4" height="6" fill="#E0A030"/></svg></span>
       <label for="q" style="position:absolute;left:-9999px">Buscar lugar</label>
       <input id="q" type="search" placeholder="Buscar en Chiloé" autocomplete="off">
       <button type="button" class="ib" id="menubtn" aria-label="Menú" aria-haspopup="dialog"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01" stroke-width="3.2"/></svg><i class="dot" id="menudot" hidden></i></button>
@@ -328,7 +336,7 @@ select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(
   </div>
   <div class="maptag" id="maptag">Mapa simple, sin calles</div>
   <section id="dock" class="dock" aria-label="Lugares">
-    <div class="brand gut"><i class="mark" aria-hidden="true"></i><div><b>Chiloé a tu manera</b><span>Guía de la isla grande</span></div></div>
+    <div class="brand gut"><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#0E5A6B"/><g transform="translate(0 -3)"><ellipse cx="50" cy="91" rx="28" ry="6" fill="none" stroke="#E0A030" stroke-width="1.6" opacity=".7"/><ellipse cx="50" cy="91" rx="14" ry="3" fill="none" stroke="#E0A030" stroke-width="2.2"/><path d="M50 88C34 72 22 58 22 42A28 28 0 0 1 78 42C78 58 66 72 50 88Z" fill="#EEF2F3"/><circle cx="50" cy="42" r="16" fill="#E0A030"/><path d="M50 32L62 43H58V52H42V43H38Z" fill="#0E5A6B"/><rect x="48" y="46" width="4" height="6" fill="#E0A030"/></g></svg><div><b>chiloé <em>a tu manera</em></b><span>Guía de la isla grande</span></div></div>
     <button type="button" class="grab" id="grab" aria-label="Cambiar el tamaño de la lista"><i></i></button>
     <div class="dhead gut" id="dhead">
       <div class="tt"><h2 id="ltitle"></h2><span id="lcount"></span></div>
@@ -365,7 +373,7 @@ select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(
 <section id="menu" class="pop" hidden aria-label="Menú">
   <div class="scrim" data-closemenu="1"></div>
   <div class="pcard gut" role="dialog" aria-label="Menú">
-    <div class="pwho"><b id="menuwho"></b><span>V 1.6</span></div>
+    <div class="pwho"><b id="menuwho"></b><span>V 1.7</span></div>
     <button type="button" class="mi" id="tidebtn2"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9c2.2 0 2.2-2 4.5-2S9.800 9 12 9s2.200-2 4.500-2S18.800 9 21 9M3 15c2.200 0 2.200-2 4.500-2S9.800 15 12 15s2.200-2 4.500-2S18.800 15 21 15"/></svg>Mareas de Castro</button>
     <button type="button" class="mi" id="sugbtn"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Sugerir un lugar</button>
     <button type="button" class="mi" id="inboxbtn" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13l2-8h12l2 8M4 13v6h16v-6M4 13h5l1 2h4l1-2h5"/></svg>Sugerencias recibidas<span class="bd" id="bdg">0</span></button>
