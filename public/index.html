@@ -346,7 +346,7 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
     <button type="button" class="btn soft" id="guest" style="margin-top:10px">Solo mirar, sin cuenta</button>
     <p class="note">Sin cuenta puedes ver el mapa, los lugares y las mareas. Con una cuenta también guardas favoritos en todos tus aparatos y puedes sugerir lugares.</p>
     <button type="button" class="linkbtn" id="setup-link" hidden>Primera vez: configurar al administrador</button>
-    <div class="ver">V 1.9</div>
+    <div class="ver">V 1.10</div>
   </div>
 </section>
 
@@ -354,7 +354,7 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
   <div id="map" role="application" aria-label="Mapa de Chiloé"></div>
   <div class="ftop gut" id="ftop">
     <div class="bar" id="bar">
-      <span class="logov" aria-hidden="true"><span class="logo"><svg viewBox="4 6 92 92"><path d="M50 88C34 72 22 58 22 42A28 28 0 0 1 78 42C78 58 66 72 50 88Z" fill="#0E5A6B"/><circle cx="50" cy="42" r="16" fill="#E0A030"/><path d="M50 32L62 43H58V52H42V43H38Z" fill="#0E5A6B"/><rect x="48" y="46" width="4" height="6" fill="#E0A030"/></svg></span><span class="vtag">V 1.9</span></span>
+      <span class="logov" aria-hidden="true"><span class="logo"><svg viewBox="4 6 92 92"><path d="M50 88C34 72 22 58 22 42A28 28 0 0 1 78 42C78 58 66 72 50 88Z" fill="#0E5A6B"/><circle cx="50" cy="42" r="16" fill="#E0A030"/><path d="M50 32L62 43H58V52H42V43H38Z" fill="#0E5A6B"/><rect x="48" y="46" width="4" height="6" fill="#E0A030"/></svg></span><span class="vtag">V 1.10</span></span>
       <label for="q" style="position:absolute;left:-9999px">Buscar lugar</label>
       <input id="q" type="search" placeholder="Buscar en Chiloé" autocomplete="off">
       <button type="button" class="ib" id="menubtn" aria-label="Menú" aria-haspopup="dialog"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01" stroke-width="3.2"/></svg><i class="dot" id="menudot" hidden></i></button>
@@ -370,7 +370,7 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
   </div>
   <div class="maptag" id="maptag">Mapa simple, sin calles</div>
   <section id="dock" class="dock" aria-label="Lugares">
-    <div class="brand gut"><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#0E5A6B"/><g transform="translate(0 -3)"><ellipse cx="50" cy="91" rx="28" ry="6" fill="none" stroke="#E0A030" stroke-width="1.6" opacity=".7"/><ellipse cx="50" cy="91" rx="14" ry="3" fill="none" stroke="#E0A030" stroke-width="2.2"/><path d="M50 88C34 72 22 58 22 42A28 28 0 0 1 78 42C78 58 66 72 50 88Z" fill="#EEF2F3"/><circle cx="50" cy="42" r="16" fill="#E0A030"/><path d="M50 32L62 43H58V52H42V43H38Z" fill="#0E5A6B"/><rect x="48" y="46" width="4" height="6" fill="#E0A030"/></g></svg><div><b>chiloé <em>a tu manera</em><span class="vtag">V 1.9</span></b><span>Guía de la isla grande</span></div></div>
+    <div class="brand gut"><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#0E5A6B"/><g transform="translate(0 -3)"><ellipse cx="50" cy="91" rx="28" ry="6" fill="none" stroke="#E0A030" stroke-width="1.6" opacity=".7"/><ellipse cx="50" cy="91" rx="14" ry="3" fill="none" stroke="#E0A030" stroke-width="2.2"/><path d="M50 88C34 72 22 58 22 42A28 28 0 0 1 78 42C78 58 66 72 50 88Z" fill="#EEF2F3"/><circle cx="50" cy="42" r="16" fill="#E0A030"/><path d="M50 32L62 43H58V52H42V43H38Z" fill="#0E5A6B"/><rect x="48" y="46" width="4" height="6" fill="#E0A030"/></g></svg><div><b>chiloé <em>a tu manera</em><span class="vtag">V 1.10</span></b><span>Guía de la isla grande</span></div></div>
     <button type="button" class="grab" id="grab" aria-label="Cambiar el tamaño de la lista"><i></i></button>
     <div class="dhead gut" id="dhead">
       <div class="tt"><h2 id="ltitle"></h2><span id="lcount"></span></div>
@@ -477,7 +477,7 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
     <button type="button" class="mi" id="accbtn" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a4 4 0 1 0 0 8 4 4 0 1 0 0-8zM4 20a8 8 0 0 1 16 0"/></svg>Mi cuenta</button>
     <button type="button" class="mi" id="loginbtn" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4h4v16h-4M8 8l-4 4 4 4M4 12h11"/></svg>Crear cuenta o entrar</button>
     <button type="button" class="mi" id="out" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/></svg>Cerrar sesión</button>
-    <p class="credit">V 1.9 · Mapa © colaboradores de OpenStreetMap · Costa: chile-geojson · Leaflet</p>
+    <p class="credit">V 1.10 · Mapa © colaboradores de OpenStreetMap · Costa: chile-geojson · Leaflet</p>
   </div>
 </section>
 </main>
