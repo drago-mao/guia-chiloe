@@ -310,7 +310,7 @@ details.sg[open]>summary{margin-bottom:10px}
 input[type=file]{width:100%;font:inherit;font-size:14px;color:var(--muted);padding:8px;background:var(--surface);border:1px dashed var(--line2);border-radius:14px}
 input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right:10px;padding:10px 14px;border:0;border-radius:10px;background:var(--accent);color:var(--on-accent);cursor:pointer;min-height:40px}
 
-/* recorridos (V 1.13) */
+/* recorridos (V 1.14) */
 .rintro{margin:6px 0 14px;color:var(--muted);font-size:15px}
 .rcard{display:flex;gap:13px;align-items:center;width:100%;margin:0 0 10px;padding:14px;border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:var(--shadow-s);text-align:left;transition:transform .12s}
 .rcard:active{transform:scale(.99)}
@@ -320,6 +320,9 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
 .rchips{display:flex;flex-wrap:wrap;gap:6px}
 .rchip{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 10px;border-radius:13px;background:var(--surface2);font-size:12.5px;font-weight:600;color:var(--ink)}
 .rchip.warn{background:var(--t-comprar);color:#6B4A0E}
+.nm .rchips{display:flex;flex-wrap:wrap;gap:6px;margin:0}
+.nm .rchips .rchip{display:inline-flex;margin:0;font-size:12.5px;color:var(--ink)}
+.nm .rchips .rchip.warn{color:#6B4A0E}
 .rtexit{flex:none;height:38px;padding:0 15px;border:0;border-radius:19px;background:var(--ink);color:var(--surface);font-weight:700;font-size:14px}
 .rtexit:active{transform:scale(.97)}
 #app.rt .zones,#app.rt .subs,#app.rt .tog2,#app.rt #cats{display:none!important}
@@ -378,7 +381,7 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
     <button type="button" class="btn soft" id="guest" style="margin-top:10px">Solo mirar, sin cuenta</button>
     <p class="note">Sin cuenta puedes ver el mapa, los lugares y las mareas. Con una cuenta también guardas favoritos en todos tus aparatos y puedes sugerir lugares.</p>
     <button type="button" class="linkbtn" id="setup-link" hidden>Primera vez: configurar al administrador</button>
-    <div class="ver">V 1.13</div>
+    <div class="ver">V 1.14</div>
   </div>
 </section>
 
@@ -386,7 +389,7 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
   <div id="map" role="application" aria-label="Mapa de Chiloé"></div>
   <div class="ftop gut" id="ftop">
     <div class="bar" id="bar">
-      <span class="logov" aria-hidden="true"><span class="logo"><svg viewBox="4 6 92 92"><path d="M50 88C34 72 22 58 22 42A28 28 0 0 1 78 42C78 58 66 72 50 88Z" fill="#0E5A6B"/><circle cx="50" cy="42" r="16" fill="#E0A030"/><path d="M50 32L62 43H58V52H42V43H38Z" fill="#0E5A6B"/><rect x="48" y="46" width="4" height="6" fill="#E0A030"/></svg></span><span class="vtag">V 1.13</span></span>
+      <span class="logov" aria-hidden="true"><span class="logo"><svg viewBox="4 6 92 92"><path d="M50 88C34 72 22 58 22 42A28 28 0 0 1 78 42C78 58 66 72 50 88Z" fill="#0E5A6B"/><circle cx="50" cy="42" r="16" fill="#E0A030"/><path d="M50 32L62 43H58V52H42V43H38Z" fill="#0E5A6B"/><rect x="48" y="46" width="4" height="6" fill="#E0A030"/></svg></span><span class="vtag">V 1.14</span></span>
       <label for="q" style="position:absolute;left:-9999px">Buscar lugar</label>
       <input id="q" type="search" placeholder="Buscar en Chiloé" autocomplete="off">
       <button type="button" class="ib" id="menubtn" aria-label="Menú" aria-haspopup="dialog"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01" stroke-width="3.2"/></svg><i class="dot" id="menudot" hidden></i></button>
@@ -403,7 +406,7 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
   </div>
   <div class="maptag" id="maptag">Mapa simple, sin calles</div>
   <section id="dock" class="dock" aria-label="Lugares">
-    <div class="brand gut"><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#0E5A6B"/><g transform="translate(0 -3)"><ellipse cx="50" cy="91" rx="28" ry="6" fill="none" stroke="#E0A030" stroke-width="1.6" opacity=".7"/><ellipse cx="50" cy="91" rx="14" ry="3" fill="none" stroke="#E0A030" stroke-width="2.2"/><path d="M50 88C34 72 22 58 22 42A28 28 0 0 1 78 42C78 58 66 72 50 88Z" fill="#EEF2F3"/><circle cx="50" cy="42" r="16" fill="#E0A030"/><path d="M50 32L62 43H58V52H42V43H38Z" fill="#0E5A6B"/><rect x="48" y="46" width="4" height="6" fill="#E0A030"/></g></svg><div><b>chiloé <em>a tu manera</em><span class="vtag">V 1.13</span></b><span>Guía de la isla grande</span></div></div>
+    <div class="brand gut"><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#0E5A6B"/><g transform="translate(0 -3)"><ellipse cx="50" cy="91" rx="28" ry="6" fill="none" stroke="#E0A030" stroke-width="1.6" opacity=".7"/><ellipse cx="50" cy="91" rx="14" ry="3" fill="none" stroke="#E0A030" stroke-width="2.2"/><path d="M50 88C34 72 22 58 22 42A28 28 0 0 1 78 42C78 58 66 72 50 88Z" fill="#EEF2F3"/><circle cx="50" cy="42" r="16" fill="#E0A030"/><path d="M50 32L62 43H58V52H42V43H38Z" fill="#0E5A6B"/><rect x="48" y="46" width="4" height="6" fill="#E0A030"/></g></svg><div><b>chiloé <em>a tu manera</em><span class="vtag">V 1.14</span></b><span>Guía de la isla grande</span></div></div>
     <button type="button" class="grab" id="grab" aria-label="Cambiar el tamaño de la lista"><i></i></button>
     <div class="dhead gut" id="dhead">
       <div class="tt"><h2 id="ltitle"></h2><span id="lcount"></span></div>
@@ -516,7 +519,7 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
     <button type="button" class="mi" id="accbtn" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a4 4 0 1 0 0 8 4 4 0 1 0 0-8zM4 20a8 8 0 0 1 16 0"/></svg>Mi cuenta</button>
     <button type="button" class="mi" id="loginbtn" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4h4v16h-4M8 8l-4 4 4 4M4 12h11"/></svg>Crear cuenta o entrar</button>
     <button type="button" class="mi" id="out" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/></svg>Cerrar sesión</button>
-    <p class="credit">V 1.13 · Mapa © colaboradores de OpenStreetMap · Costa: chile-geojson · Leaflet · Mareas: TICON-4 (CC BY 4.0) y Neaps</p>
+    <p class="credit">V 1.14 · Mapa © colaboradores de OpenStreetMap · Costa: chile-geojson · Leaflet · Mareas: TICON-4 (CC BY 4.0) y Neaps</p>
   </div>
 </section>
 </main>
@@ -817,7 +820,7 @@ function choose(id,pan){
 }
 
 
-/* ---------- recorridos (V 1.13) ---------- */
+/* ---------- recorridos (V 1.14) ---------- */
 var rt=null,rlayer=null,RUTAS=null,rtSel=null,ROUTE_COLOR='#0E5A6B';
 function decPoly(str){var i=0,la=0,lo=0,out=[];while(i<str.length){var b,sh=0,r=0;do{b=str.charCodeAt(i++)-63;r|=(b&31)<<sh;sh+=5;}while(b>=32);la+=(r&1)?~(r>>1):(r>>1);sh=0;r=0;do{b=str.charCodeAt(i++)-63;r|=(b&31)<<sh;sh+=5;}while(b>=32);lo+=(r&1)?~(r>>1):(r>>1);out.push([la/1e5,lo/1e5]);}return out;}
 function fmtKm(n){return n.toFixed(1).replace('.',',')+' km';}
@@ -825,7 +828,7 @@ function fmtMin(m){return m<60?m+' min':Math.floor(m/60)+' h'+(m%60?' '+(m%60)+'
 function cruceTxt(c){return c==='barco'?'Cruce en barco':c==='lancha'?'Cruce en lancha':'';}
 function loadRutas(){
   if(RUTAS)return Promise.resolve(RUTAS);
-  return fetch("rutas.json?v=1.13").then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.json();}).then(function(j){RUTAS=j;return j;});
+  return fetch("rutas.json?v=1.14").then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.json();}).then(function(j){RUTAS=j;return j;});
 }
 function rchips(r){
   var h='<span class="rchip">'+fmtKm(r.km)+'</span><span class="rchip">≈ '+fmtMin(r.min)+'</span>';
@@ -890,7 +893,7 @@ function endRoute(){
 function fitRoute(){
   if(!map||!rt)return;
   map.invalidateSize();
-  map.fitBounds(rt.bounds,{paddingTopLeft:[36,DESK?80:140],paddingBottomRight:[36,visPad()+24],maxZoom:13,animate:false});
+  map.fitBounds(rt.bounds,{paddingTopLeft:[36,DESK?80:140],paddingBottomRight:[DESK?90:76,visPad()+24],maxZoom:13,animate:false});
 }
 function drawRoute(){
   if(!rlayer||!rt)return;

@@ -1,5 +1,5 @@
 {
- "version": "1.13",
+ "version": "1.14",
  "nota": "Caminos calculados con OSRM sobre datos de OpenStreetMap (18-10-2026). Tipos de tramo: c = camino, f = cruce en barco por ruta marítima, b = cruce en lancha (línea recta de referencia).",
  "tramos": {
   "castro-dalcahue": {
