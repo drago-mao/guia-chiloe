@@ -1,4 +1,4 @@
-# Chiloé a tu Manera – V 1.5
+# Chiloé a tu Manera – V 1.6
 
 Esta carpeta es la guía lista para publicar en internet. No necesita instalar nada.
 
