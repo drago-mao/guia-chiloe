@@ -9,7 +9,7 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Chiloé a tu Manera</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600&family=Manrope:wght@400;500;600;700&family=Outfit:wght@300;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@300;600&display=swap">
 <style>
 /* Diseño: mapa a pantalla completa, buscador y categorías flotando sobre el mapa, lista en una hoja inferior que se arrastra. Tres estilos con las mismas piezas. */
 :root{
@@ -19,7 +19,7 @@
   --c-comer:#C0533A;--c-visitar:#2F6F8F;--c-comprar:#A97A1C;--c-servicios:#378564;--c-guardados:#12232B;
   --t-comer:#F8E8E3;--t-visitar:#E1EDF3;--t-comprar:#F6ECD6;--t-servicios:#E0F0E8;--t-guardados:#E4E9EB;
   --hero1:#0E5A6B;--hero2:#1B8097;--danger:#B3382A;--r:16px;
-  --f-display:'Newsreader',Georgia,'Times New Roman',serif;--f-body:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-display:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;--f-text:'Source Serif 4',Georgia,'Times New Roman',serif;--f-body:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -30,7 +30,7 @@ button{cursor:pointer}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-h1,h2,h3{font-family:var(--f-display);margin:0;font-weight:600;letter-spacing:-.01em}
+h1,h2,h3{font-family:var(--f-display);margin:0;font-weight:700;letter-spacing:-.02em}
 svg.i{width:1.2em;height:1.2em;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .k-comer{--cc:var(--c-comer);--ct:var(--t-comer)}.k-visitar{--cc:var(--c-visitar);--ct:var(--t-visitar)}
 .k-comprar{--cc:var(--c-comprar);--ct:var(--t-comprar)}.k-servicios{--cc:var(--c-servicios);--ct:var(--t-servicios)}
@@ -134,7 +134,7 @@ path.land{fill:var(--land);fill-opacity:1;stroke:var(--coast);stroke-width:1.2;s
 .item.sel .irow{padding-left:10px}
 .ico{flex:none;width:44px;height:44px;border-radius:13px;background:var(--ct);color:var(--cc);display:flex;align-items:center;justify-content:center}
 .nm{flex:1;min-width:0}
-.nm b{display:block;font-family:var(--f-display);font-size:18px;font-weight:600;line-height:1.15}
+.nm b{display:block;font-family:var(--f-display);font-size:17px;font-weight:700;line-height:1.2;letter-spacing:-.015em}
 .nm span{display:block;font-size:13px;color:var(--muted);margin-top:2px}
 .rate{flex:none;display:flex;align-items:center;gap:4px;font-weight:600;font-size:14px;color:var(--ink)}
 .rate svg{width:14px;height:14px;fill:#E1A72B;stroke:none}
@@ -177,12 +177,12 @@ td.n{white-space:nowrap;font-weight:600}
 .dhero .big{width:56px;height:56px;stroke-width:1.4}
 .addph{position:absolute;right:14px;bottom:36px;z-index:3;height:40px;padding:0 14px;border-radius:20px;border:0;background:var(--glass);color:var(--ink);font-weight:600;font-size:14px;backdrop-filter:blur(10px)}
 .dbody{position:relative;margin-top:-24px;background:var(--bg);border-radius:26px 26px 0 0;padding-top:24px;padding-bottom:max(32px,env(safe-area-inset-bottom,0px))}
-.dbody h2{font-size:30px;line-height:1.05}
+.dbody h2{font-size:28px;line-height:1.12}
 .dbody .sub{color:var(--muted);margin:5px 0 10px;font-size:15px}
 .stars{display:flex;align-items:center;gap:6px;font-weight:600;margin-bottom:12px}
 .stars svg{width:17px;height:17px;fill:#E1A72B;stroke:none}
 .stars span{font-weight:500;color:var(--muted);font-size:14px}
-.dbody p{margin:0 0 14px;font-size:16px;line-height:1.55}
+.dbody p{margin:0 0 14px;font-family:var(--f-text);font-size:17px;line-height:1.6}
 .info{display:flex;flex-direction:column;gap:10px;margin:6px 0 18px}
 .irowi{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:var(--surface);box-shadow:var(--shadow-s);font-size:15px}
 .irowi svg{color:var(--cc);margin-top:1px}
@@ -271,7 +271,7 @@ select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(
 .tdays button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:rgba(255,255,255,.75)}
 .tdays button[aria-pressed="true"] b{color:#fff}
 .tev{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;background:var(--surface);box-shadow:var(--shadow-s);margin-bottom:8px}
-.tev .tm{font-family:var(--f-display);font-size:20px;font-weight:600;width:62px}
+.tev .tm{font-family:var(--f-display);font-size:19px;font-weight:700;width:62px;font-variant-numeric:tabular-nums}
 .tev .tp{flex:1;font-weight:600}
 .tev .tp small{display:block;font-weight:500;color:var(--muted);font-size:13px}
 .tev .th{font-weight:700;font-size:17px}
