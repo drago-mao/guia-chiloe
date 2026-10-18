@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import { randomBytes, scryptSync } from 'node:crypto';
 import { createApi } from '../netlify/functions/api.mjs';
 import { memoryKV } from './memory-kv.mjs';
+import { computeTides } from '../netlify/functions/mareas-calc.mjs';
+import { TIDES as SEED_TIDES } from '../netlify/functions/seed.mjs';
 
 const CODE = 'CHILOE-PRUEBA-0000';
 const salt = randomBytes(16);
@@ -27,8 +29,8 @@ const fresh = () => createApi(memoryKV(), { setup: SETUP });
 const jpeg = () => 'data:image/jpeg;base64,' + Buffer.concat([Buffer.from([0xff, 0xd8, 0xff, 0xe0]), Buffer.alloc(300, 7)]).toString('base64');
 const place = (o) => Object.assign({ name: 'Lugar de prueba', cat: 'comer', sub: 'Café', town: 'Castro', lat: -42.48, lng: -73.76, hours: 'L–V 10:00–18:00', tel: '+56912345678', web: 'ejemplo.cl', desc: 'Rico.' }, o || {});
 
-async function withAdmin() {
-  const api = fresh();
+async function withAdmin(nowMs) {
+  const api = createApi(memoryKV(), { setup: SETUP, now: nowMs ? () => nowMs : undefined });
   const admin = browser(api);
   const r = await admin.call('POST', '/instalar', { codigo: CODE, name: 'Drago', email: 'Admin@Correo.cl', password: 'clave-larga-1' });
   assert.equal(r.status, 200);
@@ -190,15 +192,59 @@ test('sugerencias: el usuario envía, el administrador aprueba (con foto) o rech
   assert.equal((await admin.call('GET', '/sugerencias')).body.suggestions.length, 0);
 });
 
-test('mareas: el administrador las actualiza y se validan', async () => {
-  const { api, admin } = await withAdmin();
+test('mareas: el administrador corrige días a mano, el resto sigue calculándose, y se validan', async () => {
+  const { api, admin } = await withAdmin(Date.parse('2026-10-28T15:00:00Z'));
   const ok = await admin.call('PUT', '/mareas', { tides: [['2026-11-02', [['10:00', 'H', 5.1], ['04:00', 'L', 1.2]]], ['2026-11-01', [['09:00', 'H', 5]]]], src: 'SHOA' });
-  assert.equal(ok.status, 200); assert.equal(ok.body.tides[0][0], '2026-11-01'); assert.equal(ok.body.tides[1][1][0][0], '04:00');
+  assert.equal(ok.status, 200);
   const g = (await browser(api).call('GET', '/mareas')).body;
-  assert.equal(g.tides.length, 2); assert.equal(g.src, 'SHOA');
+  const day = (d) => g.tides.find((x) => x[0] === d);
+  assert.deepEqual(day('2026-11-01')[1], [['09:00', 'H', 5]]);                       // lo escrito a mano se respeta
+  assert.deepEqual(day('2026-11-02')[1], [['04:00', 'L', 1.2], ['10:00', 'H', 5.1]]);
+  assert.ok(day('2026-11-03')[1].length >= 3 && day('2026-10-30')[1].length >= 3);   // el resto se calcula solo
+  assert.ok(g.src.startsWith('SHOA') && g.src.includes('cálculo automático') && g.src.includes('TICON-4'));
+  // Si el panel devuelve la fuente ya combinada, no se duplica el texto del cálculo automático.
+  const again = await admin.call('PUT', '/mareas', { tides: [['2026-11-01', [['09:00', 'H', 5]]]], src: g.src });
+  assert.equal(again.status, 200);
+  const g2 = (await browser(api).call('GET', '/mareas')).body;
+  assert.equal(g2.src.split('Después de esa fecha').length, 2, g2.src);
+  assert.ok(g2.src.startsWith('SHOA'));
   for (const bad of [[], 'x', [['2026-13-01', [['10:00', 'H', 5]]]], [['2026-02-30', [['10:00', 'H', 5]]]], [['2026-11-01', [['25:00', 'H', 5]]]], [['2026-11-01', [['10:00', 'X', 5]]]], [['2026-11-01', [['10:00', 'H', 99]]]], [['2026-11-01', []]], [['2026-11-01', [['10:00', 'H', 5]]], ['2026-11-01', [['10:00', 'H', 5]]]]]) {
     assert.equal((await admin.call('PUT', '/mareas', { tides: bad })).status, 400, JSON.stringify(bad));
   }
+});
+
+test('mareas: siempre hay días seguidos desde ayer hasta 30 días después de hoy, también al cambiar la hora de Chile', async () => {
+  for (const [nowIso, desde, hasta] of [['2027-03-05T15:00:00Z', '2027-03-04', '2027-04-04'], ['2027-04-02T15:00:00Z', '2027-04-01', '2027-05-02'], ['2027-08-30T15:00:00Z', '2027-08-29', '2027-09-29'], ['2031-01-10T03:00:00Z', '2031-01-09', '2031-02-09']]) {
+    const api = createApi(memoryKV(), { setup: SETUP, now: () => Date.parse(nowIso) });
+    const g = (await browser(api).call('GET', '/mareas')).body;
+    assert.equal(g.tides[0][0], desde, nowIso); assert.equal(g.tides.at(-1)[0], hasta, nowIso);
+    assert.ok(g.src.includes('TICON-4'));
+    let prev = null;
+    for (const [d, ev] of g.tides) {
+      if (prev) assert.equal(d, new Date(Date.parse(prev + 'T12:00:00Z') + 86400000).toISOString().slice(0, 10), 'faltan días: ' + prev + ' → ' + d);
+      prev = d;
+      assert.ok(ev.length >= 3 && ev.length <= 5, d + ' tiene ' + ev.length + ' mareas');
+      for (let i = 0; i < ev.length; i++) {
+        assert.match(ev[i][0], /^([01]\d|2[0-3]):[0-5]\d$/);
+        assert.ok(ev[i][2] > 0 && ev[i][2] < 7.5, d + ' altura rara ' + ev[i][2]);
+        if (i) { assert.ok(ev[i][0] > ev[i - 1][0], d + ' horas desordenadas'); assert.notEqual(ev[i][1], ev[i - 1][1], d + ' dos pleamares/bajamares seguidas'); }
+      }
+    }
+  }
+});
+
+test('mareas: el cálculo automático coincide con los 10 días del modelo FES2022 que traía la guía', () => {
+  const calc = computeTides(SEED_TIDES[0][0], SEED_TIDES.at(-1)[0]);
+  const dh = [], dt = [];
+  const mins = (hm) => (+hm.slice(0, 2)) * 60 + (+hm.slice(3));
+  for (let i = 0; i < SEED_TIDES.length; i++) {
+    assert.equal(calc[i][0], SEED_TIDES[i][0]);
+    assert.equal(calc[i][1].length, SEED_TIDES[i][1].length, 'distinta cantidad de mareas el ' + SEED_TIDES[i][0]);
+    SEED_TIDES[i][1].forEach((e, k) => { const c = calc[i][1][k]; assert.equal(c[1], e[1]); dt.push(mins(c[0]) - mins(e[0])); dh.push(c[2] - e[2]); });
+  }
+  const rms = (a) => Math.sqrt(a.reduce((x, y) => x + y * y, 0) / a.length), mx = (a) => Math.max(...a.map(Math.abs));
+  assert.ok(rms(dt) < 12 && mx(dt) <= 25, 'hora: rms ' + rms(dt).toFixed(1) + ' máx ' + mx(dt));
+  assert.ok(rms(dh) < 0.09 && mx(dh) <= 0.2, 'altura: rms ' + rms(dh).toFixed(3) + ' máx ' + mx(dh));
 });
 
 test('usuarios: cambiar perfil, restablecer clave, borrar, y nunca quedarse sin administrador', async () => {

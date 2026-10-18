@@ -6,6 +6,7 @@ import { scrypt as _scrypt, randomBytes, timingSafeEqual, createHmac, createHash
 import { promisify } from 'node:util';
 import { PLACES as SEED_PLACES, TIDES as SEED_TIDES, TIDES_SRC as SEED_TIDES_SRC } from './seed.mjs';
 import { SETUP } from './setup.mjs';
+import { computeTides, chileDate, CALC_SRC } from './mareas-calc.mjs';
 
 const scrypt = promisify(_scrypt);
 
@@ -139,6 +140,29 @@ function cleanTides(input) {
     return [d[0], ev];
   });
   return out.sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));
+}
+
+/* ---------- mareas siempre al día ---------- */
+// Se entregan desde AYER hasta 30 días después de hoy (hora de Chile). Los días que el administrador cargó a mano
+// (o los de la tabla inicial) se respetan; todos los demás se calculan solos (mareas-calc.mjs).
+const TIDES_AHEAD = 30, TIDES_MAX_AHEAD = 120;
+const isoPlus = (iso, n) => new Date(Date.parse(iso + 'T12:00:00Z') + n * 86400000).toISOString().slice(0, 10);
+export function currentTides(base, nowMs) {
+  try {
+    const today = chileDate(nowMs), from = isoPlus(today, -1);
+    const manual = {};
+    let last = null;
+    for (const d of base.tides) if (d[0] >= from) { manual[d[0]] = d; if (!last || d[0] > last) last = d[0]; }
+    let to = isoPlus(today, TIDES_AHEAD);
+    if (last && last > to) to = last < isoPlus(today, TIDES_MAX_AHEAD) ? last : isoPlus(today, TIDES_MAX_AHEAD);
+    const calc = computeTides(from, to);
+    const tides = calc.map((d) => manual[d[0]] || d);
+    const usedManual = calc.some((d) => manual[d[0]]), usedCalc = calc.some((d) => !manual[d[0]]);
+    const src = usedManual && usedCalc ? clean(base.src, 300) + ' · Después de esa fecha: ' + CALC_SRC.charAt(0).toLowerCase() + CALC_SRC.slice(1) : usedManual ? base.src : CALC_SRC;
+    return { tides, src };
+  } catch (e) {
+    return base; // si el cálculo fallara, se muestra la tabla guardada
+  }
 }
 
 /* ---------- la API ---------- */
@@ -288,7 +312,7 @@ export function createApi(kv, opts) {
     }
     if (method === 'GET' && path === '/mareas') {
       const r = await data.getJSON('mareas');
-      return send(200, r ? r.data : { tides: SEED_TIDES, src: SEED_TIDES_SRC });
+      return send(200, currentTides(r ? r.data : { tides: SEED_TIDES, src: SEED_TIDES_SRC }, now()));
     }
     if (method === 'GET' && (m = /^\/foto\/([A-Za-z0-9_-]{1,30})$/.exec(path))) {
       const f = await fotos.getBin('p/' + m[1]);
@@ -458,9 +482,10 @@ export function createApi(kv, opts) {
       await needAdmin(req);
       const b = await readBody(req);
       const tides = cleanTides(b.tides);
-      const src = clean(b.src, 300) || SEED_TIDES_SRC;
+      // El panel muestra la fuente ya combinada con la del cálculo automático; se guarda solo la parte propia.
+      const src = clean(b.src, 300).split(' · Después de esa fecha: ')[0].trim() || SEED_TIDES_SRC;
       await data.setJSON('mareas', { tides, src, at: now() });
-      return send(200, { tides, src });
+      return send(200, currentTides({ tides, src }, now()));
     }
     if (method === 'GET' && path === '/usuarios') {
       await needAdmin(req);

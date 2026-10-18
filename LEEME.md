@@ -1,6 +1,6 @@
-# Chiloé a tu Manera – V 1.11
+# Chiloé a tu Manera – V 1.12
 
-Guía de Chiloé con mapa, lugares, horarios, teléfonos, valoraciones y mareas de Castro.
+Guía de Chiloé con mapa, lugares, horarios, teléfonos, valoraciones y mareas de Castro siempre al día.
 Se publica sola en Netlify cada vez que se sube un cambio a la rama `main` de este repositorio.
 
 ## Perfiles
@@ -21,7 +21,17 @@ El código solo sirve una vez. Después, el botón desaparece.
 - `public/index.html`: la app (mapa Leaflet + OpenStreetMap).
 - `netlify/functions/api.mjs`: servidor (cuentas, lugares, fotos, sugerencias, mareas). Guarda los datos en Netlify Blobs.
 - `netlify/functions/seed.mjs`: los 65 lugares y las mareas iniciales (se cargan solo la primera vez).
+- `netlify/functions/mareas-calc.mjs`: calcula las mareas de Castro para cualquier fecha (ver "Mareas siempre al día").
+- `tools/calibrar-mareas.mjs`: repite la calibración de las mareas si algún día hay una tabla de Castro más larga o más confiable.
 - `tests/`: pruebas automáticas (`npm test`).
+
+## Mareas siempre al día
+Las mareas de Castro **no hay que cargarlas**: el servidor las calcula cada vez que alguien abre la pantalla, desde ayer hasta 30 días después de hoy (hora de Chile, con cambio de horario incluido). No dependen de ningún sitio externo ni de claves.
+
+- **Cómo se calculan:** constantes armónicas de la estación Puerto Montt (la más cercana con datos abiertos; TICON-4, licencia CC BY 4.0, vía la base abierta `@neaps/tide-database`), corregidas para Castro con 5 números calibrados con 10 días de mareas de Castro del modelo FES2022 (tidesatlas.com, 18-10-2026).
+- **Qué tan exactas son:** contra esos 10 días el error típico es de ~7 minutos y ~6 cm (máximo 19 min y 14 cm); calibrando con una parte de los días y probando con la otra, 5–9 min y 5–7 cm. La app avisa que pueden diferir hasta unos 30 minutos y 20 cm de la tabla oficial del SHOA. Solo son predicciones astronómicas: no incluyen viento ni lluvia, y no sirven para navegar.
+- **Corrección a mano:** el administrador puede cambiar cualquier día desde Panel > Mareas. Lo que escriba reemplaza el cálculo de esos días y el resto sigue calculándose solo.
+- **Mejorarlas:** con una tabla de Castro más larga (idealmente de un año, por ejemplo la oficial del SHOA) se corre `node tools/calibrar-mareas.mjs tabla.json` y se pegan los 5 números nuevos en `CALIB`.
 
 ## Cosas a saber
 - No hay correo de "olvidé mi contraseña": el administrador crea una contraseña temporal desde Panel > Usuarios.
