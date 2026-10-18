@@ -1,0 +1,14 @@
+{
+  "name": "guia-chiloe",
+  "version": "1.7.0",
+  "private": true,
+  "type": "module",
+  "description": "Chiloé a tu Manera: guía interactiva con mapa, cuentas y panel de administración.",
+  "scripts": {
+    "test": "node --test tests/api.test.mjs",
+    "seed": "node tools/make-seed.mjs"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}

@@ -190,7 +190,7 @@ td.n{white-space:nowrap;font-weight:600}
 .adm{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
 .adm button{height:44px;padding:0 14px;border-radius:12px;border:1px solid var(--line2);background:var(--surface);font-weight:600}
 select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 20px) 22px,calc(100% - 15px) 22px;background-size:5px 5px;background-repeat:no-repeat;padding-right:36px}
-.hint{font-size:12px;color:var(--muted);margin-top:4px}
+.hint{font-size:12px;color:var(--muted);margin-top:4px;word-break:break-word}
 .prev{margin-top:8px;max-width:100%;border-radius:12px;display:block;max-height:180px}
 .ok{padding:14px;border-radius:14px;background:var(--t-servicios);font-weight:600;margin-bottom:12px}
 .sg{border-radius:18px;background:var(--surface);box-shadow:var(--shadow-s);padding:14px;margin-bottom:12px}
@@ -228,7 +228,7 @@ select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(
   .dock .brand{display:flex}
   .dock .bar{margin:0 16px 12px;box-shadow:none;background:var(--surface2);border-color:transparent;backdrop-filter:none}
   .dock .bar input{font-size:15px}
-  #detail,#inbox,#sheet,#tides{right:auto;width:420px;box-shadow:0 0 0 1px var(--line),12px 0 40px rgba(0,0,0,.1)}
+  #detail,#sheet,#tides,#panel,#editor,#account{right:auto;width:420px;box-shadow:0 0 0 1px var(--line),12px 0 40px rgba(0,0,0,.1)}
   .pop{align-items:center;justify-content:center}
   .pcard{width:min(400px,calc(100vw - 32px));border-radius:26px;padding:12px 16px 20px}
   .cats{margin:0;padding-left:16px}
@@ -271,6 +271,30 @@ select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 @media (min-width:700px){#login{max-width:480px;left:50%;right:auto;width:480px;transform:translateX(-50%);box-shadow:0 0 0 1px var(--line2)}}
 @media (min-width:700px) and (max-width:899px){.ovl,.pop{max-width:480px;left:50%;right:auto;width:480px;transform:translateX(-50%);box-shadow:0 0 0 1px var(--line2)}}
+
+/* perfiles, panel de administración y editor (V 1.7) */
+#login.wait .card-login{visibility:hidden}
+.linkbtn{display:block;margin:12px auto 0;border:0;background:transparent;padding:8px;font-size:13px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.seg.s3{grid-template-columns:repeat(3,1fr);margin:0 0 12px}
+.seg.s3 button{font-size:13px;padding:0 4px}
+.cnt{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;margin-left:5px;padding:0 5px;border-radius:10px;background:var(--danger);color:#fff;font-size:12px;font-weight:700}
+.role{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:10px;background:var(--surface2);color:var(--muted)}
+.role.adm{background:var(--t-visitar);color:var(--c-visitar)}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:20px;font-weight:700;letter-spacing:.04em;user-select:all;display:inline-block;margin:6px 0}
+details.sg>summary{cursor:pointer;font-weight:700;font-size:16px;min-height:28px;display:flex;align-items:center}
+details.sg[open]>summary{margin-bottom:10px}
+.pk-wrap{position:relative;flex:1 1 0;min-height:0}
+#pk-map{position:absolute;inset:0;background:var(--sea)}
+#pk-map.has-tiles path.land{fill-opacity:0;stroke-opacity:0}
+.pk-pin{position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-38px 0 0 -22px;color:var(--danger);pointer-events:none;z-index:1000;filter:drop-shadow(0 3px 4px rgba(0,0,0,.4))}
+.pk-pin svg{width:44px;height:44px;fill:currentColor;stroke:#fff;stroke-width:1.2}
+.pk-bar{flex:none;padding-top:12px;padding-bottom:max(16px,env(safe-area-inset-bottom,0px));background:var(--surface);box-shadow:0 -6px 20px rgba(0,0,0,.08)}
+.pk-bar p{margin:0 0 10px;font-size:14px;color:var(--muted)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:max(24px,env(safe-area-inset-bottom,0px));z-index:4000;max-width:calc(100vw - 32px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:14px;font-weight:600;font-size:14px;box-shadow:var(--shadow)}
+.fmsg{min-height:22px;margin-bottom:8px;font-weight:600;color:var(--danger)}
+.who{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+input[type=file]{width:100%;font:inherit;font-size:14px;color:var(--muted);padding:8px;background:var(--surface);border:1px dashed var(--line2);border-radius:14px}
+input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right:10px;padding:10px 14px;border:0;border-radius:10px;background:var(--accent);color:var(--on-accent);cursor:pointer;min-height:40px}
 </style>
 <link rel="stylesheet" href="leaflet/leaflet.css">
 <script src="leaflet/leaflet.js"></script>
@@ -279,7 +303,7 @@ select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(
 </head>
 <body>
 <main>
-<section id="login" aria-label="Acceso">
+<section id="login" class="wait" aria-label="Acceso">
   <div class="hero gut">
     <div aria-hidden="true" style="position:absolute;inset:0">
       <div class="casa" style="left:18px;width:70px;height:92px"><i style="left:12px;top:16px"></i><i style="left:42px;top:16px"></i></div>
@@ -296,16 +320,19 @@ select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(
       <button type="button" id="m-in" aria-pressed="true">Entrar</button>
       <button type="button" id="m-new" aria-pressed="false">Crear cuenta</button>
     </div>
+    <p id="setup-title" class="note" hidden style="margin:0 0 12px;font-weight:600;color:var(--ink)">Configuración inicial: crea la cuenta del administrador con el código de instalación.</p>
     <form id="form" novalidate>
+      <div class="fld" id="f-code" hidden><label for="code">Código de instalación</label><input id="code" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="CHILOE-XXXX-XXXX-XXXX-XXXX"></div>
       <div class="fld" id="f-name" hidden><label for="name">Tu nombre</label><input id="name" type="text" autocomplete="name" placeholder="Ej: Camila"></div>
       <div class="fld"><label for="mail">Correo</label><input id="mail" type="email" autocomplete="email" inputmode="email" placeholder="tucorreo@ejemplo.cl"></div>
-      <div class="fld"><label for="pass">Contraseña</label><input id="pass" type="password" autocomplete="current-password" placeholder="Mínimo 6 caracteres"></div>
+      <div class="fld"><label for="pass">Contraseña</label><input id="pass" type="password" autocomplete="current-password" placeholder="Mínimo 8 caracteres"></div>
       <div id="msg" role="alert" aria-live="polite"></div>
       <button type="submit" class="btn main" id="go" style="width:100%">Entrar</button>
     </form>
-    <button type="button" class="btn soft" id="guest" style="margin-top:10px">Entrar como invitado</button>
-    <p class="note">Tu cuenta se guarda solo en este teléfono. Para usarla en otros aparatos hará falta un servicio de cuentas.</p>
-    <div class="ver">V 1.6</div>
+    <button type="button" class="btn soft" id="guest" style="margin-top:10px">Solo mirar, sin cuenta</button>
+    <p class="note">Sin cuenta puedes ver el mapa, los lugares y las mareas. Con una cuenta también guardas favoritos en todos tus aparatos y puedes sugerir lugares.</p>
+    <button type="button" class="linkbtn" id="setup-link" hidden>Primera vez: configurar al administrador</button>
+    <div class="ver">V 1.7</div>
   </div>
 </section>
 
@@ -321,6 +348,7 @@ select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(
     <div class="cats" id="cats" role="group" aria-label="Categoría"></div>
   </div>
   <div class="fabs">
+    <button type="button" class="ib g" id="addbtn" hidden aria-label="Agregar un lugar"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11zM12 7v6M9 10h6"/></svg></button>
     <button type="button" class="ib g" id="tidebtn" aria-label="Ver mareas de Castro"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9c2.2 0 2.2-2 4.5-2S9.800 9 12 9s2.200-2 4.500-2S18.800 9 21 9M3 15c2.200 0 2.200-2 4.500-2S9.800 15 12 15s2.200-2 4.500-2S18.800 15 21 15"/></svg></button>
     <button type="button" class="ib g" id="fit" aria-label="Ver todos los lugares de la lista"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
     <button type="button" class="ib g" id="zin" aria-label="Acercar"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
@@ -341,19 +369,18 @@ select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(
 </section>
 
 <section id="detail" class="ovl" hidden aria-label="Ficha del lugar"></section>
-<section id="inbox" class="ovl" hidden aria-label="Sugerencias recibidas"></section>
 <section id="tides" class="ovl" hidden aria-label="Mareas de Castro"></section>
 <section id="sheet" class="ovl" hidden aria-label="Sugerir un lugar">
   <div class="ovl-top gut"><button type="button" class="back" id="sg-back"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Volver</button><h2>Sugerir un lugar</h2></div>
   <div class="ovl-body gut">
     <form id="sg-form" novalidate>
-      <p style="margin:4px 0 16px;color:var(--muted)">Cuéntanos de un lugar que debería estar en la guía. Lo revisamos antes de publicarlo.</p>
+      <p style="margin:4px 0 16px;color:var(--muted)">Cuéntanos de un lugar que debería estar en la guía. Lo revisa el administrador antes de publicarlo.</p>
       <div class="fl"><label for="s-name">Nombre del lugar *</label><input id="s-name" type="text" autocomplete="off" placeholder="Ej: Cocinería Doña Rosa"></div>
       <div class="fl"><label for="s-cat">¿Qué es? *</label><select id="s-cat"><option value="comer">Para comer</option><option value="visitar">Para visitar</option><option value="comprar">Para comprar</option><option value="servicios">Servicio</option></select></div>
       <div class="fl"><label for="s-town">Pueblo</label><select id="s-town"></select></div>
       <div class="fl"><label for="s-tel">Teléfono</label><input id="s-tel" type="text" inputmode="tel" autocomplete="off" placeholder="+56 9 1234 5678"></div>
       <div class="fl"><label for="s-web">Sitio web o Instagram</label><input id="s-web" type="text" inputmode="url" autocomplete="off" placeholder="https://"></div>
-      <div class="fl"><label for="s-map">Enlace de Google Maps</label><input id="s-map" type="text" inputmode="url" autocomplete="off" placeholder="Pega aquí el enlace, si lo tienes"><div class="hint">Sirve para poner el lugar en el mapa.</div></div>
+      <div class="fl"><label for="s-map">Enlace de Google Maps</label><input id="s-map" type="text" inputmode="url" autocomplete="off" placeholder="Pega aquí el enlace, si lo tienes"><div class="hint">Si el enlace es corto (maps.app.goo.gl) no trae la ubicación; igual lo revisamos antes de publicarlo.</div></div>
       <div class="fl"><label for="s-note">¿Por qué lo recomiendas?</label><textarea id="s-note" placeholder="Qué se come, qué se ve, mejor horario…"></textarea></div>
       <div class="fl"><label for="s-photo">Foto (opcional)</label><input id="s-photo" type="file" accept="image/*"><img id="s-prev" class="prev" alt="Vista previa de la foto" hidden></div>
       <div id="s-msg" role="alert" aria-live="polite" style="min-height:22px;margin-bottom:8px;font-weight:600;color:var(--danger)"></div>
@@ -362,20 +389,83 @@ select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(
     <div id="s-done" class="ok" hidden>¡Gracias! Tu sugerencia quedó en revisión.</div>
   </div>
 </section>
+<section id="panel" class="ovl" hidden aria-label="Panel de administración">
+  <div class="ovl-top gut"><button type="button" class="back" data-closeovl="panel"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Volver</button><h2>Administración</h2></div>
+  <div class="gut" style="flex:none"><div class="seg s3" id="ptabs" role="group" aria-label="Sección">
+    <button type="button" data-ptab="sug" aria-pressed="true">Sugerencias<span class="cnt" id="pcnt" hidden></span></button>
+    <button type="button" data-ptab="usr" aria-pressed="false">Usuarios</button>
+    <button type="button" data-ptab="mar" aria-pressed="false">Mareas</button>
+  </div></div>
+  <div class="ovl-body gut" id="pbody"></div>
+</section>
+<section id="editor" class="ovl" hidden aria-label="Editar lugar">
+  <div class="ovl-top gut"><button type="button" class="back" id="ed-back"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Volver</button><h2 id="ed-title">Lugar</h2></div>
+  <div class="ovl-body gut">
+    <form id="ed-form" novalidate>
+      <div class="fl"><label for="e-name">Nombre *</label><input id="e-name" type="text" maxlength="120" autocomplete="off"></div>
+      <div class="fl"><label for="e-cat">¿Qué es? *</label><select id="e-cat"><option value="comer">Para comer</option><option value="visitar">Para visitar</option><option value="comprar">Para comprar</option><option value="servicios">Servicio</option></select></div>
+      <div class="fl"><label for="e-sub">Tipo de lugar</label><input id="e-sub" type="text" list="e-sublist" maxlength="40" autocomplete="off" placeholder="Ej: Restaurante, Playa, Café"><datalist id="e-sublist"></datalist></div>
+      <div class="fl"><label for="e-town">Pueblo</label><select id="e-town"></select></div>
+      <div class="fl"><label for="e-hours">Horario</label><input id="e-hours" type="text" maxlength="200" autocomplete="off" placeholder="L–V 10:00–18:00 · S 10:00–14:00"></div>
+      <div class="fl"><label for="e-tel">Teléfono</label><input id="e-tel" type="text" inputmode="tel" maxlength="40" autocomplete="off" placeholder="+56 9 1234 5678"></div>
+      <div class="fl"><label for="e-web">Sitio web, Instagram o carta</label><input id="e-web" type="text" inputmode="url" maxlength="300" autocomplete="off" placeholder="https://"></div>
+      <div class="fl"><label for="e-desc">Descripción</label><textarea id="e-desc" maxlength="1500" placeholder="Qué se come, qué se ve, mejor horario…"></textarea></div>
+      <div class="sg">
+        <h3>Ubicación en el mapa</h3>
+        <div class="sm" id="e-loc"></div>
+        <div id="e-sugmap" class="sm" hidden></div>
+        <div class="acts"><button type="button" class="btn main" id="e-pick">Elegir en el mapa</button><button type="button" class="btn" id="e-clearloc">Quitar</button></div>
+        <div class="fl" style="margin-top:14px"><label for="e-link">…o pega un enlace largo de Google Maps</label><input id="e-link" type="text" inputmode="url" autocomplete="off" placeholder="https://www.google.com/maps/…"><div class="hint" id="e-linkmsg"></div></div>
+        <details><summary>Escribir las coordenadas</summary><div class="two"><div><label for="e-lat">Latitud</label><input id="e-lat" type="text" inputmode="decimal" autocomplete="off"></div><div><label for="e-lng">Longitud</label><input id="e-lng" type="text" inputmode="decimal" autocomplete="off"></div></div></details>
+      </div>
+      <details class="sg"><summary>Valoración de Google (opcional)</summary>
+        <div class="two"><div><label for="e-rating">Nota (0 a 5)</label><input id="e-rating" type="text" inputmode="decimal" autocomplete="off" placeholder="4.6"></div><div><label for="e-count">Opiniones</label><input id="e-count" type="text" inputmode="numeric" autocomplete="off" placeholder="120"></div></div>
+      </details>
+      <div class="sg">
+        <h3>Foto</h3>
+        <img id="e-prev" class="prev" alt="Foto del lugar" hidden>
+        <div class="fl" style="margin-top:8px"><input id="e-photo" type="file" accept="image/*"></div>
+        <div class="acts"><button type="button" class="btn" id="e-rmphoto" hidden>Quitar foto</button></div>
+      </div>
+      <div id="e-msg" class="fmsg" role="alert" aria-live="polite"></div>
+      <button type="submit" class="btn main" id="e-go" style="width:100%">Guardar</button>
+    </form>
+  </div>
+</section>
+<section id="picker" class="ovl" hidden aria-label="Elegir ubicación en el mapa">
+  <div class="ovl-top gut"><button type="button" class="back" id="pk-back"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Volver</button><h2>Elegir ubicación</h2></div>
+  <div class="pk-wrap"><div id="pk-map" role="application" aria-label="Mapa para elegir la ubicación"></div><div class="pk-pin" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11zM12 7.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 1 0 0-5z" fill-rule="evenodd"/></svg></div></div>
+  <div class="pk-bar gut"><p>Mueve el mapa hasta que la flecha roja quede justo sobre el lugar. Acércate para más precisión.</p><button type="button" class="btn main" id="pk-ok" style="width:100%">Usar este punto</button></div>
+</section>
+<section id="account" class="ovl" hidden aria-label="Mi cuenta">
+  <div class="ovl-top gut"><button type="button" class="back" data-closeovl="account"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Volver</button><h2>Mi cuenta</h2></div>
+  <div class="ovl-body gut">
+    <div class="sg"><h3 id="acc-name"></h3><div class="sm" id="acc-mail"></div><div class="who"><span class="role" id="acc-role"></span></div></div>
+    <form id="acc-form" novalidate>
+      <h3 style="margin:18px 0 10px">Cambiar contraseña</h3>
+      <div class="fl"><label for="a-old">Contraseña actual</label><input id="a-old" type="password" autocomplete="current-password"></div>
+      <div class="fl"><label for="a-new">Contraseña nueva</label><input id="a-new" type="password" autocomplete="new-password" placeholder="Mínimo 8 caracteres"></div>
+      <div id="a-msg" class="fmsg" role="alert" aria-live="polite"></div>
+      <button type="submit" class="btn main" id="a-go" style="width:100%">Cambiar contraseña</button>
+    </form>
+  </div>
+</section>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <section id="menu" class="pop" hidden aria-label="Menú">
   <div class="scrim" data-closemenu="1"></div>
   <div class="pcard gut" role="dialog" aria-label="Menú">
-    <div class="pwho"><b id="menuwho"></b><span>V 1.6</span></div>
+    <div class="pwho"><b id="menuwho"></b><span id="menurole"></span></div>
+    <p class="note" id="guestnote" hidden style="margin:0 0 12px">Estás como visualizador: puedes mirar todo. Crea una cuenta para guardar favoritos en todos tus aparatos y sugerir lugares.</p>
     <button type="button" class="mi" id="tidebtn2"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9c2.2 0 2.2-2 4.5-2S9.800 9 12 9s2.200-2 4.500-2S18.800 9 21 9M3 15c2.200 0 2.200-2 4.500-2S9.800 15 12 15s2.200-2 4.500-2S18.800 15 21 15"/></svg>Mareas de Castro</button>
-    <button type="button" class="mi" id="sugbtn"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Sugerir un lugar</button>
-    <button type="button" class="mi" id="inboxbtn" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13l2-8h12l2 8M4 13v6h16v-6M4 13h5l1 2h4l1-2h5"/></svg>Sugerencias recibidas<span class="bd" id="bdg">0</span></button>
-    <button type="button" class="mi" id="out"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/></svg>Cerrar sesión</button>
-    <p class="credit">Mapa © colaboradores de OpenStreetMap · Costa: chile-geojson · Leaflet</p>
+    <button type="button" class="mi" id="panelbtn" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13l2-8h12l2 8M4 13v6h16v-6M4 13h5l1 2h4l1-2h5"/></svg>Panel de administración<span class="bd" id="bdg" hidden>0</span></button>
+    <button type="button" class="mi" id="addplacebtn" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Agregar un lugar</button>
+    <button type="button" class="mi" id="sugbtn" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Sugerir un lugar</button>
+    <button type="button" class="mi" id="accbtn" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a4 4 0 1 0 0 8 4 4 0 1 0 0-8zM4 20a8 8 0 0 1 16 0"/></svg>Mi cuenta</button>
+    <button type="button" class="mi" id="loginbtn" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4h4v16h-4M8 8l-4 4 4 4M4 12h11"/></svg>Crear cuenta o entrar</button>
+    <button type="button" class="mi" id="out" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/></svg>Cerrar sesión</button>
+    <p class="credit">V 1.7 · Mapa © colaboradores de OpenStreetMap · Costa: chile-geojson · Leaflet</p>
   </div>
 </section>
-<form name="sugerencia" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
-  <input name="bot-field"><input name="nombre"><input name="tipo"><input name="pueblo"><input name="telefono"><input name="web"><input name="mapa"><textarea name="comentario"></textarea><input name="enviado_por"><input type="file" name="foto">
-</form>
 </main>
 <script>
 var P=[
@@ -460,9 +550,9 @@ var TOWNS=[['Ancud',-41.87,-73.83],['Quemchi',-42.15,-73.48],['Dalcahue',-42.385
 var TOWN_OPTS=['Ancud','Castro','Chonchi','Dalcahue','Quemchi','Queilén','Putemún','Nercón','Rilán','Cucao','Tenaún','Quinchao','Lemuy','Quellón','Otro'];
 var EM=[['Ambulancia (SAMU)','131'],['Bomberos','132'],['Carabineros','133'],['PDI','134']];
 var BASE=P.map(function(r,i){return {id:String(i),cat:r[0],sub:r[1],name:r[2],town:r[3],zone:ZONE[r[3]]||'Otro',lat:r[4],lng:r[5],hours:r[6],tel:r[7],rating:r[8],count:r[9],desc:r[10],web:r[11],hs:r[12]};});
-var EXTRA=[],ALL=BASE.slice(),BYID={};
-function rebuild(){ALL=BASE.concat(EXTRA);BYID={};ALL.forEach(function(p){BYID[p.id]=p;});}
-rebuild();
+var ALL=BASE.slice(),BYID={};
+function setAll(list){ALL=list;BYID={};ALL.forEach(function(p){BYID[p.id]=p;});}
+setAll(ALL);
 
 /* ---------- utilidades ---------- */
 var mem={};
@@ -473,7 +563,7 @@ function jget(k,d){try{var v=store.get(k);return v?JSON.parse(v):d;}catch(e){ret
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function norm(s){return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
 function svg(d,cls){return '<svg class="i '+(cls||'')+'" viewBox="0 0 24 24" aria-hidden="true"><path d="'+d+'"/></svg>';}
-function safeUrl(u){u=String(u||'').trim();if(!u)return '';if(!/^https?:\/\//i.test(u))u='https://'+u;return /^https?:\/\/[^\s"'<>]+$/i.test(u)?u:'';}
+function safeUrl(u){u=String(u||'').trim();if(!u)return '';if(!/^https?:\/\//i.test(u))u='https://'+u;return /^https?:\/\/[^\s"'<>\/:@]+\.[^\s"'<>\/:@]+(?:[:\/?#][^\s"'<>]*)?$/i.test(u)?u:'';}
 function webLabel(u){if(/drive\.google|qrcarta|canva/.test(u))return 'Ver carta o menú';if(/instagram/.test(u))return 'Instagram';if(/facebook/.test(u))return 'Facebook';return u.replace(/^https?:\/\/(www\.)?/,'').split('/')[0];}
 function fmtTel(t){return String(t||'').replace(/^(\+56)(9)(\d{4})(\d{4})$/,'$1 $2 $3 $4').replace(/^(\+56)(65)(\d{3})(\d{4})$/,'$1 $2 $3 $4');}
 function telHref(t){return 'tel:'+String(t).replace(/[^\d+]/g,'');}
@@ -493,65 +583,94 @@ function shrink(file,maxW,q){return new Promise(function(res,rej){
     res(out);};im.src=fr.result;};
   fr.readAsDataURL(file);});}
 
-/* ---------- servicios en línea (si existen) ---------- */
-var db=null,isAdmin=false,myId=null,SUGS=[];
-function connect(){
-  if(!(window.claude&&claude.use))return;
-  claude.use('user').then(function(u){if(!u)return;u.canEdit().then(function(v){isAdmin=!!v;updateAdmin();}).catch(function(){});u.id().then(function(i){myId=i;}).catch(function(){});}).catch(function(){});
-  claude.use('db').then(function(d){
-    if(!d)return;db=d;updateAdmin();
-    db.collection('places').onSnapshot(function(snap){
-      EXTRA=snap.docs.map(function(s){var x=s.data();return {id:'x'+s.id,docId:s.id,cat:x.cat||'visitar',sub:x.sub||'Sugerido',name:x.name||'Sin nombre',town:x.town||'Otro',zone:ZONE[x.town]||'Otro',lat:typeof x.lat==='number'?x.lat:null,lng:typeof x.lng==='number'?x.lng:null,hours:x.hours||'',tel:x.tel||'',rating:null,count:0,desc:x.desc||'',web:x.web||'',hs:''};});
-      rebuild();if(user&&map){drawMarkers();renderList();}
-    },function(){});
-    if(isAdmin)subSugs();
+/* ---------- conexión con el servidor ---------- */
+var user=null,saved={},role='visitante',SUGS=[],USERS=null,hasAdmin=true;
+var ROLE_LABEL={admin:'Administrador',usuario:'Usuario registrado',visitante:'Visualizador'};
+function isAdm(){return !!(user&&!user.guest&&user.role==='admin');}
+function isReg(){return !!(user&&!user.guest);}
+function api(method,path,body){
+  var o={method:method,headers:{'x-guia':'1'},credentials:'same-origin'};
+  if(body!==undefined){o.headers['content-type']='application/json';o.body=JSON.stringify(body);}
+  return fetch('/api'+path,o).then(function(r){
+    return r.json().catch(function(){return {};}).then(function(j){
+      if(!r.ok){var e=new Error(j.error||'Algo salió mal. Inténtalo otra vez.');e.status=r.status;throw e;}
+      return j;
+    });
+  },function(){var e=new Error('No hay conexión con el servidor. Revisa tu internet e inténtalo otra vez.');e.status=0;throw e;});
+}
+function fail(e){
+  if(e&&e.status===401&&isReg()){sessionLost();return 'Tu sesión terminó. Vuelve a entrar.';}
+  return e&&e.message?e.message:'Algo salió mal. Inténtalo otra vez.';
+}
+function sessionLost(){if(sessionLost.on)return;sessionLost.on=true;doLogout(false);$('msg').textContent='Tu sesión terminó. Vuelve a entrar.';setTimeout(function(){sessionLost.on=false;},800);}
+function toast(t){var el=$('toast');el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){el.hidden=true;},3200);}
+function fromServer(p){
+  return {id:String(p.id),cat:p.cat,sub:p.sub||'Otro',name:p.name,town:p.town||'Otro',zone:ZONE[p.town]||'Otro',
+    lat:typeof p.lat==='number'?p.lat:null,lng:typeof p.lng==='number'?p.lng:null,hours:p.hours||'',tel:p.tel||'',
+    rating:typeof p.rating==='number'?p.rating:null,count:p.count||0,desc:p.desc||'',web:p.web||'',hs:p.hs||'',photo:p.photo||0};
+}
+function loadPlaces(fitAfter){
+  return api('GET','/lugares').then(function(r){
+    if(!r||!Array.isArray(r.places))return;
+    setAll(r.places.map(fromServer));
+    if(sel&&!BYID[sel])sel=null;
+    if(user&&map)refresh(!!fitAfter);
   }).catch(function(){});
 }
-function subSugs(){
-  if(!db||!isAdmin||subSugs.on)return;subSugs.on=true;
-  db.collection('suggestions').onSnapshot(function(snap){
-    SUGS=snap.docs.map(function(s){var x=s.data();x.id=s.id;return x;}).filter(function(x){return x.status==='nueva';}).sort(function(a,b){return (b.at||0)-(a.at||0);});
-    updateAdmin();if(!$('inbox').hidden)renderInbox();
-  },function(){});
+function loadTides(){
+  return api('GET','/mareas').then(function(r){if(r&&Array.isArray(r.tides)&&r.tides.length){TIDES=r.tides;if(r.src)TIDES_SRC=r.src;}}).catch(function(){});
+}
+function loadSugs(){
+  if(!isAdm())return Promise.resolve();
+  return api('GET','/sugerencias').then(function(r){SUGS=r.suggestions||[];updateAdmin();if(!$('panel').hidden&&ptab==='sug')renderPanel();}).catch(function(e){fail(e);});
 }
 function updateAdmin(){
-  var b=$('inboxbtn');if(!b)return;
-  var on=!!(isAdmin&&db);
-  b.hidden=!on;$('bdg').textContent=SUGS.length;$('bdg').hidden=!SUGS.length;$('menudot').hidden=!(on&&SUGS.length);
-  if(on)subSugs();
+  var a=isAdm(),n=SUGS.length,reg=isReg();
+  $('panelbtn').hidden=!a;$('addplacebtn').hidden=!a;$('addbtn').hidden=!a;
+  $('sugbtn').hidden=!(reg&&!a);$('accbtn').hidden=!reg;$('out').hidden=!reg;$('loginbtn').hidden=reg;$('guestnote').hidden=reg;
+  $('bdg').textContent=n;$('bdg').hidden=!n;$('menudot').hidden=!(a&&n);
+  var pc=$('pcnt');if(pc){pc.textContent=n;pc.hidden=!n;}
 }
 
-/* ---------- cuentas (solo en este teléfono) ---------- */
-function hashPw(pw,salt){
-  if(!(window.crypto&&crypto.subtle&&window.TextEncoder))return Promise.resolve('p:'+salt+pw);
-  return crypto.subtle.digest('SHA-256',new TextEncoder().encode(salt+pw)).then(function(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return ('0'+x.toString(16)).slice(-2);}).join('');});
-}
-function rnd(){var a='';for(var i=0;i<12;i++)a+=Math.floor(Math.random()*36).toString(36);return a;}
-var mode='in',user=null,saved={};
+/* ---------- cuentas ---------- */
+var mode='in';
 function setMode(m){
   mode=m;$('m-in').setAttribute('aria-pressed',m==='in');$('m-new').setAttribute('aria-pressed',m==='new');
-  $('f-name').hidden=m!=='new';$('go').textContent=m==='new'?'Crear cuenta':'Entrar';
-  $('pass').autocomplete=m==='new'?'new-password':'current-password';$('msg').textContent='';
+  $('f-name').hidden=m==='in';$('f-code').hidden=m!=='setup';$('setup-title').hidden=m!=='setup';
+  $('setup-link').hidden=hasAdmin||m==='setup';
+  $('go').textContent=m==='new'?'Crear cuenta':m==='setup'?'Crear administrador':'Entrar';
+  $('pass').autocomplete=m==='in'?'current-password':'new-password';$('msg').textContent='';
 }
 function favKey(){return 'chiloe.fav.'+(user.guest?'invitado':user.email);}
-function enter(u){user=u;saved=jget(favKey(),{});store.set('chiloe.session',JSON.stringify(u.guest?{guest:true}:{email:u.email}));showApp();}
+function pushFavs(){if(!isReg())return;api('PUT','/favoritos',{ids:Object.keys(saved)}).catch(function(e){fail(e);});}
+function enter(u,favs){
+  user=u;role=u.guest?'visitante':u.role;
+  var local=jget(favKey(),{});
+  if(u.guest){saved=local;}
+  else if(favs&&favs.length){saved={};favs.forEach(function(id){saved[id]=true;});}
+  else{saved=local;if(Object.keys(saved).length)pushFavs();}
+  store.set(favKey(),JSON.stringify(saved));
+  store.set('chiloe.session',JSON.stringify(u.guest?{guest:true}:{}));
+  showApp();
+}
 function submit(e){
   e.preventDefault();
-  var mail=$('mail').value.trim().toLowerCase(),pw=$('pass').value,nm=$('name').value.trim(),msg=$('msg');
+  var mail=$('mail').value.trim().toLowerCase(),pw=$('pass').value,nm=$('name').value.trim(),msg=$('msg'),btn=$('go'),m=mode;
+  if(m==='setup'&&!$('code').value.trim()){msg.textContent='Escribe el código de instalación.';return;}
   if(!/^\S+@\S+\.\S+$/.test(mail)){msg.textContent='Escribe un correo válido, por ejemplo nombre@correo.cl.';return;}
-  if(pw.length<6){msg.textContent='La contraseña necesita al menos 6 caracteres.';return;}
-  var users=jget('chiloe.users',{});
-  if(mode==='new'){
-    if(users[mail]){msg.textContent='Ese correo ya tiene una cuenta. Usa "Entrar".';return;}
-    var salt=rnd();
-    hashPw(pw,salt).then(function(h){users[mail]={name:nm||mail.split('@')[0],salt:salt,hash:h};store.set('chiloe.users',JSON.stringify(users));enter({email:mail,name:users[mail].name});});
-  }else{
-    var u=users[mail];
-    if(!u){msg.textContent='No encontramos esa cuenta en este teléfono. Prueba "Crear cuenta".';return;}
-    hashPw(pw,u.salt).then(function(h){if(h!==u.hash){msg.textContent='La contraseña no coincide. Revísala e inténtalo de nuevo.';return;}enter({email:mail,name:u.name});});
-  }
+  if(pw.length<8){msg.textContent='La contraseña necesita al menos 8 caracteres.';return;}
+  msg.textContent='';btn.disabled=true;btn.textContent='Un momento…';
+  var req=m==='in'?api('POST','/entrar',{email:mail,password:pw}):m==='new'?api('POST','/registro',{name:nm,email:mail,password:pw}):api('POST','/instalar',{codigo:$('code').value.trim(),name:nm,email:mail,password:pw});
+  req.then(function(r){hasAdmin=hasAdmin||m==='setup';$('pass').value='';$('code').value='';enter(r.user,r.favs||[]);})
+   .catch(function(err){msg.textContent=err.message;})
+   .then(function(){btn.disabled=false;var t=m==='new'?'Crear cuenta':m==='setup'?'Crear administrador':'Entrar';btn.textContent=t;});
 }
-function logout(){store.del('chiloe.session');user=null;sel=null;closeAll();$('app').hidden=true;$('login').hidden=false;$('pass').value='';$('msg').textContent='';}
+function doLogout(callApi){
+  if(callApi!==false&&isReg())api('POST','/salir',{}).catch(function(){});
+  store.del('chiloe.session');user=null;role='visitante';saved={};sel=null;SUGS=[];USERS=null;tempPw=null;
+  closeAll();$('app').hidden=true;$('login').hidden=false;$('pass').value='';$('msg').textContent='';
+  setMode('in');
+}
 
 /* ---------- estado y mapa ---------- */
 var zone='Castro',cat='comer',q='',sel=null,map=null,layer=null,view='mapa',sort={k:'name',d:1},subf={},DESK=false,SNAP={peek:190,half:300,full:600},sheetState='half',suppressClick=false;
@@ -696,16 +815,17 @@ function refresh(doFit){renderChips();drawMarkers();renderList();if(doFit){$('li
 var lastFocus=null,photoCache={},curId=null;
 function openOvl(id,focusSel){lastFocus=document.activeElement;var o=$(id);o.hidden=false;var b=o.querySelector(focusSel||'.back,[data-close]');if(b)b.focus();}
 function closeOvl(id){$(id).hidden=true;if(lastFocus&&lastFocus.focus&&document.contains(lastFocus))lastFocus.focus();}
-function closeAll(){['detail','sheet','inbox','tides','menu'].forEach(function(i){$(i).hidden=true;});}
-function photoHtml(p,src){
-  return '<div class="dhero k-'+p.cat+'" id="ph"><img src="fotos/'+esc(p.id)+'.jpg" alt="Foto de '+esc(p.name)+'" onerror="this.remove();document.getElementById(\'ph0\').hidden=false"><span class="phold" id="ph0" hidden>'+svg(CATS[p.cat].d,'big')+'Sin foto todavía</span></div>';
+function closeAll(){['detail','sheet','tides','panel','editor','picker','account','menu'].forEach(function(i){$(i).hidden=true;});}
+function photoSrc(p){return p.photo>0?'/api/foto/'+encodeURIComponent(p.id)+'?v='+p.photo:'fotos/'+encodeURIComponent(p.id)+'.jpg';}
+function photoHtml(p){
+  return '<div class="dhero k-'+p.cat+'" id="ph"><img src="'+esc(photoSrc(p))+'" alt="Foto de '+esc(p.name)+'" onerror="this.remove();document.getElementById(\'ph0\').hidden=false"><span class="phold" id="ph0" hidden>'+svg(CATS[p.cat].d,'big')+'Sin foto todavía</span></div>';
 }
 function infoRow(ic,inner){return '<div class="irowi">'+svg(ic)+'<span>'+inner+'</span></div>';}
 function openDetail(id){
   var p=BYID[id];if(!p)return;curId=id;
   var on=!!saved[id],web=safeUrl(p.web);
   var h='<div class="dnav gut"><button type="button" class="ib g" data-close="detail" aria-label="Volver">'+svg(IC.back)+'</button><button type="button" class="ib g heart'+(on?' on':'')+'" data-save="'+esc(id)+'" aria-pressed="'+on+'" aria-label="'+(on?'Quitar de guardados':'Guardar')+'">'+svg(IC.heart)+'</button></div>';
-  h+='<div class="ovl-body k-'+p.cat+'"><div id="phbox">'+photoHtml(p,photoCache[id]||'')+'</div><div class="dbody gut">';
+  h+='<div class="ovl-body k-'+p.cat+'"><div id="phbox">'+photoHtml(p)+'</div><div class="dbody gut">';
   h+='<h2>'+esc(p.name)+'</h2><div class="sub">'+esc(p.sub)+' en '+esc(p.town)+'</div>';
   if(p.rating!=null)h+='<div class="stars">'+svg(IC.star)+p.rating.toFixed(1)+(p.count?'<span>'+p.count+' opiniones en Google</span>':'')+'</div>';
   if(p.desc)h+='<p>'+esc(p.desc)+'</p>';
@@ -719,18 +839,10 @@ function openDetail(id){
   if(p.tel)h+='<a class="btn" href="'+esc(telHref(p.tel))+'">Llamar</a>';
   h+='</div>';
   if(p.lat!=null)h+='<div class="acts"><button type="button" class="btn soft" data-seemap="'+esc(id)+'">'+svg(IC.pin)+'Ver en el mapa</button></div>';
-  if(isAdmin&&db&&p.docId)h+='<div class="adm"><button type="button" data-delplace="'+esc(p.docId)+'">Quitar de la guía</button></div>';
-  h+='</div></div><input id="ph-file" type="file" accept="image/*" hidden>';
+  if(isAdm())h+='<div class="adm"><button type="button" data-edit="'+esc(id)+'">Editar lugar</button><button type="button" data-delplace="'+esc(id)+'">Quitar de la guía</button></div>';
+  h+='</div></div>';
   $('detail').innerHTML=h;openOvl('detail');
-  if(db&&!(id in photoCache)){db.doc('photos/'+id).get().then(function(s){var src=s.exists&&s.data().src?String(s.data().src):'';photoCache[id]=src;if(curId===id&&!$('detail').hidden)$('phbox').innerHTML=photoHtml(p,src);}).catch(function(){});}
 }
-function setPhoto(id,file){
-  var p=BYID[id];if(!p||!db||!file)return;
-  shrink(file,720,0.7).then(function(src){
-    return db.doc('photos/'+id).set({src:src,at:Date.now()}).then(function(){photoCache[id]=src;if(curId===id)$('phbox').innerHTML=photoHtml(p,src);});
-  }).catch(function(){var b=document.querySelector('[data-addph]');if(b)b.textContent='No se pudo subir. Prueba otra foto';});
-}
-
 /* ---------- sugerir un lugar ---------- */
 function openSheet(){
   if(!$('s-town').options.length)$('s-town').innerHTML=TOWN_OPTS.map(function(t){return '<option>'+esc(t)+'</option>';}).join('');
@@ -743,11 +855,11 @@ function sendSug(e){
   var name=$('s-name').value.trim(),msg=$('s-msg');
   if(name.length<2){msg.textContent='Escribe el nombre del lugar.';return;}
   var mapUrl=$('s-map').value.trim(),c=parseMaps(mapUrl),btn=$('s-go');
-  var doc={name:name,cat:$('s-cat').value,town:$('s-town').value,tel:$('s-tel').value.trim(),web:safeUrl($('s-web').value),mapUrl:mapUrl,lat:c?c.lat:null,lng:c?c.lng:null,note:$('s-note').value.trim().slice(0,600),photo:sPhoto,by:user?(user.guest?'Invitado':user.name):'',byId:myId||'',at:Date.now(),status:'nueva'};
-  btn.disabled=true;btn.textContent='Enviando…';
-  postForm(doc).then(function(){
-    $('sg-form').reset();sPhoto='';$('s-prev').hidden=true;$('sg-form').hidden=true;$('s-done').hidden=false;btn.disabled=false;btn.textContent='Enviar sugerencia';
-  }).catch(function(){msg.textContent='No se pudo enviar. Revisa tu conexión e inténtalo otra vez.';btn.disabled=false;btn.textContent='Enviar sugerencia';});
+  var doc={name:name,cat:$('s-cat').value,town:$('s-town').value,tel:$('s-tel').value.trim(),web:safeUrl($('s-web').value),mapUrl:mapUrl,lat:c?c.lat:null,lng:c?c.lng:null,note:$('s-note').value.trim().slice(0,600),photo:sPhoto};
+  btn.disabled=true;btn.textContent='Enviando…';msg.textContent='';
+  api('POST','/sugerencias',doc).then(function(){
+    $('sg-form').reset();sPhoto='';$('s-prev').hidden=true;$('sg-form').hidden=true;$('s-done').hidden=false;
+  }).catch(function(err){msg.textContent=fail(err);}).then(function(){btn.disabled=false;btn.textContent='Enviar sugerencia';});
 }
 
 
@@ -817,54 +929,245 @@ function renderTides(){
     var day=TIDES.filter(function(d){return d[0]===tideDay;})[0];
     h+=day[1].map(function(e){var hi=e[1]==='H',past=day[0]===n.date&&tmin(e[0])<n.min;return '<div class="tev '+(hi?'high':'low')+(past?' past':'')+'"><i>'+svg(hi?'M12 19V6M6 12l6-6 6 6':'M12 5v13M6 12l6 6 6-6')+'</i><span class="tm">'+e[0]+'</span><span class="tp">'+(hi?'Pleamar':'Bajamar')+'<small>'+(hi?'Marea alta':'Marea baja')+'</small></span><span class="th">'+e[2].toFixed(2)+' m</span></div>';}).join('');
   }
-  h+='<p class="tnote">Son predicciones de un modelo, no mediciones. Las horas son de Chile (Castro) y las alturas son referenciales. Fuente: '+esc(TIDES_SRC)+'. Para navegar usa solo la tabla oficial del <a target="_blank" rel="noopener" href="https://www.shoa.cl">SHOA</a>.</p></div>';
+  h+='<p class="tnote">Son predicciones de un modelo, no mediciones. Las horas son de Chile (Castro) y las alturas son referenciales. Fuente: '+esc(TIDES_SRC)+'. Para navegar usa solo la tabla oficial del <a target="_blank" rel="noopener" href="https://www.shoa.cl">SHOA</a>.</p>'+(isAdm()?'<div class="acts"><button type="button" class="btn" data-editides>Editar las mareas</button></div>':'')+'</div>';
   el.innerHTML=h;
 }
 function openTides(){renderTides();openOvl('tides');}
-function postForm(d){
-  var fd=new FormData();
-  fd.append('form-name','sugerencia');
-  [['nombre',d.name],['tipo',d.cat],['pueblo',d.town],['telefono',d.tel],['web',d.web],['mapa',d.mapUrl],['comentario',d.note],['enviado_por',d.by]].forEach(function(x){fd.append(x[0],x[1]||'');});
-  var step=d.photo?fetch(d.photo).then(function(r){return r.blob();}).then(function(b){fd.append('foto',b,'foto.jpg');}):Promise.resolve();
-  return step.then(function(){return fetch('/',{method:'POST',body:fd});}).then(function(r){if(!r.ok)throw new Error('http '+r.status);});
+/* ---------- panel de administración (solo administrador) ---------- */
+var ptab='sug',tempPw=null;
+function twice(t,label){
+  if(t.getAttribute('data-sure')!=='1'){
+    t.setAttribute('data-sure','1');t.setAttribute('data-label',t.textContent);t.textContent=label||'Toca otra vez para confirmar';
+    setTimeout(function(){if(t.getAttribute('data-sure')==='1'){t.removeAttribute('data-sure');t.textContent=t.getAttribute('data-label');}},4000);
+    return false;
+  }
+  t.removeAttribute('data-sure');return true;
 }
-/* ---------- bandeja (solo quien administra) ---------- */
-function renderInbox(){
-  var h='<div class="ovl-top gut"><button type="button" class="back" data-close="inbox">'+svg(IC.back)+'Volver</button><h2>Sugerencias</h2></div><div class="ovl-body gut">';
-  if(!SUGS.length)h+='<div class="empty">No hay sugerencias nuevas.</div>';
-  SUGS.forEach(function(s){
-    var w=safeUrl(s.web);
-    h+='<div class="sg" data-sg="'+esc(s.id)+'"><h3>'+esc(s.name)+'</h3><div class="sm">'+esc((CATS[s.cat]||{n:s.cat}).n)+' · '+esc(s.town)+(s.by?' · de '+esc(s.by):'')+'</div>';
-    if(s.photo&&/^data:image\//.test(s.photo))h+='<img class="prev" src="'+esc(s.photo)+'" alt="Foto sugerida">';
+function fmtDay(ms){if(!ms)return '—';try{return new Date(ms).toLocaleDateString('es-CL',{day:'numeric',month:'short',year:'numeric',timeZone:'America/Santiago'});}catch(e){return '—';}}
+function openPanel(tab){
+  if(!isAdm())return;
+  if(tab)ptab=tab;
+  if(ptab==='usr')loadUsers();
+  renderPanel();openOvl('panel');loadSugs();
+}
+function loadUsers(){
+  if(!isAdm())return Promise.resolve();
+  return api('GET','/usuarios').then(function(r){USERS=r.users||[];if(!$('panel').hidden&&ptab==='usr')renderPanel();}).catch(function(e){fail(e);});
+}
+function panelSugs(){
+  if(!SUGS.length)return '<div class="empty">No hay sugerencias nuevas. Cuando alguien sugiera un lugar, aparecerá aquí.</div>';
+  return SUGS.map(function(s){
+    var w=safeUrl(s.web),mp=safeUrl(s.mapUrl);
+    var h='<div class="sg"><h3>'+esc(s.name)+'</h3><div class="sm">'+esc((CATS[s.cat]||{n:s.cat}).n)+' · '+esc(s.town)+' · de '+esc(s.by||'—')+'</div>';
+    if(s.photo)h+='<img class="prev" loading="lazy" src="/api/sugerencias/'+encodeURIComponent(s.id)+'/foto" alt="Foto sugerida">';
     if(s.note)h+='<p style="margin:8px 0">'+esc(s.note)+'</p>';
     if(s.tel)h+='<div class="sm">Tel: '+esc(s.tel)+'</div>';
     if(w)h+='<div class="sm"><a target="_blank" rel="noopener" href="'+esc(w)+'">'+esc(webLabel(w))+'</a></div>';
-    h+='<div class="two"><div><label for="la-'+esc(s.id)+'">Latitud</label><input id="la-'+esc(s.id)+'" type="text" inputmode="decimal" value="'+(typeof s.lat==='number'?s.lat:'')+'"></div><div><label for="ln-'+esc(s.id)+'">Longitud</label><input id="ln-'+esc(s.id)+'" type="text" inputmode="decimal" value="'+(typeof s.lng==='number'?s.lng:'')+'"></div></div>';
-    h+='<div class="acts"><button type="button" class="btn main" data-approve="'+esc(s.id)+'">Aprobar</button><button type="button" class="btn" data-reject="'+esc(s.id)+'">Rechazar</button></div></div>';
+    if(mp)h+='<div class="sm"><a target="_blank" rel="noopener" href="'+esc(mp)+'">Ver enlace de Google Maps</a></div>';
+    return h+'<div class="acts"><button type="button" class="btn main" data-review="'+esc(s.id)+'">Revisar y publicar</button><button type="button" class="btn" data-reject="'+esc(s.id)+'">Rechazar</button></div></div>';
+  }).join('');
+}
+function panelUsers(){
+  var h='';
+  if(tempPw)h+='<div class="ok">Nueva contraseña de <b>'+esc(tempPw.email)+'</b>:<br><span class="mono">'+esc(tempPw.clave)+'</span><br><small style="font-weight:500">Anótala y entrégasela a esa persona. Solo se muestra ahora. Puede cambiarla en "Mi cuenta".</small></div>';
+  if(USERS===null)return h+'<div class="empty">Cargando…</div>';
+  h+='<p class="sm" style="color:var(--muted);margin:0 0 12px">Perfiles: <b>Administrador</b> edita todo desde la web. <b>Usuario registrado</b> guarda favoritos y sugiere lugares. Quien entra sin cuenta es <b>Visualizador</b> y solo mira.</p>';
+  USERS.forEach(function(u){
+    var me=!!(user&&u.email===user.email);
+    h+='<div class="sg"><h3>'+esc(u.name)+(me?' <span class="role">tú</span>':'')+'</h3><div class="sm">'+esc(u.email)+' · último ingreso '+esc(fmtDay(u.lastLogin))+'</div>'+
+      '<div class="fl"><label for="r-'+esc(u.email)+'">Perfil</label><select id="r-'+esc(u.email)+'" data-role="'+esc(u.email)+'"><option value="usuario"'+(u.role==='usuario'?' selected':'')+'>Usuario registrado</option><option value="admin"'+(u.role==='admin'?' selected':'')+'>Administrador</option></select></div>'+
+      '<div class="acts"><button type="button" class="btn" data-reset="'+esc(u.email)+'">Nueva contraseña</button>'+(me?'':'<button type="button" class="btn" data-deluser="'+esc(u.email)+'">Borrar cuenta</button>')+'</div></div>';
   });
-  $('inbox').innerHTML=h+'</div>';
+  return h;
 }
-function approve(sid){
-  var s=SUGS.filter(function(x){return x.id===sid;})[0];if(!s||!db)return;
-  var la=parseFloat(String($('la-'+sid).value).replace(',','.')),ln=parseFloat(String($('ln-'+sid).value).replace(',','.'));
-  var ok=isFinite(la)&&isFinite(ln)&&la<-41.5&&la>-43.3&&ln>-74.8&&ln<-72.5;
-  var ref=db.collection('places').doc();
-  var b=document.querySelector('[data-approve="'+sid+'"]');if(b){b.disabled=true;b.textContent='Aprobando…';}
-  ref.set({cat:s.cat,sub:'Sugerido',name:s.name,town:s.town,lat:ok?la:null,lng:ok?ln:null,tel:s.tel||'',web:s.web||'',desc:s.note||'',hours:''})
-   .then(function(){return s.photo?db.doc('photos/x'+ref.id).set({src:s.photo,at:Date.now()}):null;})
-   .then(function(){return db.doc('suggestions/'+sid).update({status:'aprobada'});})
-   .catch(function(){if(b){b.disabled=false;b.textContent='Aprobar';}});
+function tidesToText(t){return t.map(function(d){return d[0]+'  '+d[1].map(function(e){return e[0]+' '+(e[1]==='H'?'P':'B')+' '+Number(e[2]).toFixed(2);}).join('   ');}).join('\n');}
+function parseTidesText(txt){
+  var lines=String(txt).split(/\n/).map(function(l){return l.trim();}).filter(Boolean),out=[];
+  if(!lines.length)return {error:'Escribe al menos un día.'};
+  for(var i=0;i<lines.length;i++){
+    var m=/^(\d{4}-\d{2}-\d{2})\s+(.+)$/.exec(lines[i]);
+    if(!m)return {error:'Línea '+(i+1)+': debe empezar con la fecha, por ejemplo 2026-10-27 03:12 B 1.02 09:20 P 5.90.'};
+    var re=/(\d{1,2}):(\d{2})\s+([PBHLpbhl])\s+(-?\d+(?:[.,]\d+)?)/g,ev=[],mm;
+    while((mm=re.exec(m[2]))){ev.push([('0'+mm[1]).slice(-2)+':'+mm[2],/[PpHh]/.test(mm[3])?'H':'L',Number(mm[4].replace(',','.'))]);}
+    if(!ev.length||m[2].replace(re,'').replace(/[\s,;|]+/g,'')!=='')return {error:'Línea '+(i+1)+': no entendí las mareas. Cada una es hora, P o B, y altura. Ejemplo: 03:12 B 1.02.'};
+    out.push([m[1],ev]);
+  }
+  return {tides:out};
 }
-function reject(sid){if(db)db.doc('suggestions/'+sid).update({status:'rechazada'}).catch(function(){});}
+function panelTides(){
+  return '<p class="sm" style="color:var(--muted);margin:0 0 12px">Una línea por día: la fecha y luego cada marea con su hora, <b>P</b> (pleamar, sube) o <b>B</b> (bajamar, baja) y la altura en metros.</p>'+
+   '<div class="fl"><label for="p-tides">Mareas de Castro</label><textarea id="p-tides" rows="12" spellcheck="false" wrap="off" style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.6;white-space:pre;overflow:auto"></textarea></div>'+
+   '<div class="fl"><label for="p-src">Fuente</label><input id="p-src" type="text" maxlength="300" autocomplete="off"></div>'+
+   '<div id="p-msg" class="fmsg" role="alert" aria-live="polite"></div><button type="button" class="btn main" data-savetides style="width:100%">Guardar mareas</button>';
+}
+function renderPanel(){
+  Array.prototype.forEach.call($('ptabs').querySelectorAll('[data-ptab]'),function(b){b.setAttribute('aria-pressed',b.getAttribute('data-ptab')===ptab);});
+  var el=$('pbody');
+  if(ptab==='sug')el.innerHTML=panelSugs();
+  else if(ptab==='usr')el.innerHTML=panelUsers();
+  else{el.innerHTML=panelTides();$('p-tides').value=tidesToText(TIDES);$('p-src').value=TIDES_SRC;}
+}
+function saveTides(){
+  var msg=$('p-msg'),r=parseTidesText($('p-tides').value);
+  if(r.error){msg.textContent=r.error;return;}
+  msg.textContent='';var b=document.querySelector('[data-savetides]');b.disabled=true;
+  api('PUT','/mareas',{tides:r.tides,src:$('p-src').value.trim()}).then(function(res){TIDES=res.tides;TIDES_SRC=res.src;tideDay=null;renderPanel();toast('Mareas guardadas');})
+   .catch(function(err){msg.textContent=fail(err);}).then(function(){b.disabled=false;});
+}
+$('panel').addEventListener('click',function(e){
+  var t=e.target.closest('[data-ptab],[data-review],[data-reject],[data-reset],[data-deluser],[data-savetides]');if(!t)return;
+  if(t.hasAttribute('data-ptab')){ptab=t.getAttribute('data-ptab');if(ptab!=='usr')tempPw=null;if(ptab==='usr')loadUsers();renderPanel();}
+  else if(t.hasAttribute('data-review')){
+    var id=t.getAttribute('data-review'),s=SUGS.filter(function(x){return x.id===id;})[0];if(!s)return;
+    openEditor({name:s.name,cat:s.cat,sub:'',town:s.town,tel:s.tel,web:s.web,desc:s.note,lat:s.lat,lng:s.lng,hours:'',rating:null,count:0},{sug:s});
+  }
+  else if(t.hasAttribute('data-reject')){
+    if(!twice(t,'Toca otra vez para rechazar'))return;
+    api('POST','/sugerencias/'+encodeURIComponent(t.getAttribute('data-reject'))+'/rechazar',{}).then(function(){toast('Sugerencia rechazada');loadSugs();}).catch(function(err){toast(fail(err));loadSugs();});
+  }
+  else if(t.hasAttribute('data-reset')){
+    if(!twice(t,'Toca otra vez para confirmar'))return;
+    var em=t.getAttribute('data-reset');
+    api('POST','/usuarios/clave',{email:em}).then(function(r){tempPw={email:em,clave:r.clave};renderPanel();$('pbody').scrollTop=0;}).catch(function(err){toast(fail(err));});
+  }
+  else if(t.hasAttribute('data-deluser')){
+    if(!twice(t,'Toca otra vez para borrar'))return;
+    api('DELETE','/usuarios/'+encodeURIComponent(t.getAttribute('data-deluser'))).then(function(){toast('Cuenta borrada');loadUsers();}).catch(function(err){toast(fail(err));loadUsers();});
+  }
+  else if(t.hasAttribute('data-savetides'))saveTides();
+});
+$('panel').addEventListener('change',function(e){
+  var s=e.target.closest('[data-role]');if(!s)return;
+  var email=s.getAttribute('data-role'),r=s.value;
+  api('POST','/usuarios/rol',{email:email,role:r}).then(function(res){
+    if(res.self&&r!=='admin'){user.role=r;role='usuario';closeOvl('panel');updateAdmin();toast('Ya no eres administrador');}
+    else{toast('Perfil actualizado');loadUsers();}
+  }).catch(function(err){toast(fail(err));loadUsers();});
+});
+
+/* ---------- editor de lugares (solo administrador) ---------- */
+var ed={id:null,sug:null,photoData:null,photoRemove:false};
+function num(v){v=String(v==null?'':v).trim().replace(',','.');return v===''?null:Number(v);}
+function fillSelect(el,vals,cur){var list=vals.slice();if(cur&&list.indexOf(cur)<0)list.unshift(cur);el.innerHTML=list.map(function(v){return '<option'+(v===cur?' selected':'')+'>'+esc(v)+'</option>';}).join('');}
+function subList(){
+  var c=$('e-cat').value,seen={};
+  ALL.forEach(function(p){if(p.cat===c)seen[p.sub]=1;});
+  $('e-sublist').innerHTML=Object.keys(seen).sort().map(function(s){return '<option value="'+esc(s)+'">';}).join('');
+}
+function locText(){
+  var la=num($('e-lat').value),ln=num($('e-lng').value);
+  $('e-loc').textContent=(la!==null&&ln!==null&&isFinite(la)&&isFinite(ln))?'Ubicación elegida: '+la.toFixed(5)+', '+ln.toFixed(5):'Sin ubicación todavía. El lugar saldrá en la lista, pero no en el mapa.';
+}
+function edPhotoShow(src){var im=$('e-prev');if(src){im.src=src;im.hidden=false;}else{im.removeAttribute('src');im.hidden=true;}$('e-rmphoto').hidden=!src;}
+function openEditor(p,opts){
+  opts=opts||{};p=p||{};
+  var isNew=!p.id&&!opts.sug;
+  ed={id:opts.sug?null:(p.id||null),sug:opts.sug?opts.sug.id:null,photoData:null,photoRemove:false};
+  $('ed-title').textContent=opts.sug?'Revisar sugerencia':isNew?'Agregar un lugar':'Editar lugar';
+  $('e-go').textContent=opts.sug?'Aprobar y publicar':isNew?'Agregar a la guía':'Guardar cambios';
+  $('e-name').value=p.name||'';
+  $('e-cat').value=p.cat||(['comer','visitar','comprar','servicios'].indexOf(cat)>=0?cat:'comer');
+  $('e-sub').value=p.sub||'';
+  fillSelect($('e-town'),TOWN_OPTS,p.town||(TOWN_OPTS.indexOf(zone)>=0?zone:'Castro'));
+  $('e-hours').value=p.hours||'';$('e-tel').value=p.tel||'';$('e-web').value=p.web||'';$('e-desc').value=p.desc||'';
+  $('e-lat').value=p.lat==null?'':p.lat;$('e-lng').value=p.lng==null?'':p.lng;
+  $('e-rating').value=p.rating==null?'':p.rating;$('e-count').value=p.count?p.count:'';
+  $('e-link').value='';$('e-linkmsg').textContent='';$('e-msg').textContent='';$('e-photo').value='';
+  var sm=opts.sug?safeUrl(opts.sug.mapUrl):'';
+  $('e-sugmap').hidden=!sm;$('e-sugmap').innerHTML=sm?'La persona envió este enlace: <a target="_blank" rel="noopener" href="'+esc(sm)+'">abrir en Google Maps</a>. Úsalo para ubicar el lugar con "Elegir en el mapa".':'';
+  edPhotoShow(opts.sug?(opts.sug.photo?'/api/sugerencias/'+encodeURIComponent(opts.sug.id)+'/foto':''):(p.photo>0?'/api/foto/'+encodeURIComponent(p.id)+'?v='+p.photo:''));
+  subList();locText();
+  openOvl('editor','#ed-back');$('editor').querySelector('.ovl-body').scrollTop=0;
+}
+function saveEditor(e){
+  e.preventDefault();
+  var msg=$('e-msg'),name=$('e-name').value.trim();
+  if(name.length<2){msg.textContent='Escribe el nombre del lugar.';return;}
+  var la=num($('e-lat').value),ln=num($('e-lng').value);
+  if((la===null)!==(ln===null)){msg.textContent='Para ubicarlo en el mapa hacen falta latitud y longitud.';return;}
+  if(la!==null&&(!isFinite(la)||!isFinite(ln)||la>-41.4||la<-43.5||ln<-74.8||ln>-72.5)){msg.textContent='Esa ubicación queda fuera de Chiloé. Revisa las coordenadas.';return;}
+  var rt=num($('e-rating').value),ct=num($('e-count').value);
+  if(rt!==null&&(!isFinite(rt)||rt<0||rt>5)){msg.textContent='La nota debe ser un número entre 0 y 5.';return;}
+  if(ct!==null&&(!isFinite(ct)||ct<0)){msg.textContent='Las opiniones deben ser un número.';return;}
+  var web=$('e-web').value.trim();
+  if(web&&!safeUrl(web)){msg.textContent='El sitio web no parece una dirección válida.';return;}
+  var place={id:ed.id||undefined,name:name,cat:$('e-cat').value,sub:$('e-sub').value.trim(),town:$('e-town').value,hours:$('e-hours').value.trim(),tel:$('e-tel').value.trim(),web:web,desc:$('e-desc').value.trim(),lat:la,lng:ln,rating:rt,count:ct};
+  var btn=$('e-go'),label=btn.textContent,wasSug=!!ed.sug,okMsg=wasSug?'Lugar publicado':ed.id?'Cambios guardados':'Lugar agregado';
+  btn.disabled=true;btn.textContent='Guardando…';msg.textContent='';
+  var first=wasSug?api('POST','/sugerencias/'+encodeURIComponent(ed.sug)+'/aprobar',{place:place}):api('POST','/lugares',{place:place});
+  first.then(function(r){
+    var pl=r.place,step=Promise.resolve();
+    ed.id=pl.id;ed.sug=null; // si algo falla después, reintentar actualiza el mismo lugar
+    if(ed.photoData)step=api('PUT','/foto/'+encodeURIComponent(pl.id),{data:ed.photoData});
+    else if(ed.photoRemove)step=api('DELETE','/foto/'+encodeURIComponent(pl.id));
+    return step.then(function(){return pl;});
+  }).then(function(pl){
+    closeOvl('editor');toast(okMsg);
+    return loadPlaces(false).then(function(){if(wasSug)loadSugs();else openDetail(pl.id);});
+  }).catch(function(err){msg.textContent=fail(err);}).then(function(){btn.disabled=false;btn.textContent=label;});
+}
+$('ed-form').addEventListener('submit',saveEditor);
+$('ed-back').addEventListener('click',function(){closeOvl('editor');});
+$('e-cat').addEventListener('change',subList);
+$('e-lat').addEventListener('input',locText);$('e-lng').addEventListener('input',locText);
+$('e-clearloc').addEventListener('click',function(){$('e-lat').value='';$('e-lng').value='';$('e-link').value='';$('e-linkmsg').textContent='';locText();});
+$('e-link').addEventListener('input',function(){
+  var v=this.value.trim(),m=$('e-linkmsg');if(!v){m.textContent='';return;}
+  var c=parseMaps(v);
+  if(c){$('e-lat').value=c.lat;$('e-lng').value=c.lng;locText();m.textContent='Listo: tomé la ubicación del enlace.';}
+  else if(/goo\.gl|maps\.app/i.test(v))m.textContent='Los enlaces cortos no traen la ubicación. Usa "Elegir en el mapa".';
+  else m.textContent='No encontré una ubicación en ese enlace. Usa "Elegir en el mapa".';
+});
+$('e-photo').addEventListener('change',function(){
+  var f=this.files&&this.files[0];if(!f)return;
+  shrink(f,1280,0.8,600000).then(function(src){ed.photoData=src;ed.photoRemove=false;edPhotoShow(src);}).catch(function(){$('e-msg').textContent='No pudimos leer esa foto. Prueba con otra.';});
+});
+$('e-rmphoto').addEventListener('click',function(){ed.photoData=null;ed.photoRemove=true;$('e-photo').value='';edPhotoShow('');});
+
+/* ---------- selector de ubicación en el mapa ---------- */
+var pkMap=null;
+function townCenter(n){for(var i=0;i<TOWNS.length;i++)if(TOWNS[i][0]===n)return [TOWNS[i][1],TOWNS[i][2]];return [-42.47,-73.78];}
+function openPicker(){
+  var la=num($('e-lat').value),ln=num($('e-lng').value),has=la!==null&&ln!==null&&isFinite(la)&&isFinite(ln);
+  openOvl('picker','#pk-back');
+  if(!pkMap){
+    pkMap=L.map('pk-map',{zoomSnap:0.5,minZoom:8,maxZoom:18,maxBounds:[[-43.5,-74.8],[-41.4,-72.5]],maxBoundsViscosity:0.8,attributionControl:false});
+    var tl=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18});
+    tl.once('tileload',function(){$('pk-map').classList.add('has-tiles');});
+    tl.addTo(pkMap);L.geoJSON(LAND,{interactive:false,className:'land'}).addTo(pkMap);
+  }
+  var c=has?[la,ln]:townCenter($('e-town').value);
+  setTimeout(function(){pkMap.invalidateSize();pkMap.setView(c,has?16:13,{animate:false});},60);
+}
+$('e-pick').addEventListener('click',openPicker);
+$('pk-back').addEventListener('click',function(){closeOvl('picker');});
+$('pk-ok').addEventListener('click',function(){
+  var c=pkMap.getCenter();
+  $('e-lat').value=c.lat.toFixed(6);$('e-lng').value=c.lng.toFixed(6);$('e-link').value='';$('e-linkmsg').textContent='';locText();closeOvl('picker');
+});
+
+/* ---------- mi cuenta ---------- */
+function openAccount(){
+  $('acc-name').textContent=user.name;$('acc-mail').textContent=user.email;$('acc-role').textContent=ROLE_LABEL[role];$('acc-role').className='role'+(role==='admin'?' adm':'');
+  $('a-old').value='';$('a-new').value='';$('a-msg').textContent='';openOvl('account','.back');
+}
+$('acc-form').addEventListener('submit',function(e){
+  e.preventDefault();var msg=$('a-msg'),b=$('a-go');
+  if($('a-new').value.length<8){msg.textContent='La contraseña nueva necesita al menos 8 caracteres.';return;}
+  b.disabled=true;
+  api('POST','/cuenta/clave',{actual:$('a-old').value,nueva:$('a-new').value}).then(function(){closeOvl('account');toast('Contraseña cambiada');})
+   .catch(function(err){msg.textContent=fail(err);}).then(function(){b.disabled=false;$('a-old').value='';$('a-new').value='';});
+});
 
 /* ---------- pantallas ---------- */
 function showApp(){
   $('login').hidden=true;$('app').hidden=false;
-  $('menuwho').textContent=user.guest?'Invitado':'Hola, '+user.name;
+  $('menuwho').textContent=user.guest?'Hola':'Hola, '+user.name;$('menurole').textContent=ROLE_LABEL[role];
   initMap();applyLayout();refresh(false);updateAdmin();
   setTimeout(function(){map.invalidateSize();fit();},80);
+  loadPlaces(true);loadTides();loadSugs();
 }
-function openMenu(){lastFocus=document.activeElement;$('menu').hidden=false;$('sugbtn').focus();}
+function openMenu(){lastFocus=document.activeElement;if(isAdm())loadSugs();$('menu').hidden=false;var b=[$('panelbtn'),$('sugbtn'),$('tidebtn2')].filter(function(x){return !x.hidden;})[0];if(b)b.focus();}
 function closeMenu(){$('menu').hidden=true;}
 
 /* ---------- eventos ---------- */
@@ -873,26 +1176,32 @@ initSheetDrag();
 $('m-in').addEventListener('click',function(){setMode('in');});
 $('m-new').addEventListener('click',function(){setMode('new');});
 $('form').addEventListener('submit',submit);
-$('guest').addEventListener('click',function(){enter({guest:true});});
-$('out').addEventListener('click',function(){closeMenu();logout();});
+$('guest').addEventListener('click',function(){enter({guest:true},[]);});
+$('setup-link').addEventListener('click',function(){setMode('setup');});
+$('out').addEventListener('click',function(){closeMenu();doLogout(true);});
 $('fit').addEventListener('click',fit);
 $('zin').addEventListener('click',function(){map.zoomIn();});
 $('zout').addEventListener('click',function(){map.zoomOut();});
 $('menubtn').addEventListener('click',openMenu);
 $('tidebtn').addEventListener('click',openTides);
 $('tidebtn2').addEventListener('click',function(){closeMenu();openTides();});
-$('tides').addEventListener('click',function(e){var t=e.target.closest('[data-close],[data-tday]');if(!t)return;if(t.hasAttribute('data-close'))closeOvl('tides');else{tideDay=t.getAttribute('data-tday');var sc=$('tides').querySelector('.ovl-body').scrollTop;renderTides();$('tides').querySelector('.ovl-body').scrollTop=sc;}});
+$('tides').addEventListener('click',function(e){var t=e.target.closest('[data-close],[data-tday],[data-editides]');if(!t)return;if(t.hasAttribute('data-close'))closeOvl('tides');else if(t.hasAttribute('data-editides')){closeOvl('tides');openPanel('mar');}else{tideDay=t.getAttribute('data-tday');var sc=$('tides').querySelector('.ovl-body').scrollTop;renderTides();$('tides').querySelector('.ovl-body').scrollTop=sc;}});
 
 $('menu').addEventListener('click',function(e){if(e.target.closest('[data-closemenu]'))closeMenu();});
 $('sugbtn').addEventListener('click',function(){closeMenu();openSheet();});
-$('inboxbtn').addEventListener('click',function(){closeMenu();renderInbox();openOvl('inbox');});
+$('panelbtn').addEventListener('click',function(){closeMenu();openPanel();});
+$('addplacebtn').addEventListener('click',function(){closeMenu();openEditor(null);});
+$('addbtn').addEventListener('click',function(){openEditor(null);});
+$('accbtn').addEventListener('click',function(){closeMenu();openAccount();});
+$('loginbtn').addEventListener('click',function(){closeMenu();doLogout(false);});
+document.addEventListener('click',function(e){var t=e.target.closest('[data-closeovl]');if(t)closeOvl(t.getAttribute('data-closeovl'));});
 $('sg-back').addEventListener('click',function(){closeOvl('sheet');});
 $('sg-form').addEventListener('submit',sendSug);
 $('s-photo').addEventListener('change',function(){var f=this.files&&this.files[0];if(!f){sPhoto='';$('s-prev').hidden=true;return;}shrink(f,720,0.7).then(function(src){sPhoto=src;$('s-prev').src=src;$('s-prev').hidden=false;}).catch(function(){sPhoto='';$('s-msg').textContent='No pudimos leer esa foto. Prueba con otra.';});});
 $('q').addEventListener('input',function(){q=this.value;sel=null;drawMarkers();renderList();renderSubs();});
 $('q').addEventListener('change',function(){fit();});
 document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'){var o=['menu','sheet','inbox','tides','detail'].filter(function(i){return !$(i).hidden;})[0];if(o){if(o==='menu')closeMenu();else closeOvl(o);}}
+  if(e.key==='Escape'){var o=['menu','picker','editor','account','sheet','panel','tides','detail'].filter(function(i){return !$(i).hidden;})[0];if(o){if(o==='menu')closeMenu();else closeOvl(o);}}
   if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.tagName==='TR'&&e.target.getAttribute('data-open')){e.preventDefault();openDetail(e.target.getAttribute('data-open'));}
 });
 $('app').addEventListener('click',function(e){
@@ -906,25 +1215,28 @@ $('app').addEventListener('click',function(e){
   else if(t.hasAttribute('data-open')){openDetail(t.getAttribute('data-open'));}
 });
 $('detail').addEventListener('click',function(e){
-  var t=e.target.closest('[data-close],[data-save],[data-addph],[data-seemap],[data-delplace]');if(!t)return;
+  var t=e.target.closest('[data-close],[data-save],[data-edit],[data-seemap],[data-delplace]');if(!t)return;
   if(t.hasAttribute('data-close'))closeOvl('detail');
-  else if(t.hasAttribute('data-save')){var id=t.getAttribute('data-save');if(saved[id])delete saved[id];else saved[id]=true;store.set(favKey(),JSON.stringify(saved));var on=!!saved[id];t.classList.toggle('on',on);t.setAttribute('aria-pressed',on);t.setAttribute('aria-label',on?'Quitar de guardados':'Guardar');if(cat==='guardados')drawMarkers();renderList();}
-  else if(t.hasAttribute('data-addph')){$('ph-file').click();}
+  else if(t.hasAttribute('data-save')){var id=t.getAttribute('data-save');if(saved[id])delete saved[id];else saved[id]=true;store.set(favKey(),JSON.stringify(saved));pushFavs();var on=!!saved[id];t.classList.toggle('on',on);t.setAttribute('aria-pressed',on);t.setAttribute('aria-label',on?'Quitar de guardados':'Guardar');if(cat==='guardados')drawMarkers();renderList();}
+  else if(t.hasAttribute('data-edit')){openEditor(BYID[t.getAttribute('data-edit')]);}
   else if(t.hasAttribute('data-seemap')){var mid=t.getAttribute('data-seemap');closeOvl('detail');if(view!=='mapa'){view='mapa';if(!DESK&&sheetState==='full')setSheet('half');renderChips();setTimeout(function(){map.invalidateSize();choose(mid,true);},340);}else choose(mid,true);}
-  else if(t.hasAttribute('data-delplace')){var d=t.getAttribute('data-delplace');if(t.getAttribute('data-sure')!=='1'){t.setAttribute('data-sure','1');t.textContent='Toca otra vez para confirmar';return;}db.doc('places/'+d).delete().then(function(){closeOvl('detail');});}
-});
-$('detail').addEventListener('change',function(e){if(e.target.id==='ph-file'&&e.target.files&&e.target.files[0])setPhoto(curId,e.target.files[0]);});
-$('inbox').addEventListener('click',function(e){
-  var t=e.target.closest('[data-close],[data-approve],[data-reject]');if(!t)return;
-  if(t.hasAttribute('data-close'))closeOvl('inbox');
-  else if(t.hasAttribute('data-approve'))approve(t.getAttribute('data-approve'));
-  else if(t.hasAttribute('data-reject'))reject(t.getAttribute('data-reject'));
+  else if(t.hasAttribute('data-delplace')){
+    if(!twice(t,'Toca otra vez para confirmar'))return;
+    api('DELETE','/lugares/'+encodeURIComponent(t.getAttribute('data-delplace'))).then(function(){closeOvl('detail');sel=null;toast('Lugar quitado de la guía');return loadPlaces(false);}).catch(function(err){toast(fail(err));});
+  }
 });
 window.addEventListener('resize',function(){if(map)map.invalidateSize();if(!$('app').hidden)applyLayout();});
 (function boot(){
-  var s=jget('chiloe.session',null);
-  if(s&&s.guest){enter({guest:true});return;}
-  if(s&&s.email){var u=jget('chiloe.users',{})[s.email];if(u){enter({email:s.email,name:u.name});}}
+  store.del('chiloe.users');
+  var s0=jget('chiloe.session',null),shown=false;
+  function reveal(){shown=true;$('login').classList.remove('wait');}
+  function asGuest(){if(s0&&s0.guest){reveal();enter({guest:true},[]);}else reveal();}
+  setTimeout(function(){if(!shown)reveal();},5000);
+  api('GET','/estado').then(function(r){hasAdmin=!!r.hasAdmin;setMode(mode);}).catch(function(){});
+  api('GET','/yo').then(function(r){
+    if(user)return;
+    if(r&&r.user){reveal();enter(r.user,r.favs||[]);}else asGuest();
+  }).catch(function(){if(!user)asGuest();});
 })();
 </script>
 

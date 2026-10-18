@@ -1,21 +1,29 @@
-# Chiloé a tu Manera – V 1.6
+# Chiloé a tu Manera – V 1.7
 
-Esta carpeta es la guía lista para publicar en internet. No necesita instalar nada.
+Guía de Chiloé con mapa, lugares, horarios, teléfonos, valoraciones y mareas de Castro.
+Se publica sola en Netlify cada vez que se sube un cambio a la rama `main` de este repositorio.
 
-## Cómo publicarla (gratis, con Netlify)
-1. Entra a https://app.netlify.com/drop (crea una cuenta gratis si no tienes).
-2. Arrastra la carpeta completa `site` a la pantalla.
-3. Netlify te da un enlace público. Ese enlace es el que compartes con los turistas.
+## Perfiles
+| Perfil | Cómo entra | Qué puede hacer |
+|---|---|---|
+| **Administrador** | Con su correo y contraseña | Editar todo desde la web: agregar, cambiar o quitar lugares (con foto y ubicación en el mapa), aprobar o rechazar sugerencias, editar las mareas, ver usuarios, cambiar su perfil, darles una contraseña nueva o borrarlos |
+| **Usuario registrado** | Crea su cuenta en la app | Ver todo, guardar favoritos (se sincronizan entre sus aparatos), sugerir lugares y cambiar su contraseña |
+| **Visualizador** | Botón "Solo mirar, sin cuenta" | Solo mirar. Sus favoritos quedan en su teléfono |
 
-## Cómo agregar fotos
-1. Mira el número (id) del lugar en `lugares.csv`.
-2. Guarda la foto con ese número en la carpeta `fotos`, por ejemplo `fotos/25.jpg`.
-3. Vuelve a arrastrar la carpeta a Netlify. La ficha del lugar mostrará la foto.
+## Primera vez: crear al administrador
+1. Abre la guía en internet.
+2. Toca **"Primera vez: configurar al administrador"** (aparece solo mientras no exista administrador).
+3. Escribe el código de instalación (te lo entrega quien armó la guía), tu nombre, correo y contraseña.
 
-## Sugerencias de lugares
-Los turistas envían sugerencias con el botón "Sugerir". Llegan a Netlify, en el menú **Forms**.
-Ahí puedes verlas, y en **Forms > Notifications** puedes pedir que te avisen por correo.
+El código solo sirve una vez. Después, el botón desaparece.
 
-## Qué falta para la siguiente versión
-- Cuentas que funcionen en varios aparatos (hoy cada cuenta queda en el teléfono).
-- Aprobar sugerencias dentro de la misma app.
+## Cómo está hecha
+- `public/index.html`: la app (mapa Leaflet + OpenStreetMap).
+- `netlify/functions/api.mjs`: servidor (cuentas, lugares, fotos, sugerencias, mareas). Guarda los datos en Netlify Blobs.
+- `netlify/functions/seed.mjs`: los 65 lugares y las mareas iniciales (se cargan solo la primera vez).
+- `tests/`: pruebas automáticas (`npm test`).
+
+## Cosas a saber
+- No hay correo de "olvidé mi contraseña": el administrador crea una contraseña temporal desde Panel > Usuarios.
+- Los enlaces cortos de Google Maps (maps.app.goo.gl) no traen la ubicación; usa "Elegir en el mapa".
+- Las cuentas antiguas que estaban guardadas en cada teléfono (V 1.6) ya no sirven: hay que crear la cuenta de nuevo.

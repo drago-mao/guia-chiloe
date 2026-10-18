@@ -1,0 +1,253 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { randomBytes, scryptSync } from 'node:crypto';
+import { createApi } from '../netlify/functions/api.mjs';
+import { memoryKV } from './memory-kv.mjs';
+
+const CODE = 'CHILOE-PRUEBA-0000';
+const salt = randomBytes(16);
+const SETUP = { salt: salt.toString('hex'), hash: scryptSync(CODE, salt, 64).toString('hex') };
+
+// Un "navegador" de mentira: guarda la cookie de sesión y manda siempre el encabezado x-guia.
+function browser(api, ip) {
+  let cookie = '';
+  async function call(method, path, body, extra) {
+    const headers = Object.assign({ 'x-guia': '1' }, extra || {});
+    if (body !== undefined) headers['content-type'] = 'application/json';
+    if (cookie) headers.cookie = cookie;
+    const res = await api(new Request('https://guia.test/api' + path, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) }), ip || '1.1.1.1');
+    const sc = res.headers.get('set-cookie');
+    if (sc) cookie = sc.split(';')[0].endsWith('=') ? '' : sc.split(';')[0];
+    const ct = res.headers.get('content-type') || '';
+    return { status: res.status, body: ct.includes('json') ? await res.json() : Buffer.from(await res.arrayBuffer()), res };
+  }
+  return { call, get cookie() { return cookie; }, set cookie(v) { cookie = v; } };
+}
+const fresh = () => createApi(memoryKV(), { setup: SETUP });
+const jpeg = () => 'data:image/jpeg;base64,' + Buffer.concat([Buffer.from([0xff, 0xd8, 0xff, 0xe0]), Buffer.alloc(300, 7)]).toString('base64');
+const place = (o) => Object.assign({ name: 'Lugar de prueba', cat: 'comer', sub: 'Café', town: 'Castro', lat: -42.48, lng: -73.76, hours: 'L–V 10:00–18:00', tel: '+56912345678', web: 'ejemplo.cl', desc: 'Rico.' }, o || {});
+
+async function withAdmin() {
+  const api = fresh();
+  const admin = browser(api);
+  const r = await admin.call('POST', '/instalar', { codigo: CODE, name: 'Drago', email: 'Admin@Correo.cl', password: 'clave-larga-1' });
+  assert.equal(r.status, 200);
+  return { api, admin };
+}
+
+test('visualizador: puede mirar, no puede cambiar nada', async () => {
+  const api = fresh(); const v = browser(api);
+  const l = await v.call('GET', '/lugares');
+  assert.equal(l.status, 200); assert.equal(l.body.places.length, 65);
+  assert.ok((await v.call('GET', '/mareas')).body.tides.length >= 1);
+  assert.equal((await v.call('GET', '/yo')).body.user, null);
+  assert.equal((await v.call('POST', '/lugares', { place: place() })).status, 401);
+  assert.equal((await v.call('GET', '/usuarios')).status, 401);
+  assert.equal((await v.call('GET', '/sugerencias')).status, 401);
+  assert.equal((await v.call('POST', '/sugerencias', { name: 'x' })).status, 401);
+  assert.equal((await v.call('PUT', '/favoritos', { ids: ['1'] })).status, 401);
+});
+
+test('seguridad: sin encabezado x-guia o con otro origen no se puede escribir', async () => {
+  const api = fresh();
+  const r1 = await api(new Request('https://guia.test/api/registro', { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' }));
+  assert.equal(r1.status, 403);
+  const r2 = await api(new Request('https://guia.test/api/registro', { method: 'POST', headers: { 'content-type': 'application/json', 'x-guia': '1', origin: 'https://malo.example' }, body: '{}' }));
+  assert.equal(r2.status, 403);
+  const r3 = await api(new Request('https://guia.test/api/lugares', { method: 'GET' }));
+  assert.equal(r3.status, 200);
+});
+
+test('instalación del administrador: código correcto, una sola vez', async () => {
+  const api = fresh(); const a = browser(api);
+  assert.equal((await a.call('GET', '/estado')).body.hasAdmin, false);
+  assert.equal((await a.call('POST', '/instalar', { codigo: 'MAL', email: 'a@b.cl', password: '12345678' })).status, 403);
+  assert.equal((await a.call('GET', '/estado')).body.hasAdmin, false);
+  const ok = await a.call('POST', '/instalar', { codigo: CODE.toLowerCase(), name: 'Drago', email: 'Admin@Correo.cl', password: '12345678' });
+  assert.equal(ok.status, 200); assert.equal(ok.body.user.role, 'admin'); assert.equal(ok.body.user.email, 'admin@correo.cl');
+  assert.match(ok.res.headers.get('set-cookie'), /HttpOnly/); assert.match(ok.res.headers.get('set-cookie'), /SameSite=Strict/); assert.match(ok.res.headers.get('set-cookie'), /Secure/);
+  assert.equal((await a.call('GET', '/estado')).body.hasAdmin, true);
+  assert.equal((await browser(api).call('POST', '/instalar', { codigo: CODE, email: 'otro@b.cl', password: '12345678' })).status, 403);
+  assert.equal((await a.call('GET', '/yo')).body.user.role, 'admin');
+});
+
+test('registro y entrada: validaciones, duplicados, contraseña mala, bloqueo por intentos', async () => {
+  const api = fresh(); const u = browser(api);
+  assert.equal((await u.call('POST', '/registro', { name: 'Ana', email: 'no-es-correo', password: '12345678' })).status, 400);
+  assert.equal((await u.call('POST', '/registro', { name: 'Ana', email: 'ana@correo.cl', password: '123' })).status, 400);
+  const r = await u.call('POST', '/registro', { name: 'Ana', email: 'Ana@Correo.cl', password: 'secreta-123' });
+  assert.equal(r.status, 200); assert.equal(r.body.user.role, 'usuario');
+  assert.equal((await browser(api).call('POST', '/registro', { name: 'Otra', email: 'ana@correo.cl', password: 'secreta-123' })).status, 409);
+  const b = browser(api);
+  const bad = await b.call('POST', '/entrar', { email: 'ana@correo.cl', password: 'incorrecta' });
+  assert.equal(bad.status, 401); assert.equal(bad.body.error, 'Correo o contraseña incorrectos.');
+  assert.equal((await b.call('POST', '/entrar', { email: 'nadie@correo.cl', password: 'incorrecta' })).body.error, 'Correo o contraseña incorrectos.');
+  assert.equal((await b.call('POST', '/entrar', { email: 'ana@correo.cl', password: 'secreta-123' })).status, 200);
+  assert.equal((await b.call('GET', '/yo')).body.user.name, 'Ana');
+  // bloqueo tras 6 intentos fallidos desde el mismo lugar
+  const c = browser(api, '9.9.9.9');
+  for (let i = 0; i < 6; i++) assert.equal((await c.call('POST', '/entrar', { email: 'ana@correo.cl', password: 'x' + i })).status, 401);
+  assert.equal((await c.call('POST', '/entrar', { email: 'ana@correo.cl', password: 'secreta-123' })).status, 429);
+  // otra persona desde otro lugar sí puede entrar
+  assert.equal((await browser(api, '8.8.8.8').call('POST', '/entrar', { email: 'ana@correo.cl', password: 'secreta-123' })).status, 200);
+  // cerrar sesión
+  await b.call('POST', '/salir', {}); assert.equal((await b.call('GET', '/yo')).body.user, null);
+});
+
+test('una cookie falsificada o alterada no sirve', async () => {
+  const { api, admin } = await withAdmin();
+  const f = browser(api);
+  f.cookie = admin.cookie.slice(0, -3) + 'AAA';
+  assert.equal((await f.call('GET', '/yo')).body.user, null);
+  f.cookie = 'gc=' + Buffer.from(JSON.stringify({ e: 'admin@correo.cl', v: 0, x: Date.now() + 1e9 })).toString('base64url') + '.firmafalsa';
+  assert.equal((await f.call('GET', '/usuarios')).status, 401);
+});
+
+test('usuario registrado: favoritos y sugerencias sí; editar la guía no', async () => {
+  const api = fresh(); const u = browser(api);
+  await u.call('POST', '/registro', { name: 'Ana', email: 'ana@correo.cl', password: 'secreta-123' });
+  assert.deepEqual((await u.call('PUT', '/favoritos', { ids: ['1', '2', '2', '<script>', 'x'.repeat(50)] })).body.favs, ['1', '2']);
+  assert.deepEqual((await u.call('GET', '/yo')).body.favs, ['1', '2']);
+  assert.equal((await u.call('POST', '/sugerencias', { name: 'Cocinería Rosa', cat: 'comer', town: 'Dalcahue', note: 'Muy rica', photo: jpeg() })).status, 200);
+  assert.equal((await u.call('POST', '/sugerencias', { name: 'A', cat: 'comer' })).status, 400);
+  assert.equal((await u.call('POST', '/sugerencias', { name: 'Algo', cat: 'otra' })).status, 400);
+  assert.equal((await u.call('POST', '/sugerencias', { name: 'Algo', cat: 'comer', photo: 'data:image/png;base64,AAAA' })).status, 400);
+  assert.equal((await u.call('POST', '/lugares', { place: place() })).status, 403);
+  assert.equal((await u.call('DELETE', '/lugares/1')).status, 403);
+  assert.equal((await u.call('PUT', '/foto/1', { data: jpeg() })).status, 403);
+  assert.equal((await u.call('PUT', '/mareas', { tides: [] })).status, 403);
+  assert.equal((await u.call('GET', '/usuarios')).status, 403);
+  assert.equal((await u.call('POST', '/usuarios/rol', { email: 'ana@correo.cl', role: 'admin' })).status, 403);
+  assert.equal((await u.call('GET', '/sugerencias')).status, 403);
+});
+
+test('administrador: crear, editar, borrar lugares y validar datos', async () => {
+  const { admin } = await withAdmin();
+  const c = await admin.call('POST', '/lugares', { place: place({ lat: '-42,48', rating: 4.66, count: '12' }) });
+  assert.equal(c.status, 200);
+  const p = c.body.place;
+  assert.ok(p.id.startsWith('n')); assert.equal(p.web, 'https://ejemplo.cl'); assert.equal(p.lat, -42.48); assert.equal(p.rating, 4.7); assert.equal(p.count, 12);
+  assert.equal((await admin.call('GET', '/lugares')).body.places.length, 66);
+  const u = await admin.call('POST', '/lugares', { place: Object.assign({}, p, { name: 'Nuevo nombre', hours: 'Todos los días' }) });
+  assert.equal(u.body.place.name, 'Nuevo nombre'); assert.equal(u.body.place.id, p.id);
+  assert.equal((await admin.call('GET', '/lugares')).body.places.length, 66);
+  // el primer lugar de la guía también se puede editar
+  const first = (await admin.call('GET', '/lugares')).body.places[0];
+  assert.equal((await admin.call('POST', '/lugares', { place: Object.assign({}, first, { desc: 'Texto nuevo' }) })).body.place.desc, 'Texto nuevo');
+  // validaciones
+  for (const bad of [{ name: 'x' }, { cat: 'otra' }, { lat: -10, lng: -73 }, { lat: -42.4, lng: null }, { lat: 'abc', lng: -73.7 }, { rating: 9 }]) {
+    assert.equal((await admin.call('POST', '/lugares', { place: place(bad) })).status, 400, JSON.stringify(bad));
+  }
+  assert.equal((await admin.call('POST', '/lugares', { place: place({ id: 'noexiste' }) })).status, 404);
+  const xss = await admin.call('POST', '/lugares', { place: place({ web: 'javascript:alert(1)', name: '<b>Hola</b>' }) });
+  assert.equal(xss.body.place.web, ''); // la dirección peligrosa se descarta
+  assert.equal((await admin.call('DELETE', '/lugares/' + p.id)).status, 200);
+  assert.equal((await admin.call('DELETE', '/lugares/' + p.id)).status, 404);
+  // un lugar sin ubicación en el mapa es válido
+  assert.equal((await admin.call('POST', '/lugares', { place: place({ lat: null, lng: null }) })).body.place.lat, null);
+});
+
+test('administrador: dos ediciones a la vez no se pisan', async () => {
+  const { admin } = await withAdmin();
+  const rs = await Promise.all([1, 2, 3, 4, 5].map((i) => admin.call('POST', '/lugares', { place: place({ name: 'Simultáneo ' + i }) })));
+  rs.forEach((r) => assert.equal(r.status, 200));
+  assert.equal((await admin.call('GET', '/lugares')).body.places.length, 70);
+});
+
+test('fotos: el administrador sube y quita; cualquiera las ve', async () => {
+  const { api, admin } = await withAdmin();
+  assert.equal((await browser(api).call('GET', '/foto/3')).status, 404);
+  assert.equal((await admin.call('PUT', '/foto/3', { data: 'data:image/png;base64,AAAA' })).status, 400);
+  assert.equal((await admin.call('PUT', '/foto/noexiste', { data: jpeg() })).status, 404);
+  const up = await admin.call('PUT', '/foto/3', { data: jpeg() });
+  assert.equal(up.status, 200); assert.ok(up.body.place.photo > 0);
+  const g = await browser(api).call('GET', '/foto/3');
+  assert.equal(g.status, 200); assert.equal(g.res.headers.get('content-type'), 'image/jpeg'); assert.equal(g.body[0], 0xff);
+  assert.ok((await browser(api).call('GET', '/lugares')).body.places.find((p) => p.id === '3').photo > 0);
+  assert.equal((await admin.call('DELETE', '/foto/3')).body.place.photo, 0);
+  assert.equal((await browser(api).call('GET', '/foto/3')).status, 404);
+});
+
+test('sugerencias: el usuario envía, el administrador aprueba (con foto) o rechaza', async () => {
+  const { api, admin } = await withAdmin();
+  const ana = browser(api);
+  await ana.call('POST', '/registro', { name: 'Ana', email: 'ana@correo.cl', password: 'secreta-123' });
+  await ana.call('POST', '/sugerencias', { name: 'Cocinería Rosa', cat: 'comer', town: 'Dalcahue', note: 'Muy rica', lat: -42.38, lng: -73.65, photo: jpeg() });
+  await ana.call('POST', '/sugerencias', { name: 'Mirador Lindo', cat: 'visitar', town: 'Castro' });
+  const l = (await admin.call('GET', '/sugerencias')).body.suggestions;
+  assert.equal(l.length, 2);
+  const rosa = l.find((s) => s.name === 'Cocinería Rosa');
+  assert.equal(rosa.by, 'Ana'); assert.equal(rosa.photo, true);
+  assert.equal((await admin.call('GET', '/sugerencias/' + rosa.id + '/foto')).status, 200);
+  assert.equal((await ana.call('GET', '/sugerencias/' + rosa.id + '/foto')).status, 403);
+  const ap = await admin.call('POST', '/sugerencias/' + rosa.id + '/aprobar', { place: place({ name: 'Cocinería Rosa', town: 'Dalcahue', lat: -42.38, lng: -73.65 }) });
+  assert.equal(ap.status, 200); assert.ok(ap.body.place.photo > 0);
+  assert.equal((await browser(api).call('GET', '/foto/' + ap.body.place.id)).status, 200);
+  assert.ok((await browser(api).call('GET', '/lugares')).body.places.some((p) => p.name === 'Cocinería Rosa'));
+  assert.equal((await admin.call('POST', '/sugerencias/' + rosa.id + '/aprobar', { place: place() })).status, 404);
+  const mir = l.find((s) => s.name === 'Mirador Lindo');
+  assert.equal((await admin.call('POST', '/sugerencias/' + mir.id + '/rechazar', {})).status, 200);
+  assert.equal((await admin.call('GET', '/sugerencias')).body.suggestions.length, 0);
+});
+
+test('mareas: el administrador las actualiza y se validan', async () => {
+  const { api, admin } = await withAdmin();
+  const ok = await admin.call('PUT', '/mareas', { tides: [['2026-11-02', [['10:00', 'H', 5.1], ['04:00', 'L', 1.2]]], ['2026-11-01', [['09:00', 'H', 5]]]], src: 'SHOA' });
+  assert.equal(ok.status, 200); assert.equal(ok.body.tides[0][0], '2026-11-01'); assert.equal(ok.body.tides[1][1][0][0], '04:00');
+  const g = (await browser(api).call('GET', '/mareas')).body;
+  assert.equal(g.tides.length, 2); assert.equal(g.src, 'SHOA');
+  for (const bad of [[], 'x', [['2026-13-01', [['10:00', 'H', 5]]]], [['2026-02-30', [['10:00', 'H', 5]]]], [['2026-11-01', [['25:00', 'H', 5]]]], [['2026-11-01', [['10:00', 'X', 5]]]], [['2026-11-01', [['10:00', 'H', 99]]]], [['2026-11-01', []]], [['2026-11-01', [['10:00', 'H', 5]]], ['2026-11-01', [['10:00', 'H', 5]]]]]) {
+    assert.equal((await admin.call('PUT', '/mareas', { tides: bad })).status, 400, JSON.stringify(bad));
+  }
+});
+
+test('usuarios: cambiar perfil, restablecer clave, borrar, y nunca quedarse sin administrador', async () => {
+  const { api, admin } = await withAdmin();
+  const ana = browser(api);
+  await ana.call('POST', '/registro', { name: 'Ana', email: 'ana@correo.cl', password: 'secreta-123' });
+  const list = (await admin.call('GET', '/usuarios')).body.users;
+  assert.deepEqual(list.map((x) => x.role), ['admin', 'usuario']);
+  assert.ok(!JSON.stringify(list).includes('hash'));
+  // no se puede quitar al único administrador
+  assert.equal((await admin.call('POST', '/usuarios/rol', { email: 'admin@correo.cl', role: 'usuario' })).status, 400);
+  assert.equal((await admin.call('DELETE', '/usuarios/' + encodeURIComponent('admin@correo.cl'))).status, 400);
+  // Ana pasa a administradora: el cambio vale de inmediato
+  assert.equal((await ana.call('GET', '/usuarios')).status, 403);
+  assert.equal((await admin.call('POST', '/usuarios/rol', { email: 'ana@correo.cl', role: 'admin' })).status, 200);
+  assert.equal((await ana.call('GET', '/usuarios')).status, 200);
+  assert.equal((await admin.call('POST', '/usuarios/rol', { email: 'ana@correo.cl', role: 'superman' })).status, 400);
+  // ahora sí se puede quitar al primero
+  assert.equal((await ana.call('POST', '/usuarios/rol', { email: 'admin@correo.cl', role: 'usuario' })).status, 200);
+  assert.equal((await admin.call('GET', '/usuarios')).status, 403);
+  // restablecer clave: la sesión anterior se cierra y la clave temporal funciona
+  const anaOld = ana.cookie;
+  const t = await ana.call('POST', '/usuarios/clave', { email: 'admin@correo.cl' });
+  assert.equal(t.status, 200); assert.equal(t.body.clave.length, 10);
+  assert.equal((await admin.call('GET', '/yo')).body.user, null);
+  assert.equal((await browser(api, '5.5.5.5').call('POST', '/entrar', { email: 'admin@correo.cl', password: t.body.clave })).status, 200);
+  assert.equal((await browser(api, '5.5.5.6').call('POST', '/entrar', { email: 'admin@correo.cl', password: 'clave-larga-1' })).status, 401);
+  assert.equal(anaOld, ana.cookie);
+  // borrar
+  assert.equal((await ana.call('DELETE', '/usuarios/' + encodeURIComponent('ana@correo.cl'))).status, 400); // a sí misma, no
+  assert.equal((await ana.call('DELETE', '/usuarios/' + encodeURIComponent('admin@correo.cl'))).status, 200);
+  assert.equal((await ana.call('DELETE', '/usuarios/' + encodeURIComponent('admin@correo.cl'))).status, 404);
+});
+
+test('cambiar mi contraseña: pide la actual y cierra las otras sesiones', async () => {
+  const api = fresh(); const a = browser(api), b = browser(api, '2.2.2.2');
+  await a.call('POST', '/registro', { name: 'Ana', email: 'ana@correo.cl', password: 'secreta-123' });
+  await b.call('POST', '/entrar', { email: 'ana@correo.cl', password: 'secreta-123' });
+  assert.equal((await a.call('POST', '/cuenta/clave', { actual: 'mala', nueva: 'nueva-clave-1' })).status, 400);
+  assert.equal((await a.call('POST', '/cuenta/clave', { actual: 'secreta-123', nueva: 'corta' })).status, 400);
+  assert.equal((await a.call('POST', '/cuenta/clave', { actual: 'secreta-123', nueva: 'nueva-clave-1' })).status, 200);
+  assert.equal((await a.call('GET', '/yo')).body.user.email, 'ana@correo.cl'); // esta sesión sigue
+  assert.equal((await b.call('GET', '/yo')).body.user, null); // la otra se cerró
+  assert.equal((await browser(api, '3.3.3.3').call('POST', '/entrar', { email: 'ana@correo.cl', password: 'nueva-clave-1' })).status, 200);
+});
+
+test('rutas desconocidas y errores no filtran información interna', async () => {
+  const api = fresh(); const v = browser(api);
+  assert.equal((await v.call('GET', '/nada')).status, 404);
+  const bad = await api(new Request('https://guia.test/api/registro', { method: 'POST', headers: { 'x-guia': '1', 'content-type': 'application/json' }, body: '{no es json' }));
+  assert.equal(bad.status, 400);
+});
