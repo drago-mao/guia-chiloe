@@ -266,6 +266,27 @@ select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(
 .tev.past{opacity:.5}
 .tnote{font-size:13px;color:var(--muted);margin:14px 0 8px}
 .tnote a{color:var(--accent);font-weight:600}
+
+/* ventana emergente del lugar */
+.pinpop{position:absolute;left:14px;right:14px;bottom:calc(var(--sh) + 12px);z-index:1130;background:var(--surface);border-radius:20px;box-shadow:var(--shadow);padding:14px 14px 12px;transition:bottom .28s cubic-bezier(.2,.8,.2,1);animation:ppin .18s ease-out}
+@keyframes ppin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.pinpop .pp-top{display:flex;align-items:center;gap:12px;padding-right:34px}
+.pinpop .pp-ico{flex:none;width:44px;height:44px;border-radius:14px;background:var(--cc-t);color:var(--cc);display:flex;align-items:center;justify-content:center}
+.pinpop .pp-nm{flex:1;min-width:0}
+.pinpop .pp-nm b{display:block;font-family:var(--f-display);font-size:18px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pinpop .pp-nm span{display:block;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pinpop .pp-rate{flex:none;display:flex;align-items:center;gap:4px;font-weight:700;font-size:15px}
+.pinpop .pp-rate svg{width:14px;height:14px;color:#E0A21B;fill:#E0A21B;stroke:none}
+.pinpop .pp-x{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;border:0;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.pinpop .pp-h{display:flex;gap:8px;align-items:flex-start;margin:10px 0 10px;font-size:13px;color:var(--muted);line-height:1.35}
+.pinpop .pp-h svg{flex:none;width:16px;height:16px;margin-top:1px}
+.pinpop .pp-a{display:flex;gap:8px}
+.pinpop .pp-a .btn{flex:1;height:44px;font-size:14px}
+#app.haspop .fabs{display:none}
+@media (min-width:900px){
+  .pinpop{left:calc(var(--dw) + 16px);right:auto;width:min(400px,calc(100vw - var(--dw) - 100px));bottom:24px}
+  #app.haspop .fabs{display:flex}
+}
 @media (max-width:899px){#app.tab .maptag{display:none}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 @media (min-width:700px){#login{max-width:480px;left:50%;right:auto;width:480px;transform:translateX(-50%);box-shadow:0 0 0 1px var(--line2)}}
@@ -304,7 +325,7 @@ select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(
     </form>
     <button type="button" class="btn soft" id="guest" style="margin-top:10px">Entrar como invitado</button>
     <p class="note">Tu cuenta se guarda solo en este teléfono. Para usarla en otros aparatos hará falta un servicio de cuentas.</p>
-    <div class="ver">V 1.4</div>
+    <div class="ver">V 1.5</div>
   </div>
 </section>
 
@@ -325,6 +346,7 @@ select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(
     <button type="button" class="ib g" id="zin" aria-label="Acercar"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
     <button type="button" class="ib g" id="zout" aria-label="Alejar"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button>
   </div>
+  <div class="pinpop" id="pinpop" role="dialog" aria-label="Resumen del lugar" hidden></div>
   <div class="maptag" id="maptag">Mapa simple, sin calles</div>
   <section id="dock" class="dock" aria-label="Lugares">
     <div class="brand gut"><i class="mark" aria-hidden="true"></i><div><b>Chiloé a tu manera</b><span>Guía de la isla grande</span></div></div>
@@ -364,7 +386,7 @@ select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(
 <section id="menu" class="pop" hidden aria-label="Menú">
   <div class="scrim" data-closemenu="1"></div>
   <div class="pcard gut" role="dialog" aria-label="Menú">
-    <div class="pwho"><b id="menuwho"></b><span>V 1.4</span></div>
+    <div class="pwho"><b id="menuwho"></b><span>V 1.5</span></div>
     <button type="button" class="mi" id="tidebtn2"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9c2.2 0 2.2-2 4.5-2S9.800 9 12 9s2.200-2 4.500-2S18.800 9 21 9M3 15c2.200 0 2.200-2 4.500-2S9.800 15 12 15s2.200-2 4.500-2S18.800 15 21 15"/></svg>Mareas de Castro</button>
     <button type="button" class="mi" id="sugbtn"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Sugerir un lugar</button>
     <button type="button" class="mi" id="inboxbtn" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13l2-8h12l2 8M4 13v6h16v-6M4 13h5l1 2h4l1-2h5"/></svg>Sugerencias recibidas<span class="bd" id="bdg">0</span></button>
@@ -575,6 +597,7 @@ function initMap(){
   L.geoJSON(LAND,{interactive:false,className:'land'}).addTo(map);
     TOWNS.forEach(function(t){L.marker([t[1],t[2]],{interactive:false,keyboard:false,icon:L.divIcon({className:'',html:'<span class="town">'+esc(t[0])+'</span>',iconSize:[0,0]})}).addTo(map);});
   layer=L.layerGroup().addTo(map);
+  map.on('click',hidePop);
   map.on('zoomend',function(){$('map').classList.toggle('zin',map.getZoom()>=11);});
   setTimeout(function(){if(!$('map').classList.contains('has-tiles'))$('maptag').style.display='block';},2500);
 }
@@ -592,7 +615,8 @@ function drawMarkers(){
 }
 function appH(){return $('app').clientHeight||window.innerHeight;}
 function computeSnaps(){var h=appH();SNAP.peek=190;SNAP.half=Math.round(h*0.5);SNAP.full=h-132;}
-function visPad(){return DESK?0:(sheetState==='full'?SNAP.half:SNAP[sheetState]);}
+var popOpen=false;
+function visPad(){return (DESK?0:(sheetState==='full'?SNAP.half:SNAP[sheetState]))+(popOpen?150:0);}
 function setSheet(st,anim){
   sheetState=st;computeSnaps();var d=$('dock');
   if(DESK){d.style.height='';$('app').style.setProperty('--sh','0px');return;}
@@ -633,12 +657,23 @@ function fit(){
   if(v.length===1){focusAt(v[0].lat,v[0].lng,13);return;}
   map.fitBounds(L.latLngBounds(v.map(function(p){return [p.lat,p.lng];})),{paddingTopLeft:[36,DESK?80:140],paddingBottomRight:[36,visPad()+24],maxZoom:14,animate:false});
 }
+function showPop(id){
+  var p=BYID[id];if(!p||p.lat==null)return;
+  var h='<button type="button" class="pp-x" data-pp="close" aria-label="Cerrar">'+svg('M6 6l12 12M18 6L6 18')+'</button>';
+  h+='<div class="pp-top k-'+p.cat+'" style="--cc:var(--c-'+p.cat+');--cc-t:var(--t-'+p.cat+')"><span class="pp-ico">'+svg(CATS[p.cat].d)+'</span><div class="pp-nm"><b>'+esc(p.name)+'</b><span>'+esc(p.sub)+' en '+esc(p.town)+'</span></div>';
+  if(p.rating!=null)h+='<span class="pp-rate"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+IC.star+'"/></svg>'+p.rating.toFixed(1)+'</span>';
+  h+='</div><div class="pp-h">'+svg(IC.clock)+'<span>'+esc(p.hours||'Horario no informado: conviene llamar antes')+'</span></div>';
+  h+='<div class="pp-a"><button type="button" class="btn main" data-pp="open" data-id="'+esc(p.id)+'">Ver ficha</button><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination='+p.lat+','+p.lng+'">'+svg(IC.nav)+'Cómo llegar</a></div>';
+  var el=$('pinpop');el.innerHTML=h;el.hidden=false;popOpen=true;$('app').classList.add('haspop');
+}
+function hidePop(){if(!popOpen)return;popOpen=false;$('pinpop').hidden=true;$('app').classList.remove('haspop');}
 function choose(id,pan){
   sel=id;
-  if(!pan&&!DESK&&sheetState==='peek')setSheet('half');
-  drawMarkers();renderList();
   var p=BYID[id];
-  if(pan&&p&&p.lat!=null&&map){if(!DESK&&sheetState==='full')setSheet('half');focusAt(p.lat,p.lng,Math.max(map.getZoom(),13));}
+  if(p&&p.lat!=null)showPop(id);else hidePop();
+  if(!DESK&&sheetState==='full'&&p&&p.lat!=null)setSheet('half');
+  drawMarkers();renderList();
+  if(p&&p.lat!=null&&map)focusAt(p.lat,p.lng,Math.max(map.getZoom(),13));
   var el=document.querySelector('[data-card="'+id+'"]');if(el)el.scrollIntoView({block:'nearest'});
 }
 
@@ -690,7 +725,7 @@ function renderList(){
   else h+='<div class="empty">'+(q.trim()?'No hay resultados para esa búsqueda.':cat==='guardados'?'Aún no guardas lugares aquí. Abre un lugar y toca el corazón.':'No hay lugares de esta categoría en este pueblo. Prueba con otro pueblo o con Todo.')+'</div>';
   var sc=$('list').scrollTop;$('list').innerHTML=h;$('list').scrollTop=sc;
 }
-function refresh(doFit){renderChips();drawMarkers();renderList();if(doFit){$('list').scrollTop=0;fit();}}
+function refresh(doFit){hidePop();renderChips();drawMarkers();renderList();if(doFit){$('list').scrollTop=0;fit();}}
 
 /* ---------- ficha del lugar ---------- */
 var lastFocus=null,photoCache={},curId=null;
@@ -889,14 +924,15 @@ $('inboxbtn').addEventListener('click',function(){closeMenu();renderInbox();open
 $('sg-back').addEventListener('click',function(){closeOvl('sheet');});
 $('sg-form').addEventListener('submit',sendSug);
 $('s-photo').addEventListener('change',function(){var f=this.files&&this.files[0];if(!f){sPhoto='';$('s-prev').hidden=true;return;}shrink(f,720,0.7).then(function(src){sPhoto=src;$('s-prev').src=src;$('s-prev').hidden=false;}).catch(function(){sPhoto='';$('s-msg').textContent='No pudimos leer esa foto. Prueba con otra.';});});
-$('q').addEventListener('input',function(){q=this.value;sel=null;drawMarkers();renderList();renderSubs();});
+$('q').addEventListener('input',function(){q=this.value;sel=null;hidePop();drawMarkers();renderList();renderSubs();});
 $('q').addEventListener('change',function(){fit();});
 document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'){var o=['menu','sheet','inbox','tides','detail'].filter(function(i){return !$(i).hidden;})[0];if(o){if(o==='menu')closeMenu();else closeOvl(o);}}
+  if(e.key==='Escape'){if(popOpen&&!['menu','sheet','inbox','tides','detail'].some(function(i){return !$(i).hidden;})){hidePop();return;}var o=['menu','sheet','inbox','tides','detail'].filter(function(i){return !$(i).hidden;})[0];if(o){if(o==='menu')closeMenu();else closeOvl(o);}}
   if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.tagName==='TR'&&e.target.getAttribute('data-open')){e.preventDefault();openDetail(e.target.getAttribute('data-open'));}
 });
 $('app').addEventListener('click',function(e){
-  var t=e.target.closest('[data-zone],[data-cat],[data-sub],[data-view],[data-sort],[data-open],[data-map]');if(!t)return;
+  var t=e.target.closest('[data-pp],[data-zone],[data-cat],[data-sub],[data-view],[data-sort],[data-open],[data-map]');if(!t)return;
+  if(t.hasAttribute('data-pp')){if(t.getAttribute('data-pp')==='close')hidePop();else openDetail(t.getAttribute('data-id'));return;}
   if(t.hasAttribute('data-zone')){zone=t.getAttribute('data-zone');sel=null;subf={};refresh(true);}
   else if(t.hasAttribute('data-cat')){cat=t.getAttribute('data-cat');sel=null;subf={};refresh(true);}
   else if(t.hasAttribute('data-sub')){var k=t.getAttribute('data-sub');if(subf[k])delete subf[k];else subf[k]=true;sel=null;refresh(true);}
