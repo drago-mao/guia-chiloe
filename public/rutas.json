@@ -1,0 +1,558 @@
+{
+ "version": "1.13",
+ "nota": "Caminos calculados con OSRM sobre datos de OpenStreetMap (18-10-2026). Tipos de tramo: c = camino, f = cruce en barco por ruta marítima, b = cruce en lancha (línea recta de referencia).",
+ "tramos": {
+  "castro-dalcahue": {
+   "t": "c",
+   "e": "f{gbGh|eaM@h@_n@z@iiAh_@}FbFkNtP}EoA_MCsKtCuK\\_DpA}{@kHep@iXLcC}@wAsNv@yAm@k@wAgCiXh@oLg@{EwAeCoF{D{D{JaLyJgBsEA}EdEcQF_FgI}YuCiX{EuLeEwXLeInFkW_@wGsd@yl@yDoL}A_Cce@cRwY_RqCsDyKy_@[kEtC}Y~IiWfAgO_@iEo~@urBq_@s]eXiPqBoCq@qGaAsm@aEwKwBcJpJkHyAkI"
+  },
+  "castro-chonchi": {
+   "t": "c",
+   "e": "f{gbGh|eaM@h@qCDGf\\nQA}DlJu@dFJvCfA|AzLrE}ApGaDvp@fFdAtBhPS`Np@nGOjMs@bD@fEoBvIxKQrGlB~CpCnQxUlGhDhILxXuIpUp@tDjAtHhHh\\fDr\\`PjFvG`FdW|E~IzEvCnUnFnTlMbWrJnDvEpJtUzPbUnLpR~B|@lBa@pCiD`ExC~Dt@vRqBzDiClw@gx@~G{AjUr@pEm@~eBux@xTyHpOwCrwAuOf]sHvy@mFFaBr_AgzB_G_Dw@_B{DiCqD{HuAcPr@gNpD_NnB{BbHdBvAkA"
+  },
+  "castro-ancud": {
+   "t": "c",
+   "e": "f{gbGh|eaM@h@_n@z@iiAh_@}FbFkNtP}EoA_MCsKtCuK\\_DpA}{@kH{v@s[oJWcE~AiKzIaWdI_PlRa[nYqEhCup@lOq`@mBa]zM{HDoj@mMoEoBqn@}|@}ByH}qA}fHeCsFah@qr@eMaPsDwCwZkH_\\wKoIw@ivDx_@cnDqEuDs@gHwFqCs@mXzBaYqAkDqBaQoRuEoBgYd@eRaFga@m@mF~B{QxYwBpBsCbAk}IxlAuFm@_h@k[}GiBko@hEkFjAoGdE_Y`\\mBt@gGTcHxEcDt@cPLoEgAwBwB}HsMq\\sWsE}Ag_@tCci@pKsDbCqVh[eYfe@cCfKyE~]@vElBzUcDvZmD~JeTnZ{HrEmIj@wf@kCqFeBsLqHmSa@eF|@a_@vLcLhGyrApsAaoApx@wq@bmAag@dwB}D`JaE|F}InHmqC|~AoERok@cCeEfBgOdSsFxCcfAr@sfGo|AyQkD}Sq@mH`BwSbQwCnA}CDwJmBkVNgXxVse@jT{YvOkGf@eEuBiC_FkUoqAiDgMgx@wzAoXyZaBaA{n@_AoCcBwF{IsHs@qBp@qIpJaDfAi`@QaGbAiN|EqFZcSk@_LnEwDh@k`@wGuJnA_EdCkAfB_Stl@qC~EqHfo@gG|PoHzf@_FjR?~PoAiA"
+  },
+  "castro-chepu": {
+   "t": "c",
+   "e": "f{gbGh|eaM@h@_n@z@iiAh_@}FbFkNtP}EoA_MCsKtCuK\\_DpA}{@kH{v@s[kI_@gFfBiKzIaWdIeMtOq`@j^_e@vLmRfDoU}BeFBa[~LgEt@}Fi@yi@kM{C{AyC_Dyf@gs@kD}HkrAmhH}AcFkj@cv@sPiSgD_BiXcGmZeKoF{@{GD_pDj_@oMF}aD{EsD_AwFyEeDaAmXzBmV{@eFoB{QgSuDeBgZZeRaFo`@q@oCf@uBzA{QxYwBpBsCbAk}IxlAuFm@_h@k[}GiBko@hEkFjAoGdE_Y`\\mBt@gGTcHxEcDt@cPLoEgAwBwB}HsMq\\sWsE}Ag_@tCci@pKsDbCqVh[eYfe@cCfKyE~]@vElBzUcDvZmD~JeUn[uFdDuFz@sb@kB}KsAgJqGaE_BmRUeF|@a_@vLoJ~EmtAztAaoApx@wq@bmAag@dwBcFvKqF~GgGvEknCt}AmG|@g^eBgG``Cc]dqId@~AnFxGfHpQzCvTr@xAd^nJxJpFxIoAzD`@tNvTlEf[eBvLE|CuCfNoAjKdBn^E|JgAzJPjFnLle@hLtZjExIZhESjDiF|OXjJ|AdFxIHzBjFi@vNd@xKpDpFlAjE\\rNjCfCxAfD_EdHsUaDwPi@"
+  },
+  "dalcahue-quemchi": {
+   "t": "c",
+   "e": "rntaG`no`Mw@sCsDpAYyAcFfDpGtXySjOiJrI{FtJkDTqClD{KtGsD~EkDbB_A_@cCwKaAcBaQoKgTqRgGwAeVTuDgA{CgCk|@wqAkBcFoHcj@{VusA?uj@_@qEs]_{AyI_yByGau@y@aD_r@my@iDuBw[oCkt@xg@eBb@}Bq@gS{UoDoC_NwFoZwB_C{@aBoCgLkc@kDaAgKbBuAu@m@cBB_CxBaFhH_DfCmGEaFaEcOtCiW_@{FqWqj@ub@kY{KgGoVgAoHaBoCqCsFXaQ_CyIzEcAtCw@lJ}NtSwUdOgL`BsJaJuEmGyGg@wDiCsEb@oAzAaAFcEe@yHsCyClC_CZkEc@_DzDiKn@{@rAeAJiIzFuHJoFiGwCi@_CcIGmB~@oDaBoFyCwB{EbBmHwBwJoKmHuAwAkB_BaGqEyBcHo@}I{JkBcAaTiFiEH}SiGyUWgSdD_E_BaEYwKsLcQmI{I{GarAypA_LiPjB}VY{CmCq@yNj@}MkCiE{GwF{@cFPkDkAwFA{DyDqEoJuC}A_Da@}D}Eu[lY{GxH_MrJgCOiF{EmJwE_Bj@eDjGkA_@c@kCy@k@kLbGeE~KaH|G{AsEuFkBwFUaPxCo@qAp@qLwE{Ce@gDfDsf@{@qG}EwNAgB"
+  },
+  "quemchi-aucar": {
+   "t": "c",
+   "e": "nif`Gp}m_M@fB|EvNz@pGgDrf@d@fDvEzCq@pLn@pA`PyCvFTtFjBzArE`H}GrDoK~KkGdAFl@zCrAj@dDkGdCe@`JbFnEhErAX`Bg@xL}J_AmAoB]}EaDsBU"
+  },
+  "dalcahue-tenaun": {
+   "t": "c",
+   "e": "rntaG`no`Mw@sCsDpAYyAcFfDpGtXySjOiJrI{FtJkDTqClD{KtGsD~EkDbB_A_@cCwKaAcBaQoKgTqRgGwAeVTuDgAmCyBy|@erAkBcFoHcj@{VusA?uj@_@qEs]_{AyI_yByGau@kA}Dmq@qx@iDuBw[oCkt@xg@eBb@iC}@kU_XkMgGua@wEoB{CgLkc@kDaAaKdBqAk@s@aB?mCxBaFhH_DfCmGEaFaEcOvCeZo@}DkTwe@iDaEqi@}]uCw@gU_AsGuAkCeBuAaEtAguB|KsUjEmNzLct@z[qqAbFmItHuVpBiCbFgDbIeLhGsXx\\es@|Hi^nDi]tKoU@gY`AkUjMqVz@aDrAeL[yOhDi\\`E{T`HgXvHqs@pGaMjOaUtZ}gAjLo}@~EwRr@wHxEeFh@qE`GcE@oCb@kAlCTnDpExEt@jDbBrFzFdS|MtBnFbEtBcAxK"
+  },
+  "tenaun-mechuque": {
+   "t": "b",
+   "a": [
+    -42.3317,
+    -73.3751
+   ],
+   "b": [
+    -42.3028,
+    -73.2719
+   ]
+  },
+  "dalcahue-muelle": {
+   "t": "c",
+   "e": "rntaG`no`Mw@sCsDpAYyAcFfDzHh\\hCnH~AlBdEb@"
+  },
+  "dalcahue-quinchao-barco": {
+   "t": "f",
+   "e": "tvtaGxyp`Mx[xArHkA"
+  },
+  "quinchao-camino": {
+   "t": "c",
+   "e": "b}uaGfzp`MZsNbByC~TaGvAZpCvDxAJbGyDnEeN|OgX|p@{}CzP_a@dOqr@jNkUdBgB`sAmu@lTgGhEEv_@nQfC}@bJqZIeNk@cBqFoGaH_T{HcG{@}E~@qVnBqHJqHfHsOv@oQl@cD~AeDbNePjK}BfBgBh@iDu@kQ`AwGtT_k@vVsZlSsf@vEoXMkJz@iMpAmErJyRlBiJD_IeAaOPkDfAuCpJyLzHwPnI_HtBaFrDsSlIMP`WfFdS"
+  },
+  "chonchi-muelle": {
+   "t": "c",
+   "e": "~iccGjigaMbDeElB|B}EdHhSdHxDdE|GyJdMoUhDqN|ByEl[gUvPw[rL{OfNiKbC}HpCcFzL_OxCkH`A}O|IgTtD_GrCqOcByA"
+  },
+  "chonchi-lemuy-barco": {
+   "t": "f",
+   "e": "v`icGxj`aMqU}PuCyC_CyDqCkGiLw\\yBuEuBuCaD{CkDsBsAScBzA"
+  },
+  "lemuy-camino": {
+   "t": "c",
+   "e": "|wfcGnv}`Mo@`AsAxIwVdAwBk@i@mB~Bmr@wAeDsFuA{Ad@}DnFiLaHsCEy_@dX{Cp@}MDoNjIaCg@qHoE}AgEgIy^iB}YlAgPc@eBeDiEc@aCpBaLY}DiB{EgEmBkDgE}EiP_KoHUkE}CkLqF{Gy@kW{Fcb@TqLt@oGlCaJrA_PpMkLdEuBvC_HhB}IpD{G|D_Pr@mIzCsMTkDw@iG~AcGnCaE|Aq@|IAdFmClFm@bEqJ`CqC"
+  },
+  "chonchi-morelia": {
+   "t": "c",
+   "e": "~iccGjigaMbDeElB|B}EdHhUrI|M~RRtKh@dB|JlJ|GX|At@zTzv@x^lbBdTtQdBlElG`FzBlFhGlHlBjHJzJ|@rKgF`QiGtv@O|MzA|M~@zB|FbHlCjGzRlGlLzO~BzLnBbTtDrMpI|NhF`QJzHlAhKqDbg@dB|QvC`PlLbTpRxJhDtGrDbLvY~f@bCpGdIzIjDvKnApK]vEn@xG~C\\`AzA|Sj`@xCvK|DhVdHxR~FhWxDhU|CbXvEzUnBhDzH|HtBzE|GbIfAlDExPiB|SwE`LiGvCgFlFcSdHeAhAkFvi@gDbMwCrPw@hKiDzTqKvFgApBUfHnA|MDpOeAzOiBjl@wCxYuJb\\sCdRaApBmI`GgO|NeDbFaBdEIvJw@bFqAjD_GtIIfTu@nEf@zEnCtJmGnQwB|LGdDr@xCdGxEhGjPaAnJwEnKu@vEY`Hp@rLSbDyDhK{ErFoK`@gOiEgBrAwEhN}A~LwCzLaGrMwLxf@aItS"
+  },
+  "morelia-cucao": {
+   "t": "c",
+   "e": "l_icGfx~bMoBjHyBlQyAvCgGbEm@zAN|GjCdST~R}@fMgBzBkIbDgBdEcCnZUdPeBlIaEnLwGde@MvDv@nOOjGxF`TH~I{Q`c@}CrSgLwGcD_HwIyH}JaCyCjEcGyA_TzLaFtFuGzC_KrIs^pSaHd@mK]}ZdLeHfDgErDyHzAuE`E{HxC}JhHgQ|G"
+  },
+  "chonchi-lelbun": {
+   "t": "c",
+   "e": "~iccGjigaMbDeElB|B}EdHhSdHxDdE|GyJdMoUhDqN|ByEl[gUdE{GrFcMxMsR~PiNzD{K~E_IvFqFhEoInAmQ|IgTtD_GxKca@|EqH~KcLhPeb@|a@or@pg@}SdVaEtW}Hpo@}Jl[gNjHkEx|BoyBvw@el@v^w[|VwP~McGjSgRli@}y@xGqFjd@_q@xg@aZbMaF|H_JjBqI@k_@f@{GhJy\\fFyU|AsCvU_PdI}Nt@sGiCoV`@wF~A{FzBaG`DiEdOmQxJsHnOyc@pE}Wz@_QrAeLlG_mBxRi^lRyjAdcA}cDk{@om@aDo@oIrAyHcE{Fa@yKiNWy@`@gBi@gBaCvD"
+  },
+  "lelbun-aituy": {
+   "t": "c",
+   "e": "robdGjku_M~O{XfRk_@~Okq@lFcK|GaHbS}EvC_D~McAzNgJtHiAbMU`P{CdGmDxQ}OlXy]xBkKpEz@vL{GvEjB"
+  },
+  "chonchi-paildad": {
+   "t": "c",
+   "e": "~iccGjigaMbDeElB|B}EdHhSdHxDdE|GyJdMoUhDqN|ByEl[gUdE{GrFcMxMsR~PiNzD{K~E_IvFqFhEoInAmQ|IgTtD_GxKca@|EqH~KcLhPeb@|a@or@pg@}SdVaEtW}Hpo@}Jl[gNjHkEx|BoyBvw@el@v^w[|VwP~McGjSgRli@}y@xGqFhf@{r@ze@eXdPsHzEmGtAwEZ{DCi]f@{GhJy\\fFyU|AsCvU_PdI}Nt@sGgCkS@gDjAsHlD}JfTwWxJsHnOyc@pE}WjO_EtCyDjDoBrMg@|WvQz@zMiBlINzCg@hGRbF|IhYbHhHxFdRpAdH~G`Q~@l@nDyB~@XfItUvGjHnAlKvDjLvFnAfEJ~CnBlDJ|DxCrBpDNbNmAhCa@hD\\rEyBzG]`EwI|NaEnBaJzP_AzEWtJu@xAMrB}DrIg@lMqG`JuAfQsClBsA~Dt@~IQhEkIrV"
+  },
+  "chonchi-queilen": {
+   "t": "c",
+   "e": "~iccGjigaMbDeElB|B}EdHhSdHxDdE|GyJdMoUhDqN|ByEl[gUdE{GrFcMxMsR~PiNzD{K~E_IvFqFhEoInAmQ|IgTtD_GxKca@|EqH~KcLhPeb@|a@or@pg@}SdVaEtW}Hpo@}Jl[gNjHkEx|BoyBvw@el@v^w[|VwP~McGjSgRli@}y@xGqFhf@{r@ze@eXbMaFrG_HdBcEn@mE@k_@f@{GhJy\\fFyU|AsCvU_PdI}Nt@sGiCoV`@wF~A{FzBaG`DiEdOmQxJsHnOyc@pE}Wz@_QrAeLlG_mBxRi^lRyjAdcA}cDfBoDnSuQp[y]tGkCvPwClCqBlJqTvWsv@hMoRxTge@xJcVzOwQ~Mwi@rCiB`a@yI~BkArIwJ`MgB|T{@xJbCdJqD`W|BnWkCvIhBnFH~McBxJwDdKkAdZyNbJyJ`U_H"
+  },
+  "ancud-chauman": {
+   "t": "c",
+   "e": "x}o~FprraMnAhAZrCtJlD~DgBpG_AtC{EhICzUkD~Dp@bBhCfBrLhQh`@zChJpCrl@^tbA_Mf`AeCp\\{JdjD{O|^kAnWH~G_Ab@qB{Ai@lCS|Zr@~@bGn@r@tBTtJo@|KrC`L_AzLbAZpA{B`AAvAfBB~EnCv@vAzCgAfKuBrIDhMeKv^mAtAmEf@gCtFcLxH{EpMKlN}@`DgQlOuIhEiBlKoGfNyCxJ}AjBsD~@mLXqBaAgB{Gy@g@yAb@qBbDAdIfA~FbCbFZlGqA~MGjPrBbUSdBiBbCWzAfBvVbPr]^lCeCxSaGnIoG~LkE~MqO|p@mg@rY{g@tm@of@me@{OmRuEiOyIii@sDsHkGiCif@wBuKcGi@qD?}EfE_JdAyDBoBoCeLgEuHAoJmA_D_@wDaKsWa[m`AaAsFYiHiLuFmCY}JpBcGvFgCXeIqBiB}AqCmK{DeHsFmFeBoGcBg@yBl@q@`A"
+  },
+  "chauman-lacuy": {
+   "t": "c",
+   "e": "ppb~FttjbMp@aAxBm@bBf@dBnGrFlFzDdHpClKhB|AdIpBfCYbGwF|JqBlCXhLtFXhH`ArF`[l`A{KlM_BhAgCXkMkIaDYcDgKyCuFmGyDsDmHmCEwCuA"
+  },
+  "ancud-punihuil": {
+   "t": "c",
+   "e": "x}o~FprraMnAhAZrCtJlD~DgBpG_A`D}E|HAzUkDxBJnBhAdAfCzApKtUfi@`D~n@b@v`AcMdbAeCp\\{JdjD{O|^kAnWH~G_Ab@iB}Ao@xAUr\\r@~@bGn@r@tBTtJo@|KrC`L_AzLbAZpA{B`AAvAfBB~EbDlA~@dB@lAeAxIuBrIDhMeKv^mAtAmEf@gCtFeKrGyFvNKlNhAnIjQtk@zDvXrDbIrKo@tIgDzEv@tOkA|Fn@zDeAzD`Ct@rQ`@hAfEpBlKvAdGk@xAmBxDoBvJ}@hMoFdy@gP|EUbGhAzCnDfEVzTrJhCvCnD~IzTfXbFpUyElTa@bF~Gva@y@vKmBtISbGsBjFpDzNiAvP`@tKxL|TvSdU~EbIzArE|CvP~CfI~@jGEnIyBrXRxAjCnDDnOy@~EgCxBZ`BzC~Ct@hJ]xBfA~D@|A|BdAI`E`AbM_AtA{A~XwBjL"
+  },
+  "punihuil-duhatao": {
+   "t": "c",
+   "e": "~e|~Ffj{bMz@gEz@|Dq@zBHrAdGXvChBdFbAzA|ArBB|Bg@jB_BnA{ExGaBrEwCbDy@vMnFvIuAlDaKQ{BcBeEGoBxCoL~@cHeFcH]aEgCeF^mDiAyCxAmCByDuFuGoAyE}AwBdSVbFiC`Ii@zE{EfLmCvC{A`EeFbIoGpDKjUvDnOfQbGjSjHtDpAxF|DhFtO`d@vDhG`A~C|B|OOdLzBpKrC~FjIvJvAGtBrAjDjGjD|B`FYpDaJ|PgJjGgA|KpBrIsCvIi@pCoA`@dDhE~EfB`JxBxBtBlE?jDeBxEB|@nD|G"
+  }
+ },
+ "rutas": [
+  {
+   "id": "quinchao",
+   "nombre": "Isla Quinchao",
+   "resumen": "Cruce en barco desde Dalcahue y paseo por la isla.",
+   "km": 38.8,
+   "min": 57,
+   "cruce": "barco",
+   "tramos": [
+    "castro-dalcahue",
+    "dalcahue-muelle",
+    "dalcahue-quinchao-barco",
+    "quinchao-camino"
+   ],
+   "paradas": [
+    {
+     "n": "Castro (Plaza de Armas)",
+     "lat": -42.4802,
+     "lng": -73.7634,
+     "nota": "Punto de partida"
+    },
+    {
+     "n": "Dalcahue",
+     "lat": -42.3811,
+     "lng": -73.6482,
+     "lugar": "Cocinerías Dalcahue",
+     "nota": "Para comer antes de cruzar. El puesto N° 8 tiene las mejores empanadas."
+    },
+    {
+     "n": "Isla Quinchao",
+     "lat": -42.4692,
+     "lng": -73.5147,
+     "lugar": "Isla Quinchao",
+     "nota": "Llegas en barco. Los horarios del cruce conviene confirmarlos antes de salir."
+    }
+   ]
+  },
+  {
+   "id": "lemuy",
+   "nombre": "Isla Lemuy",
+   "resumen": "Cruce en barco desde Chonchi y paseo por la isla.",
+   "km": 40.9,
+   "min": 72,
+   "cruce": "barco",
+   "tramos": [
+    "castro-chonchi",
+    "chonchi-muelle",
+    "chonchi-lemuy-barco",
+    "lemuy-camino"
+   ],
+   "paradas": [
+    {
+     "n": "Castro (Plaza de Armas)",
+     "lat": -42.4802,
+     "lng": -73.7634,
+     "nota": "Punto de partida"
+    },
+    {
+     "n": "Chonchi",
+     "lat": -42.6207,
+     "lng": -73.7707,
+     "lugar": "La Ventana de Elisa",
+     "nota": "Imperdible de la costanera. Rico para algo dulce o salado."
+    },
+    {
+     "n": "Isla Lemuy",
+     "lat": -42.6192,
+     "lng": -73.6492,
+     "lugar": "Isla Lemuy",
+     "nota": "Llegas en barco. Los horarios del cruce conviene confirmarlos antes de salir."
+    }
+   ]
+  },
+  {
+   "id": "paildad",
+   "nombre": "Estero Paildad",
+   "resumen": "Salida corta hacia el sur, pasando por Chonchi.",
+   "km": 55.9,
+   "min": 60,
+   "cruce": null,
+   "tramos": [
+    "castro-chonchi",
+    "chonchi-paildad"
+   ],
+   "paradas": [
+    {
+     "n": "Castro (Plaza de Armas)",
+     "lat": -42.4802,
+     "lng": -73.7634,
+     "nota": "Punto de partida"
+    },
+    {
+     "n": "Chonchi",
+     "lat": -42.6207,
+     "lng": -73.7707,
+     "lugar": "La Ventana de Elisa",
+     "nota": "Parada para un café en la costanera."
+    },
+    {
+     "n": "Estero Paildad",
+     "lat": -42.7863,
+     "lng": -73.6794,
+     "lugar": "Estero Paildad"
+    }
+   ]
+  },
+  {
+   "id": "tenaun",
+   "nombre": "Tenaún",
+   "resumen": "Hacia la costa del este, pasando por Dalcahue.",
+   "km": 56.1,
+   "min": 69,
+   "cruce": null,
+   "tramos": [
+    "castro-dalcahue",
+    "dalcahue-tenaun"
+   ],
+   "paradas": [
+    {
+     "n": "Castro (Plaza de Armas)",
+     "lat": -42.4802,
+     "lng": -73.7634,
+     "nota": "Punto de partida"
+    },
+    {
+     "n": "Dalcahue",
+     "lat": -42.3811,
+     "lng": -73.6482,
+     "lugar": "Cocinerías Dalcahue",
+     "nota": "Parada para comer. El puesto N° 8 tiene las mejores empanadas."
+    },
+    {
+     "n": "Tenaún",
+     "lat": -42.3317,
+     "lng": -73.3751,
+     "lugar": "Tenaún"
+    }
+   ]
+  },
+  {
+   "id": "mechuque",
+   "nombre": "Isla Mechuque",
+   "resumen": "Por camino hasta Tenaún y luego en lancha a la isla.",
+   "km": 56.1,
+   "min": 69,
+   "cruce": "lancha",
+   "tramos": [
+    "castro-dalcahue",
+    "dalcahue-tenaun",
+    "tenaun-mechuque"
+   ],
+   "paradas": [
+    {
+     "n": "Castro (Plaza de Armas)",
+     "lat": -42.4802,
+     "lng": -73.7634,
+     "nota": "Punto de partida"
+    },
+    {
+     "n": "Dalcahue",
+     "lat": -42.3811,
+     "lng": -73.6482,
+     "lugar": "Cocinerías Dalcahue",
+     "nota": "Parada para comer."
+    },
+    {
+     "n": "Tenaún",
+     "lat": -42.3317,
+     "lng": -73.3751,
+     "lugar": "Tenaún",
+     "nota": "Aquí termina el camino. Averigua las salidas de las lanchas antes de ir."
+    },
+    {
+     "n": "Isla Mechuque",
+     "lat": -42.3028,
+     "lng": -73.2719,
+     "lugar": "Isla Mechuque",
+     "nota": "Se llega solo en lancha. La línea punteada es referencial: no es la ruta exacta del bote."
+    }
+   ]
+  },
+  {
+   "id": "lelbun",
+   "nombre": "Lelbun y Aituy",
+   "resumen": "Dos playas de arena de la costa de Queilén, un paseo para el día.",
+   "km": 61.6,
+   "min": 64,
+   "cruce": null,
+   "tramos": [
+    "castro-chonchi",
+    "chonchi-lelbun",
+    "lelbun-aituy"
+   ],
+   "paradas": [
+    {
+     "n": "Castro (Plaza de Armas)",
+     "lat": -42.4802,
+     "lng": -73.7634,
+     "nota": "Punto de partida"
+    },
+    {
+     "n": "Chonchi",
+     "lat": -42.6207,
+     "lng": -73.7707,
+     "lugar": "La Ventana de Elisa",
+     "nota": "Parada para un café en la costanera."
+    },
+    {
+     "n": "Playa Lelbun",
+     "lat": -42.7792,
+     "lng": -73.5151,
+     "lugar": "Playa Lelbun",
+     "nota": "Rica playa de arena, ideal para un paseo por el día."
+    },
+    {
+     "n": "Playa Aituy",
+     "lat": -42.8205,
+     "lng": -73.4769,
+     "lugar": "Playa Aituy",
+     "nota": "Queda muy cerca de Lelbun."
+    }
+   ]
+  },
+  {
+   "id": "cucao",
+   "nombre": "Cucao",
+   "resumen": "Hasta la costa del Pacífico, con parada en el camino.",
+   "km": 62.4,
+   "min": 89,
+   "cruce": null,
+   "tramos": [
+    "castro-chonchi",
+    "chonchi-morelia",
+    "morelia-cucao"
+   ],
+   "paradas": [
+    {
+     "n": "Castro (Plaza de Armas)",
+     "lat": -42.4802,
+     "lng": -73.7634,
+     "nota": "Punto de partida"
+    },
+    {
+     "n": "Chonchi",
+     "lat": -42.6207,
+     "lng": -73.7707,
+     "lugar": "La Ventana de Elisa",
+     "nota": "Parada para un café en la costanera."
+    },
+    {
+     "n": "Tradiciones Cocinería Morelia",
+     "lat": -42.6498,
+     "lng": -74.0547,
+     "lugar": "Tradiciones Cocinería Morelia",
+     "nota": "Un clásico del camino a Cucao: se come muy bien."
+    },
+    {
+     "n": "Playa Cucao",
+     "lat": -42.5984,
+     "lng": -74.1301,
+     "lugar": "Playa Cucao",
+     "nota": "Salida al Pacífico. Suele haber mucho viento. Se combina con caminatas y el Parque Nacional Chiloé."
+    }
+   ]
+  },
+  {
+   "id": "aucar",
+   "nombre": "Aucar",
+   "resumen": "Hacia el norte por Dalcahue y Quemchi.",
+   "km": 62.9,
+   "min": 82,
+   "cruce": null,
+   "tramos": [
+    "castro-dalcahue",
+    "dalcahue-quemchi",
+    "quemchi-aucar"
+   ],
+   "paradas": [
+    {
+     "n": "Castro (Plaza de Armas)",
+     "lat": -42.4802,
+     "lng": -73.7634,
+     "nota": "Punto de partida"
+    },
+    {
+     "n": "Dalcahue",
+     "lat": -42.3811,
+     "lng": -73.6482,
+     "lugar": "Cocinerías Dalcahue",
+     "nota": "Parada para comer."
+    },
+    {
+     "n": "Quemchi",
+     "lat": -42.1445,
+     "lng": -73.4769,
+     "lugar": "Lancha Chilota",
+     "nota": "Cocina de autor. Lo opera la hija de Coco Pacheco."
+    },
+    {
+     "n": "Aucar",
+     "lat": -42.1608,
+     "lng": -73.4792,
+     "lugar": "Aucar"
+    }
+   ]
+  },
+  {
+   "id": "queilen",
+   "nombre": "Queilén",
+   "resumen": "Hacia el sureste por Chonchi, hasta la playa de Queilén.",
+   "km": 64.0,
+   "min": 59,
+   "cruce": null,
+   "tramos": [
+    "castro-chonchi",
+    "chonchi-queilen"
+   ],
+   "paradas": [
+    {
+     "n": "Castro (Plaza de Armas)",
+     "lat": -42.4802,
+     "lng": -73.7634,
+     "nota": "Punto de partida"
+    },
+    {
+     "n": "Chonchi",
+     "lat": -42.6207,
+     "lng": -73.7707,
+     "lugar": "La Ventana de Elisa",
+     "nota": "Parada para un café en la costanera."
+    },
+    {
+     "n": "Playa Queilén",
+     "lat": -42.8742,
+     "lng": -73.4658,
+     "lugar": "Playa Queilén",
+     "nota": "Parte del paseo por el día. Hay lugares para comer."
+    }
+   ]
+  },
+  {
+   "id": "chepu",
+   "nombre": "Chepu",
+   "resumen": "Un camino largo hacia el norte, al sur de Ancud.",
+   "km": 74.3,
+   "min": 84,
+   "cruce": null,
+   "tramos": [
+    "castro-chepu"
+   ],
+   "paradas": [
+    {
+     "n": "Castro (Plaza de Armas)",
+     "lat": -42.4802,
+     "lng": -73.7634,
+     "nota": "Punto de partida"
+    },
+    {
+     "n": "Chepu",
+     "lat": -42.0416,
+     "lng": -73.974,
+     "lugar": "Chepu"
+    }
+   ]
+  },
+  {
+   "id": "lacuy",
+   "nombre": "Península Lacuy",
+   "resumen": "Hasta Ancud y la zona de los fuertes.",
+   "km": 115.3,
+   "min": 143,
+   "cruce": null,
+   "tramos": [
+    "castro-ancud",
+    "ancud-chauman",
+    "chauman-lacuy"
+   ],
+   "paradas": [
+    {
+     "n": "Castro (Plaza de Armas)",
+     "lat": -42.4802,
+     "lng": -73.7634,
+     "nota": "Punto de partida"
+    },
+    {
+     "n": "Ancud",
+     "lat": -41.866,
+     "lng": -73.8285,
+     "lugar": "Club Social Baquedano",
+     "nota": "Restaurante tradicional de Ancud."
+    },
+    {
+     "n": "Playa Chauman",
+     "lat": -41.7972,
+     "lng": -73.9515,
+     "lugar": "Playa Chauman",
+     "nota": "Parte del recorrido de los fuertes de Ancud."
+    },
+    {
+     "n": "Península Lacuy",
+     "lat": -41.8047,
+     "lng": -73.9639,
+     "lugar": "Península Lacuy"
+    }
+   ]
+  },
+  {
+   "id": "punihuil",
+   "nombre": "Puñihuil y Duhatao",
+   "resumen": "Hasta Ancud y la costa del Pacífico, con los pingüinos.",
+   "km": 119.5,
+   "min": 157,
+   "cruce": null,
+   "tramos": [
+    "castro-ancud",
+    "ancud-punihuil",
+    "punihuil-duhatao"
+   ],
+   "paradas": [
+    {
+     "n": "Castro (Plaza de Armas)",
+     "lat": -42.4802,
+     "lng": -73.7634,
+     "nota": "Punto de partida"
+    },
+    {
+     "n": "Ancud",
+     "lat": -41.866,
+     "lng": -73.8285,
+     "lugar": "Club Social Baquedano",
+     "nota": "Restaurante tradicional de Ancud."
+    },
+    {
+     "n": "Playa Puñihuil",
+     "lat": -41.9288,
+     "lng": -74.037,
+     "lugar": "Playa Puñihuil",
+     "nota": "Se combina con un paseo en lancha para ver los pingüinos, y productos de mar frescos con las famosas empanadas Loco Queso."
+    },
+    {
+     "n": "Playa Duhatao",
+     "lat": -41.9897,
+     "lng": -74.0487,
+     "lugar": "Playa Duhatao",
+     "nota": "Playa pequeña, cerca de Puñihuil, con muy lindas vistas."
+    }
+   ]
+  }
+ ]
+}

@@ -1,11 +1,11 @@
 {
   "name": "guia-chiloe",
-  "version": "1.12.0",
+  "version": "1.13.0",
   "private": true,
   "type": "module",
   "description": "Chiloé a tu Manera: guía interactiva con mapa, cuentas y panel de administración.",
   "scripts": {
-    "test": "node --test tests/api.test.mjs",
+    "test": "node --test tests/api.test.mjs tests/rutas.test.mjs",
     "seed": "node tools/make-seed.mjs"
   },
   "dependencies": {

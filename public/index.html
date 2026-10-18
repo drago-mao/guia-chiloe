@@ -309,6 +309,38 @@ details.sg[open]>summary{margin-bottom:10px}
 .who{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 input[type=file]{width:100%;font:inherit;font-size:14px;color:var(--muted);padding:8px;background:var(--surface);border:1px dashed var(--line2);border-radius:14px}
 input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right:10px;padding:10px 14px;border:0;border-radius:10px;background:var(--accent);color:var(--on-accent);cursor:pointer;min-height:40px}
+
+/* recorridos (V 1.13) */
+.rintro{margin:6px 0 14px;color:var(--muted);font-size:15px}
+.rcard{display:flex;gap:13px;align-items:center;width:100%;margin:0 0 10px;padding:14px;border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:var(--shadow-s);text-align:left;transition:transform .12s}
+.rcard:active{transform:scale(.99)}
+.rcard .ico,.rsum .ico{--cc:var(--accent);--ct:color-mix(in srgb,var(--accent) 12%,#fff)}
+.rcard .nm b{font-size:18px}
+.rcard .nm p{margin:3px 0 8px;font-size:14px;color:var(--muted)}
+.rchips{display:flex;flex-wrap:wrap;gap:6px}
+.rchip{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 10px;border-radius:13px;background:var(--surface2);font-size:12.5px;font-weight:600;color:var(--ink)}
+.rchip.warn{background:var(--t-comprar);color:#6B4A0E}
+.rtexit{flex:none;height:38px;padding:0 15px;border:0;border-radius:19px;background:var(--ink);color:var(--surface);font-weight:700;font-size:14px}
+.rtexit:active{transform:scale(.97)}
+#app.rt .zones,#app.rt .subs,#app.rt .tog2,#app.rt #cats{display:none!important}
+.rsum{margin:2px 0 6px;padding:14px;border-radius:18px;background:var(--surface2)}
+.rsum p{margin:0 0 10px;font-size:15px}
+.rsum small{display:block;margin-top:10px;font-size:12px;color:var(--muted)}
+.rstop{display:flex;align-items:center;border-bottom:1px solid var(--line)}
+.rstop.sel{background:var(--surface2);border-radius:16px;border-bottom-color:transparent}
+.rmain{flex:1;min-width:0;display:flex;gap:13px;align-items:flex-start;padding:12px 8px 12px 0;min-height:64px;border:0;background:transparent;text-align:left}
+.rstop.sel .rmain{padding-left:10px}
+.rnum{flex:none;width:32px;height:32px;margin-top:1px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--f-display);font-weight:800;font-size:14px}
+.rnum.s{background:var(--ink)}
+.rmain b{display:block;font-family:var(--f-display);font-size:17px;font-weight:700;line-height:1.2;letter-spacing:-.015em}
+.rmain span.t{display:block;margin-top:2px;font-size:13px;color:var(--muted)}
+.rfic{flex:none;height:36px;margin-right:4px;padding:0 13px;border-radius:18px;border:1px solid var(--line2);background:var(--surface);font-weight:600;font-size:13px}
+.rh{margin:20px 0 4px;font-family:var(--f-display);font-size:15px;font-weight:700;color:var(--muted)}
+.racts{display:grid;gap:10px;margin:18px 0 6px}
+.rn{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;font-family:var(--f-display);font-weight:800;font-size:14px;transition:transform .15s}
+.rn.s{background:var(--ink)}
+.rn.sel{transform:scale(1.25);box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 30%,transparent),0 4px 12px rgba(0,0,0,.4)}
+.rlbl{display:inline-block;transform:translate(-50%,-50%);padding:3px 9px;border-radius:12px;background:#fff;color:var(--ink);border:1px solid var(--line2);box-shadow:var(--shadow-s);font:700 12px var(--f-body);white-space:nowrap}
 </style>
 <link rel="stylesheet" href="leaflet/leaflet.css">
 <script src="leaflet/leaflet.js"></script>
@@ -346,7 +378,7 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
     <button type="button" class="btn soft" id="guest" style="margin-top:10px">Solo mirar, sin cuenta</button>
     <p class="note">Sin cuenta puedes ver el mapa, los lugares y las mareas. Con una cuenta también guardas favoritos en todos tus aparatos y puedes sugerir lugares.</p>
     <button type="button" class="linkbtn" id="setup-link" hidden>Primera vez: configurar al administrador</button>
-    <div class="ver">V 1.12</div>
+    <div class="ver">V 1.13</div>
   </div>
 </section>
 
@@ -354,7 +386,7 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
   <div id="map" role="application" aria-label="Mapa de Chiloé"></div>
   <div class="ftop gut" id="ftop">
     <div class="bar" id="bar">
-      <span class="logov" aria-hidden="true"><span class="logo"><svg viewBox="4 6 92 92"><path d="M50 88C34 72 22 58 22 42A28 28 0 0 1 78 42C78 58 66 72 50 88Z" fill="#0E5A6B"/><circle cx="50" cy="42" r="16" fill="#E0A030"/><path d="M50 32L62 43H58V52H42V43H38Z" fill="#0E5A6B"/><rect x="48" y="46" width="4" height="6" fill="#E0A030"/></svg></span><span class="vtag">V 1.12</span></span>
+      <span class="logov" aria-hidden="true"><span class="logo"><svg viewBox="4 6 92 92"><path d="M50 88C34 72 22 58 22 42A28 28 0 0 1 78 42C78 58 66 72 50 88Z" fill="#0E5A6B"/><circle cx="50" cy="42" r="16" fill="#E0A030"/><path d="M50 32L62 43H58V52H42V43H38Z" fill="#0E5A6B"/><rect x="48" y="46" width="4" height="6" fill="#E0A030"/></svg></span><span class="vtag">V 1.13</span></span>
       <label for="q" style="position:absolute;left:-9999px">Buscar lugar</label>
       <input id="q" type="search" placeholder="Buscar en Chiloé" autocomplete="off">
       <button type="button" class="ib" id="menubtn" aria-label="Menú" aria-haspopup="dialog"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01" stroke-width="3.2"/></svg><i class="dot" id="menudot" hidden></i></button>
@@ -363,6 +395,7 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
   </div>
   <div class="fabs">
     <button type="button" class="ib g" id="addbtn" hidden aria-label="Agregar un lugar"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11zM12 7v6M9 10h6"/></svg></button>
+    <button type="button" class="ib g" id="routebtn" aria-label="Ver recorridos con el camino"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 1 0 0-5zM18 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 1 0 0-5zM8.5 18H16a3 3 0 0 0 0-6H8a3 3 0 0 1 0-6h7.5"/></svg></button>
     <button type="button" class="ib g" id="tidebtn" aria-label="Ver mareas de Castro"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9c2.2 0 2.2-2 4.5-2S9.800 9 12 9s2.200-2 4.500-2S18.800 9 21 9M3 15c2.200 0 2.200-2 4.500-2S9.800 15 12 15s2.200-2 4.500-2S18.800 15 21 15"/></svg></button>
     <button type="button" class="ib g" id="fit" aria-label="Ver todos los lugares de la lista"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
     <button type="button" class="ib g" id="zin" aria-label="Acercar"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
@@ -370,11 +403,12 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
   </div>
   <div class="maptag" id="maptag">Mapa simple, sin calles</div>
   <section id="dock" class="dock" aria-label="Lugares">
-    <div class="brand gut"><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#0E5A6B"/><g transform="translate(0 -3)"><ellipse cx="50" cy="91" rx="28" ry="6" fill="none" stroke="#E0A030" stroke-width="1.6" opacity=".7"/><ellipse cx="50" cy="91" rx="14" ry="3" fill="none" stroke="#E0A030" stroke-width="2.2"/><path d="M50 88C34 72 22 58 22 42A28 28 0 0 1 78 42C78 58 66 72 50 88Z" fill="#EEF2F3"/><circle cx="50" cy="42" r="16" fill="#E0A030"/><path d="M50 32L62 43H58V52H42V43H38Z" fill="#0E5A6B"/><rect x="48" y="46" width="4" height="6" fill="#E0A030"/></g></svg><div><b>chiloé <em>a tu manera</em><span class="vtag">V 1.12</span></b><span>Guía de la isla grande</span></div></div>
+    <div class="brand gut"><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#0E5A6B"/><g transform="translate(0 -3)"><ellipse cx="50" cy="91" rx="28" ry="6" fill="none" stroke="#E0A030" stroke-width="1.6" opacity=".7"/><ellipse cx="50" cy="91" rx="14" ry="3" fill="none" stroke="#E0A030" stroke-width="2.2"/><path d="M50 88C34 72 22 58 22 42A28 28 0 0 1 78 42C78 58 66 72 50 88Z" fill="#EEF2F3"/><circle cx="50" cy="42" r="16" fill="#E0A030"/><path d="M50 32L62 43H58V52H42V43H38Z" fill="#0E5A6B"/><rect x="48" y="46" width="4" height="6" fill="#E0A030"/></g></svg><div><b>chiloé <em>a tu manera</em><span class="vtag">V 1.13</span></b><span>Guía de la isla grande</span></div></div>
     <button type="button" class="grab" id="grab" aria-label="Cambiar el tamaño de la lista"><i></i></button>
     <div class="dhead gut" id="dhead">
       <div class="tt"><h2 id="ltitle"></h2><span id="lcount"></span></div>
       <div class="tog2" role="group" aria-label="Vista"><button type="button" data-view="mapa" aria-pressed="true">Lista</button><button type="button" data-view="tabla" aria-pressed="false">Tabla</button></div>
+      <button type="button" class="rtexit" id="rtexit" hidden>Salir</button>
     </div>
     <div class="zones gut" id="zones" role="group" aria-label="Pueblo"></div>
     <div class="subs gut" id="subs" role="group" aria-label="Tipo de lugar" hidden></div>
@@ -384,6 +418,10 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
 
 <section id="detail" class="ovl" hidden aria-label="Ficha del lugar"></section>
 <section id="tides" class="ovl" hidden aria-label="Mareas de Castro"></section>
+<section id="routes" class="ovl" hidden aria-label="Recorridos">
+  <div class="ovl-top gut"><button type="button" class="back" data-closeovl="routes"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Volver</button><h2>Recorridos</h2></div>
+  <div class="ovl-body gut" id="rtbody"></div>
+</section>
 <section id="sheet" class="ovl" hidden aria-label="Sugerir un lugar">
   <div class="ovl-top gut"><button type="button" class="back" id="sg-back"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Volver</button><h2>Sugerir un lugar</h2></div>
   <div class="ovl-body gut">
@@ -470,6 +508,7 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
   <div class="pcard gut" role="dialog" aria-label="Menú">
     <div class="pwho"><b id="menuwho"></b><span id="menurole"></span></div>
     <p class="note" id="guestnote" hidden style="margin:0 0 12px">Estás como visualizador: puedes mirar todo. Crea una cuenta para guardar favoritos en todos tus aparatos y sugerir lugares.</p>
+    <button type="button" class="mi" id="routebtn2"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 1 0 0-5zM18 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 1 0 0-5zM8.5 18H16a3 3 0 0 0 0-6H8a3 3 0 0 1 0-6h7.5"/></svg>Recorridos con el camino</button>
     <button type="button" class="mi" id="tidebtn2"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9c2.2 0 2.2-2 4.5-2S9.800 9 12 9s2.200-2 4.500-2S18.800 9 21 9M3 15c2.200 0 2.200-2 4.500-2S9.800 15 12 15s2.200-2 4.500-2S18.800 15 21 15"/></svg>Mareas de Castro</button>
     <button type="button" class="mi" id="panelbtn" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13l2-8h12l2 8M4 13v6h16v-6M4 13h5l1 2h4l1-2h5"/></svg>Panel de administración<span class="bd" id="bdg" hidden>0</span></button>
     <button type="button" class="mi" id="addplacebtn" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Agregar un lugar</button>
@@ -477,7 +516,7 @@ input[type=file]::file-selector-button{font:inherit;font-weight:600;margin-right
     <button type="button" class="mi" id="accbtn" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a4 4 0 1 0 0 8 4 4 0 1 0 0-8zM4 20a8 8 0 0 1 16 0"/></svg>Mi cuenta</button>
     <button type="button" class="mi" id="loginbtn" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4h4v16h-4M8 8l-4 4 4 4M4 12h11"/></svg>Crear cuenta o entrar</button>
     <button type="button" class="mi" id="out" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/></svg>Cerrar sesión</button>
-    <p class="credit">V 1.12 · Mapa © colaboradores de OpenStreetMap · Costa: chile-geojson · Leaflet · Mareas: TICON-4 (CC BY 4.0) y Neaps</p>
+    <p class="credit">V 1.13 · Mapa © colaboradores de OpenStreetMap · Costa: chile-geojson · Leaflet · Mareas: TICON-4 (CC BY 4.0) y Neaps</p>
   </div>
 </section>
 </main>
@@ -709,13 +748,14 @@ function initMap(){
   L.geoJSON(LAND,{interactive:false,className:'land'}).addTo(map);
     TOWNS.forEach(function(t){L.marker([t[1],t[2]],{interactive:false,keyboard:false,icon:L.divIcon({className:'',html:'<span class="town">'+esc(t[0])+'</span>',iconSize:[0,0]})}).addTo(map);});
   layer=L.layerGroup().addTo(map);
+  rlayer=L.layerGroup().addTo(map);
   map.on('zoomend',function(){$('map').classList.toggle('zin',map.getZoom()>=11);});
   setTimeout(function(){if(!$('map').classList.contains('has-tiles'))$('maptag').style.display='block';},2500);
 }
 function drawMarkers(){
   if(!layer)return;
   layer.clearLayers();
-  visible().forEach(function(p){
+  (rt?(sel&&BYID[sel]?[BYID[sel]]:[]):visible()).forEach(function(p){
     if(p.lat==null)return;
     var on=sel===p.id,c=CATS[p.cat];
     var m=L.marker([p.lat,p.lng],{title:p.name,alt:p.name,riseOnHover:true,zIndexOffset:on?1000:0,icon:L.divIcon({className:'',html:'<div class="pin k-'+p.cat+(on?' sel':'')+'">'+svg(c.d)+'</div>',iconSize:[44,44],iconAnchor:[22,22]})});
@@ -736,7 +776,7 @@ function setSheet(st,anim){
 }
 function initSheetDrag(){
   var d=$('dock'),startY=0,startH=0,lastY=0,lastT=0,vel=0,moved=false,on=false;
-  function down(e){if(DESK||e.target.closest('button[data-view]'))return;on=true;moved=false;startY=e.clientY;startH=d.getBoundingClientRect().height;lastY=startY;lastT=e.timeStamp;vel=0;d.classList.add('drag');try{e.currentTarget.setPointerCapture(e.pointerId);}catch(x){}}
+  function down(e){if(DESK||e.target.closest('button[data-view],#rtexit'))return;on=true;moved=false;startY=e.clientY;startH=d.getBoundingClientRect().height;lastY=startY;lastT=e.timeStamp;vel=0;d.classList.add('drag');try{e.currentTarget.setPointerCapture(e.pointerId);}catch(x){}}
   function move(e){if(!on)return;var dy=startY-e.clientY;if(Math.abs(dy)>4)moved=true;var h=Math.max(SNAP.peek,Math.min(SNAP.full,startH+dy));d.style.height=h+'px';$('app').style.setProperty('--sh',h+'px');var dt=e.timeStamp-lastT;if(dt>0)vel=(lastY-e.clientY)/dt;lastY=e.clientY;lastT=e.timeStamp;}
   function up(){if(!on)return;on=false;d.classList.remove('drag');if(!moved)return;
     var proj=d.getBoundingClientRect().height+vel*180,best='half',bd=1e9;
@@ -759,6 +799,7 @@ function focusAt(lat,lng,z){
   map.setView([lat,lng],z,{animate:false});if(Math.abs(dy)>1)map.panBy([0,dy],{animate:false});
 }
 function fit(){
+  if(rt){fitRoute();return;}
   if(!map||(view==='tabla'&&!DESK))return;
   var v=visible().filter(function(p){return p.lat!=null;});
   if(!v.length)v=ALL.filter(function(p){return p.lat!=null&&(zone==='Todo'||p.zone===zone);});
@@ -773,6 +814,134 @@ function choose(id,pan){
   var p=BYID[id];
   if(pan&&p&&p.lat!=null&&map){if(!DESK&&sheetState==='full')setSheet('half');focusAt(p.lat,p.lng,Math.max(map.getZoom(),13));}
   var el=document.querySelector('[data-card="'+id+'"]');if(el)el.scrollIntoView({block:'nearest'});
+}
+
+
+/* ---------- recorridos (V 1.13) ---------- */
+var rt=null,rlayer=null,RUTAS=null,rtSel=null,ROUTE_COLOR='#0E5A6B';
+function decPoly(str){var i=0,la=0,lo=0,out=[];while(i<str.length){var b,sh=0,r=0;do{b=str.charCodeAt(i++)-63;r|=(b&31)<<sh;sh+=5;}while(b>=32);la+=(r&1)?~(r>>1):(r>>1);sh=0;r=0;do{b=str.charCodeAt(i++)-63;r|=(b&31)<<sh;sh+=5;}while(b>=32);lo+=(r&1)?~(r>>1):(r>>1);out.push([la/1e5,lo/1e5]);}return out;}
+function fmtKm(n){return n.toFixed(1).replace('.',',')+' km';}
+function fmtMin(m){return m<60?m+' min':Math.floor(m/60)+' h'+(m%60?' '+(m%60)+' min':'');}
+function cruceTxt(c){return c==='barco'?'Cruce en barco':c==='lancha'?'Cruce en lancha':'';}
+function loadRutas(){
+  if(RUTAS)return Promise.resolve(RUTAS);
+  return fetch("rutas.json?v=1.13").then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.json();}).then(function(j){RUTAS=j;return j;});
+}
+function rchips(r){
+  var h='<span class="rchip">'+fmtKm(r.km)+'</span><span class="rchip">≈ '+fmtMin(r.min)+'</span>';
+  if(r.cruce)h+='<span class="rchip warn">'+cruceTxt(r.cruce)+'</span>';
+  return h;
+}
+function renderRoutes(){
+  var list=RUTAS.rutas.slice().sort(function(a,b){return a.km-b.km;});
+  var h='<p class="rintro">Elige un recorrido para ver el camino en el mapa y los lugares donde pasar. Todos salen desde Castro.</p>';
+  h+=list.map(function(r){
+    return '<button type="button" class="rcard" data-route="'+esc(r.id)+'"><span class="ico">'+svg('M6 15.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 1 0 0-5zM18 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 1 0 0-5zM8.5 18H16a3 3 0 0 0 0-6H8a3 3 0 0 1 0-6h7.5')+'</span><span class="nm"><b>'+esc(r.nombre)+'</b><p>'+esc(r.resumen)+'</p><span class="rchips" style="margin:0">'+rchips(r)+'<span class="rchip">'+r.paradas.length+' paradas</span></span></span></button>';
+  }).join('');
+  $('rtbody').innerHTML=h;
+}
+function openRoutes(){
+  loadRutas().then(function(){renderRoutes();openOvl('routes');$('rtbody').scrollTop=0;}).catch(function(){toast('No pudimos cargar los recorridos. Revisa tu conexión.');});
+}
+function segDist(a,b,c){
+  var k=111320,cl=Math.cos(a[0]*Math.PI/180),ax=a[1]*k*cl,ay=a[0]*k,bx=b[1]*k*cl,by=b[0]*k,cx=c[1]*k*cl,cy=c[0]*k,dx=bx-ax,dy=by-ay,l=dx*dx+dy*dy,t=l?((cx-ax)*dx+(cy-ay)*dy)/l:0;
+  t=Math.max(0,Math.min(1,t));return Math.hypot(ax+t*dx-cx,ay+t*dy-cy);
+}
+function findByName(n){for(var i=0;i<ALL.length;i++)if(ALL[i].name===n)return ALL[i];return null;}
+function nearPlaces(r){
+  var pts=[];
+  r.segs.forEach(function(sg){if(sg.t!=='b')sg.pts.forEach(function(q){pts.push(q);});});
+  var start=[r.paradas[0].lat,r.paradas[0].lng],names={};
+  r.paradas.forEach(function(s){if(s.lugar)names[s.lugar]=1;});
+  var out=[];
+  ALL.forEach(function(p){
+    if(p.lat==null||p.cat==='servicios'||p.sub==='Recorrido'||names[p.name])return;
+    var c=[p.lat,p.lng];
+    if(segDist(start,start,c)<2500)return;
+    var best=1e9,at=0;
+    for(var i=0;i<pts.length-1;i++){var d=segDist(pts[i],pts[i+1],c);if(d<best){best=d;at=i;}}
+    if(best<=700)out.push({p:p,d:best,at:at});
+  });
+  out.sort(function(a,b){return a.d-b.d;});
+  return out.slice(0,8).sort(function(a,b){return a.at-b.at;}).map(function(o){return o.p;});
+}
+function gmapsUrl(r){
+  var st=r.paradas.slice();if(r.cruce==='lancha')st.pop();
+  var o=st[0],d=st[st.length-1],mid=st.slice(1,-1).map(function(s){return s.lat+','+s.lng;});
+  return 'https://www.google.com/maps/dir/?api=1&origin='+o.lat+','+o.lng+'&destination='+d.lat+','+d.lng+(mid.length?'&waypoints='+mid.join('%7C'):'')+'&travelmode=driving';
+}
+function startRoute(id){
+  var r=null;RUTAS.rutas.forEach(function(x){if(x.id===id)r=x;});if(!r)return;
+  r.segs=r.tramos.map(function(tid){var t=RUTAS.tramos[tid];return {t:t.t,pts:t.t==='b'?[t.a,t.b]:decPoly(t.e)};});
+  var all=[];r.segs.forEach(function(sg){sg.pts.forEach(function(q){all.push(q);});});
+  r.bounds=L.latLngBounds(all);
+  rt=r;rtSel=null;sel=null;view='mapa';
+  r.near=nearPlaces(r);
+  closeAll();$('app').classList.add('rt');$('rtexit').hidden=false;
+  renderChips();drawMarkers();renderList();$('list').scrollTop=0;
+  if(!DESK)setSheet('half');
+  setTimeout(function(){map.invalidateSize();drawRoute();fitRoute();},60);
+}
+function endRoute(){
+  rt=null;rtSel=null;if(rlayer)rlayer.clearLayers();
+  $('app').classList.remove('rt');$('rtexit').hidden=true;
+  sel=null;refresh(true);
+}
+function fitRoute(){
+  if(!map||!rt)return;
+  map.invalidateSize();
+  map.fitBounds(rt.bounds,{paddingTopLeft:[36,DESK?80:140],paddingBottomRight:[36,visPad()+24],maxZoom:13,animate:false});
+}
+function drawRoute(){
+  if(!rlayer||!rt)return;
+  rlayer.clearLayers();
+  rt.segs.forEach(function(sg){
+    var dash=sg.t==='c'?null:(sg.t==='f'?'2 10':'9 11');
+    L.polyline(sg.pts,{color:'#fff',weight:sg.t==='c'?9:7,opacity:.92,lineCap:'round',lineJoin:'round',interactive:false}).addTo(rlayer);
+    L.polyline(sg.pts,{color:ROUTE_COLOR,weight:sg.t==='c'?5:4,opacity:1,lineCap:'round',lineJoin:'round',dashArray:dash,interactive:false}).addTo(rlayer);
+    if(sg.t!=='c'){
+      var a=sg.pts[0],b=sg.pts[sg.pts.length-1],mid=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+      L.marker(mid,{interactive:false,keyboard:false,icon:L.divIcon({className:'',html:'<span class="rlbl">'+(sg.t==='f'?'Barco':'Lancha')+'</span>',iconSize:[0,0]})}).addTo(rlayer);
+    }
+  });
+  var rpts=[];rt.segs.forEach(function(sg){if(sg.t!=='b')sg.pts.forEach(function(q){rpts.push(q);});});
+  rt.paradas.forEach(function(s,i){
+    if(i===0||!rpts.length)return;
+    var bq=null,bd=1e9;rpts.forEach(function(q){var d=segDist(q,q,[s.lat,s.lng]);if(d<bd){bd=d;bq=q;}});
+    if(bd>300&&rt.segs[rt.segs.length-1].t!=='b')L.polyline([bq,[s.lat,s.lng]],{color:ROUTE_COLOR,weight:3,opacity:.9,dashArray:'1 8',lineCap:'round',interactive:false}).addTo(rlayer);
+  });
+  rt.near.forEach(function(p){
+    var m=L.marker([p.lat,p.lng],{title:p.name,alt:p.name,icon:L.divIcon({className:'',html:'<div class="pin k-'+p.cat+'">'+svg(CATS[p.cat].d)+'</div>',iconSize:[44,44],iconAnchor:[22,22]})});
+    m.on('click',function(){openDetail(p.id);});
+    rlayer.addLayer(m);
+  });
+  rt.paradas.forEach(function(s,i){
+    var m=L.marker([s.lat,s.lng],{title:s.n,alt:'Parada '+(i+1)+': '+s.n,zIndexOffset:900+(rtSel===i?500:0),icon:L.divIcon({className:'',html:'<div class="rn'+(i===0?' s':'')+(rtSel===i?' sel':'')+'">'+(i+1)+'</div>',iconSize:[34,34],iconAnchor:[17,17]})});
+    if(rtSel===i)m.bindTooltip(s.n,{permanent:true,direction:'top',offset:[0,-20]});
+    m.on('click',function(){pickStop(i);});
+    rlayer.addLayer(m);
+  });
+}
+function pickStop(i){
+  rtSel=i;sel=null;drawRoute();drawMarkers();renderList();
+  var s=rt.paradas[i];
+  if(!DESK&&sheetState==='full')setSheet('half');
+  focusAt(s.lat,s.lng,Math.max(map.getZoom(),13));
+  var el=document.querySelector('[data-rs="'+i+'"]');if(el)el.scrollIntoView({block:'nearest'});
+}
+function renderRoute(){
+  var r=rt;
+  $('ltitle').textContent='Recorrido: '+r.nombre;
+  $('lcount').textContent=fmtKm(r.km)+' · ≈ '+fmtMin(r.min)+(r.cruce?' · '+cruceTxt(r.cruce):'');
+  var h='<div class="rsum"><p>'+esc(r.resumen)+'</p><div class="rchips">'+rchips(r)+'</div><small>Salida desde Castro. Distancia y tiempo aproximados en auto, sin paradas ni esperas'+(r.cruce?'; el cruce depende de los horarios'+(r.cruce==='lancha'?' de las lanchas':' del barco'):'')+'. La vuelta es por el mismo camino.</small></div>';
+  h+='<h3 class="rh">Paradas</h3>';
+  h+=r.paradas.map(function(s,i){
+    var pl=s.lugar?findByName(s.lugar):null;
+    return '<div class="rstop'+(rtSel===i?' sel':'')+'" data-rs="'+i+'"><button type="button" class="rmain" data-rstop="'+i+'"><span class="rnum'+(i===0?' s':'')+'">'+(i+1)+'</span><span style="min-width:0"><b>'+esc(s.n)+'</b>'+(s.nota?'<span class="t">'+esc(s.nota)+'</span>':'')+'</span></button>'+(pl?'<button type="button" class="rfic" data-open="'+esc(pl.id)+'">Ficha</button>':'')+'</div>';
+  }).join('');
+  if(r.near.length){h+='<h3 class="rh">Lugares cerca del camino</h3>'+r.near.map(card).join('');}
+  h+='<div class="racts"><a class="btn main" target="_blank" rel="noopener" href="'+esc(gmapsUrl(r))+'">'+svg(IC.nav)+'Abrir en Google Maps</a><button type="button" class="btn soft" data-rfit="1">'+svg(IC.pin)+'Ver todo el camino</button><button type="button" class="btn" data-rexit="1">Salir del recorrido</button></div>';
+  var sc=$('list').scrollTop;$('list').innerHTML=h;$('list').scrollTop=sc;
 }
 
 /* ---------- lista y tabla ---------- */
@@ -814,6 +983,7 @@ function table(v){
   return h+'</tbody></table></div>';
 }
 function renderList(){
+  if(rt){renderRoute();return;}
   var v=visible(),zn=zone==='Todo'?'toda la isla':zone;
   $('ltitle').textContent=(cat==='guardados'?'Tus guardados':CATS[cat].n)+' en '+zn;
   $('lcount').textContent=v.length+(v.length===1?' lugar':' lugares');
@@ -829,7 +999,7 @@ function refresh(doFit){renderChips();drawMarkers();renderList();if(doFit){$('li
 var lastFocus=null,photoCache={},curId=null;
 function openOvl(id,focusSel){lastFocus=document.activeElement;var o=$(id);o.hidden=false;var b=o.querySelector(focusSel||'.back,[data-close]');if(b)b.focus();}
 function closeOvl(id){$(id).hidden=true;if(lastFocus&&lastFocus.focus&&document.contains(lastFocus))lastFocus.focus();}
-function closeAll(){['detail','sheet','tides','panel','editor','picker','account','menu'].forEach(function(i){$(i).hidden=true;});}
+function closeAll(){['detail','sheet','tides','routes','panel','editor','picker','account','menu'].forEach(function(i){$(i).hidden=true;});}
 function photoSrc(p){return p.photo>0?'/api/foto/'+encodeURIComponent(p.id)+'?v='+p.photo:'fotos/'+encodeURIComponent(p.id)+'.jpg';}
 function photoHtml(p){
   return '<div class="dhero k-'+p.cat+'" id="ph"><img src="'+esc(photoSrc(p))+'" alt="Foto de '+esc(p.name)+'" onerror="this.remove();document.getElementById(\'ph0\').hidden=false"><span class="phold" id="ph0" hidden>'+svg(CATS[p.cat].d,'big')+'Sin foto todavía</span></div>';
@@ -1180,6 +1350,7 @@ $('acc-form').addEventListener('submit',function(e){
 function showApp(){
   $('login').hidden=true;$('app').hidden=false;
   $('menuwho').textContent=user.guest?'Hola':'Hola, '+user.name;$('menurole').textContent=ROLE_LABEL[role];
+  if(rt){rt=null;if(rlayer)rlayer.clearLayers();$('app').classList.remove('rt');$('rtexit').hidden=true;}
   initMap();applyLayout();refresh(false);updateAdmin();
   setTimeout(function(){map.invalidateSize();fit();},80);
   loadPlaces(true);loadTides();loadSugs();
@@ -1204,6 +1375,16 @@ $('tidebtn').addEventListener('click',openTides);
 $('tidebtn2').addEventListener('click',function(){closeMenu();openTides();});
 $('tides').addEventListener('click',function(e){var t=e.target.closest('[data-close],[data-tday],[data-editides]');if(!t)return;if(t.hasAttribute('data-close'))closeOvl('tides');else if(t.hasAttribute('data-editides')){closeOvl('tides');openPanel('mar');}else{tideDay=t.getAttribute('data-tday');var sc=$('tides').querySelector('.ovl-body').scrollTop;renderTides();$('tides').querySelector('.ovl-body').scrollTop=sc;}});
 
+$('routebtn').addEventListener('click',openRoutes);
+$('routebtn2').addEventListener('click',function(){closeMenu();openRoutes();});
+$('rtexit').addEventListener('click',endRoute);
+$('routes').addEventListener('click',function(e){var t=e.target.closest('[data-route]');if(t)startRoute(t.getAttribute('data-route'));});
+$('list').addEventListener('click',function(e){
+  var t=e.target.closest('[data-rstop],[data-rexit],[data-rfit]');if(!t||!rt)return;
+  if(t.hasAttribute('data-rstop'))pickStop(+t.getAttribute('data-rstop'));
+  else if(t.hasAttribute('data-rexit'))endRoute();
+  else{rtSel=null;drawRoute();fitRoute();renderList();}
+});
 $('menu').addEventListener('click',function(e){if(e.target.closest('[data-closemenu]'))closeMenu();});
 $('sugbtn').addEventListener('click',function(){closeMenu();openSheet();});
 $('panelbtn').addEventListener('click',function(){closeMenu();openPanel();});
@@ -1215,10 +1396,10 @@ document.addEventListener('click',function(e){var t=e.target.closest('[data-clos
 $('sg-back').addEventListener('click',function(){closeOvl('sheet');});
 $('sg-form').addEventListener('submit',sendSug);
 $('s-photo').addEventListener('change',function(){var f=this.files&&this.files[0];if(!f){sPhoto='';$('s-prev').hidden=true;return;}shrink(f,720,0.7).then(function(src){sPhoto=src;$('s-prev').src=src;$('s-prev').hidden=false;}).catch(function(){sPhoto='';$('s-msg').textContent='No pudimos leer esa foto. Prueba con otra.';});});
-$('q').addEventListener('input',function(){q=this.value;sel=null;drawMarkers();renderList();renderSubs();});
+$('q').addEventListener('input',function(){if(rt)return;q=this.value;sel=null;drawMarkers();renderList();renderSubs();});
 $('q').addEventListener('change',function(){fit();});
 document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'){var o=['menu','picker','editor','account','sheet','panel','tides','detail'].filter(function(i){return !$(i).hidden;})[0];if(o){if(o==='menu')closeMenu();else closeOvl(o);}}
+  if(e.key==='Escape'){var o=['menu','picker','editor','account','sheet','panel','tides','routes','detail'].filter(function(i){return !$(i).hidden;})[0];if(o){if(o==='menu')closeMenu();else closeOvl(o);}}
   if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.tagName==='TR'&&e.target.getAttribute('data-open')){e.preventDefault();openDetail(e.target.getAttribute('data-open'));}
 });
 $('app').addEventListener('click',function(e){

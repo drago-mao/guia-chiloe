@@ -1,4 +1,4 @@
-# Chiloé a tu Manera – V 1.12
+# Chiloé a tu Manera – V 1.13
 
 Guía de Chiloé con mapa, lugares, horarios, teléfonos, valoraciones y mareas de Castro siempre al día.
 Se publica sola en Netlify cada vez que se sube un cambio a la rama `main` de este repositorio.
@@ -9,6 +9,11 @@ Se publica sola en Netlify cada vez que se sube un cambio a la rama `main` de es
 | **Administrador** | Con su correo y contraseña | Editar todo desde la web: agregar, cambiar o quitar lugares (con foto y ubicación en el mapa), aprobar o rechazar sugerencias, editar las mareas, ver usuarios, cambiar su perfil, darles una contraseña nueva o borrarlos |
 | **Usuario registrado** | Crea su cuenta en la app | Ver todo, guardar favoritos (se sincronizan entre sus aparatos), sugerir lugares y cambiar su contraseña |
 | **Visualizador** | Botón "Solo mirar, sin cuenta" | Solo mirar. Sus favoritos quedan en su teléfono |
+
+## Recorridos con camino (V 1.13)
+Botón del mapa (o menú ⋯ > "Recorridos con el camino"). Son 12 salidas de un día desde Castro: eliges una y el mapa muestra el camino real, las paradas numeradas, los cruces en barco o lancha (línea punteada) y los lugares de la guía que quedan cerca del camino. Desde ahí se abre la ruta en Google Maps.
+- Los datos están en `public/rutas.json` (caminos calculados con OSRM sobre OpenStreetMap, el 18-10-2026). Para cambiar textos o paradas se edita ese archivo y se corre `npm test`, que revisa que los tramos estén pegados y las paradas dentro de Chiloé.
+- Tiempos y distancias son aproximados en auto, sin paradas ni esperas. El tramo de lancha a Isla Mechuque es una línea recta de referencia.
 
 ## Primera vez: crear al administrador
 1. Abre la guía en internet.
@@ -23,6 +28,7 @@ El código solo sirve una vez. Después, el botón desaparece.
 - `netlify/functions/seed.mjs`: los 65 lugares y las mareas iniciales (se cargan solo la primera vez).
 - `netlify/functions/mareas-calc.mjs`: calcula las mareas de Castro para cualquier fecha (ver "Mareas siempre al día").
 - `tools/calibrar-mareas.mjs`: repite la calibración de las mareas si algún día hay una tabla de Castro más larga o más confiable.
+- `public/rutas.json`: los recorridos (caminos y paradas).
 - `tests/`: pruebas automáticas (`npm test`).
 
 ## Mareas siempre al día
