@@ -1,5 +1,5 @@
-// Servidor de "Chiloé a tu Manera" (V 1.7).
-// Maneja cuentas, perfiles (administrador / usuario registrado), lugares, fotos, sugerencias, favoritos y mareas.
+// Servidor de "Chiloé a tu Manera" (V 1.13).
+// Maneja cuentas, perfiles (administrador / usuario registrado), secciones, lugares, fotos, sugerencias, favoritos y mareas.
 // Los datos se guardan en Netlify Blobs. Quien no inicia sesión es "visualizador": solo puede mirar.
 import { getStore } from '@netlify/blobs';
 import { scrypt as _scrypt, randomBytes, timingSafeEqual, createHmac, createHash } from 'node:crypto';
@@ -10,7 +10,16 @@ import { computeTides, chileDate, CALC_SRC } from './mareas-calc.mjs';
 
 const scrypt = promisify(_scrypt);
 
-const CATS = ['comer', 'visitar', 'comprar', 'servicios'];
+// Secciones de la guía (Comer, Visitar…). El administrador puede agregarlas, renombrarlas, ordenarlas y quitarlas.
+// "icon" es el nombre de un ícono que dibuja la app; "color" es un color #RRGGBB.
+const DEFAULT_CATS = [
+  { id: 'comer', n: 'Comer', icon: 'cubiertos', color: '#C0533A' },
+  { id: 'visitar', n: 'Visitar', icon: 'montana', color: '#2F6F8F' },
+  { id: 'comprar', n: 'Comprar', icon: 'bolsa', color: '#A97A1C' },
+  { id: 'servicios', n: 'Servicios', icon: 'cruz', color: '#378564' }
+];
+export const ICON_KEYS = ['cubiertos', 'cafe', 'copa', 'montana', 'arbol', 'olas', 'camara', 'bolsa', 'cruz', 'cama', 'casa', 'auto', 'bencina', 'bote', 'musica', 'calendario', 'estrella', 'corazon', 'info'];
+const MAX_CATS = 12;
 const ROLES = ['admin', 'usuario'];
 const COOKIE = 'gc';
 const SESSION_MS = 30 * 24 * 3600 * 1000;
@@ -90,11 +99,11 @@ function decodeJpeg(dataUrl, maxBytes) {
 }
 
 /* ---------- validación de lugares y mareas ---------- */
-function cleanPlace(input, existing) {
+function cleanPlace(input, existing, catIds) {
   const p = input || {};
   const name = clean(p.name, 120);
   if (name.length < 2) throw new HttpError(400, 'Escribe el nombre del lugar.');
-  if (CATS.indexOf(p.cat) < 0) throw new HttpError(400, 'Elige qué tipo de lugar es.');
+  if (catIds.indexOf(p.cat) < 0) throw new HttpError(400, 'Elige en qué sección va el lugar.');
   let lat = numOrNull(p.lat, BOUNDS.latMin, BOUNDS.latMax, 'La latitud');
   let lng = numOrNull(p.lng, BOUNDS.lngMin, BOUNDS.lngMax, 'La longitud');
   if ((lat === null) !== (lng === null)) throw new HttpError(400, 'Para ubicar el lugar en el mapa hacen falta latitud y longitud.');
@@ -119,6 +128,44 @@ function cleanPlace(input, existing) {
     hs: hours === (prev.hours || '') ? (prev.hs || '') : '',
     photo: prev.photo || 0
   };
+}
+
+/* ---------- validación de secciones ---------- */
+const plain = (v) => String(v || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+function slugOf(name, taken) {
+  let base = plain(name).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 20).replace(/-+$/, '') || 'seccion';
+  if (base === 'guardados') base = 'guardados-2';
+  let id = base, i = 2;
+  while (taken[id]) id = base.slice(0, 20) + '-' + i++;
+  return id;
+}
+// Recibe la lista completa y ordenada de secciones. Las que ya existían traen su "id"; las nuevas no.
+function cleanCats(input, current) {
+  if (!Array.isArray(input) || input.length < 1) throw new HttpError(400, 'Debe quedar al menos una sección.');
+  if (input.length > MAX_CATS) throw new HttpError(400, 'Puede haber hasta ' + MAX_CATS + ' secciones.');
+  const known = Object.create(null); current.forEach((c) => { known[c.id] = c; });
+  const taken = Object.create(null), names = Object.create(null), out = [];
+  input.forEach((c) => {
+    if (!c || typeof c !== 'object') throw new HttpError(400, 'Hay una sección con formato incorrecto.');
+    const n = clean(c.n, 24);
+    if (n.length < 2) throw new HttpError(400, 'El nombre de cada sección necesita al menos 2 letras.');
+    const key = plain(n);
+    if (names[key]) throw new HttpError(400, 'Hay dos secciones llamadas "' + n + '". Cada nombre debe ser distinto.');
+    names[key] = true;
+    if (ICON_KEYS.indexOf(c.icon) < 0) throw new HttpError(400, 'Elige un ícono para "' + n + '".');
+    if (!/^#[0-9a-fA-F]{6}$/.test(String(c.color || ''))) throw new HttpError(400, 'Elige un color para "' + n + '".');
+    let id = c.id;
+    if (id !== undefined && id !== null && id !== '') {
+      if (!known[id]) throw new HttpError(400, 'La sección "' + n + '" ya no existe. Recarga la página.');
+      if (taken[id]) throw new HttpError(400, 'Hay una sección repetida.');
+    } else id = null;
+    out.push({ id, n, icon: c.icon, color: String(c.color).toUpperCase() });
+    if (id) taken[id] = true;
+  });
+  // las nuevas reciben un identificador propio que nunca choca con uno existente (ni con uno ya borrado y reutilizado)
+  const used = Object.assign(Object.create(null), taken, known);
+  out.forEach((c) => { if (!c.id) { c.id = slugOf(c.n, used); used[c.id] = true; } });
+  return out;
 }
 
 function cleanTides(input) {
@@ -276,18 +323,25 @@ export function createApi(kv, opts) {
     }
     throw new HttpError(409, 'Otra persona editó al mismo tiempo. Vuelve a intentarlo.');
   }
-  const savePlace = (input) => mutatePlaces((list) => {
-    if (input && input.id) {
-      const i = list.findIndex((p) => p.id === String(input.id));
-      if (i < 0) throw new HttpError(404, 'Ese lugar ya no existe.');
-      const upd = cleanPlace(input, list[i]);
-      list[i] = upd;
-      return { list, value: upd };
-    }
-    const created = cleanPlace(input, null);
-    list.push(created);
-    return { list, value: created };
-  });
+  async function readCats() {
+    const r = await data.getJSON('secciones');
+    return r ? { cats: r.data.cats, etag: r.etag } : { cats: DEFAULT_CATS.map((c) => Object.assign({}, c)), etag: null };
+  }
+  async function savePlace(input) {
+    const catIds = (await readCats()).cats.map((c) => c.id);
+    return mutatePlaces((list) => {
+      if (input && input.id) {
+        const i = list.findIndex((p) => p.id === String(input.id));
+        if (i < 0) throw new HttpError(404, 'Ese lugar ya no existe.');
+        const upd = cleanPlace(input, list[i], catIds);
+        list[i] = upd;
+        return { list, value: upd };
+      }
+      const created = cleanPlace(input, null, catIds);
+      list.push(created);
+      return { list, value: created };
+    });
+  }
 
   /* --- rutas --- */
   async function route(req, ip) {
@@ -308,7 +362,8 @@ export function createApi(kv, opts) {
     }
     if (method === 'GET' && path === '/lugares') {
       const cur = await readPlaces();
-      return send(200, { places: cur.places });
+      const sec = await readCats();
+      return send(200, { places: cur.places, cats: sec.cats });
     }
     if (method === 'GET' && path === '/mareas') {
       const r = await data.getJSON('mareas');
@@ -396,7 +451,7 @@ export function createApi(kv, opts) {
       await hit('sug:' + u.email, 6, 24 * 3600 * 1000, 'Ya enviaste varias sugerencias hoy. Inténtalo mañana.');
       const name = clean(b.name, 120);
       if (name.length < 2) throw new HttpError(400, 'Escribe el nombre del lugar.');
-      if (CATS.indexOf(b.cat) < 0) throw new HttpError(400, 'Elige qué tipo de lugar es.');
+      if ((await readCats()).cats.every((c) => c.id !== b.cat)) throw new HttpError(400, 'Elige en qué sección va el lugar.');
       const id = newId();
       let hasPhoto = false;
       if (b.photo) { await fotos.setBin('s/' + id, decodeJpeg(b.photo, 400 * 1024), 'image/jpeg'); hasPhoto = true; }
@@ -477,6 +532,42 @@ export function createApi(kv, opts) {
       await sugs.del('s/' + id);
       await fotos.del('s/' + id).catch(() => {});
       return send(200, { ok: true, place });
+    }
+    if (method === 'PUT' && path === '/secciones') {
+      await needAdmin(req);
+      const b = await readBody(req);
+      const cur = await readCats();
+      const cats = cleanCats(b.cats, cur.cats);
+      const newIds = cats.map((c) => c.id);
+      const removed = cur.cats.map((c) => c.id).filter((id) => newIds.indexOf(id) < 0);
+      const moves = Object.create(null);
+      if (removed.length) {
+        const places = (await readPlaces()).places;
+        const sugKeys = await sugs.list('s/');
+        const sugList = [];
+        for (const k of sugKeys) { const r = await sugs.getJSON(k); if (r) sugList.push({ key: k, data: r.data }); }
+        const bm = b.moves && typeof b.moves === 'object' ? b.moves : {};
+        const pick = (id) => (Object.prototype.hasOwnProperty.call(bm, id) ? bm[id] : undefined);
+        for (const id of removed) {
+          const n = places.filter((p) => p.cat === id).length + sugList.filter((s) => s.data.cat === id).length;
+          const to = pick(id);
+          if (n > 0 && newIds.indexOf(to) < 0) {
+            const name = (cur.cats.find((c) => c.id === id) || {}).n || id;
+            throw new HttpError(400, 'La sección "' + name + '" tiene ' + n + (n === 1 ? ' lugar' : ' lugares') + '. Elige a qué sección moverlos.');
+          }
+          moves[id] = newIds.indexOf(to) >= 0 ? to : newIds[0];
+        }
+        // primero se mueven los lugares y las sugerencias; recién después se guarda la lista nueva
+        await mutatePlaces((list) => {
+          let changed = 0;
+          list.forEach((p) => { if (moves[p.cat]) { p.cat = moves[p.cat]; changed++; } });
+          return { list, value: changed };
+        });
+        for (const s of sugList) if (moves[s.data.cat]) await sugs.setJSON(s.key, Object.assign({}, s.data, { cat: moves[s.data.cat] }));
+      }
+      const w = await data.setJSON('secciones', { cats, at: now() }, cur.etag ? { onlyIfMatch: cur.etag } : { onlyIfNew: true });
+      if (w && w.modified === false) throw new HttpError(409, 'Otra persona cambió las secciones al mismo tiempo. Recarga la página e inténtalo de nuevo.');
+      return send(200, { cats, places: (await readPlaces()).places });
     }
     if (method === 'PUT' && path === '/mareas') {
       await needAdmin(req);

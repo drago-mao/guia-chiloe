@@ -1,4 +1,4 @@
-# Chiloé a tu Manera – V 1.14
+# Chiloé a tu Manera – V 1.15
 
 Guía de Chiloé con mapa, lugares, horarios, teléfonos, valoraciones y mareas de Castro siempre al día.
 Se publica sola en Netlify cada vez que se sube un cambio a la rama `main` de este repositorio.
@@ -6,7 +6,7 @@ Se publica sola en Netlify cada vez que se sube un cambio a la rama `main` de es
 ## Perfiles
 | Perfil | Cómo entra | Qué puede hacer |
 |---|---|---|
-| **Administrador** | Con su correo y contraseña | Editar todo desde la web: agregar, cambiar o quitar lugares (con foto y ubicación en el mapa), aprobar o rechazar sugerencias, editar las mareas, ver usuarios, cambiar su perfil, darles una contraseña nueva o borrarlos |
+| **Administrador** | Con su correo y contraseña | Editar todo desde la web: agregar, cambiar o quitar lugares (con foto y ubicación en el mapa), crear, renombrar, ordenar o eliminar secciones (Comer, Visitar…), aprobar o rechazar sugerencias, editar las mareas, ver usuarios, cambiar su perfil, darles una contraseña nueva o borrarlos |
 | **Usuario registrado** | Crea su cuenta en la app | Ver todo, guardar favoritos (se sincronizan entre sus aparatos), sugerir lugares y cambiar su contraseña |
 | **Visualizador** | Botón "Solo mirar, sin cuenta" | Solo mirar. Sus favoritos quedan en su teléfono |
 
@@ -38,6 +38,9 @@ Las mareas de Castro **no hay que cargarlas**: el servidor las calcula cada vez 
 - **Qué tan exactas son:** contra esos 10 días el error típico es de ~7 minutos y ~6 cm (máximo 19 min y 14 cm); calibrando con una parte de los días y probando con la otra, 5–9 min y 5–7 cm. La app avisa que pueden diferir hasta unos 30 minutos y 20 cm de la tabla oficial del SHOA. Solo son predicciones astronómicas: no incluyen viento ni lluvia, y no sirven para navegar.
 - **Corrección a mano:** el administrador puede cambiar cualquier día desde Panel > Mareas. Lo que escriba reemplaza el cálculo de esos días y el resto sigue calculándose solo.
 - **Mejorarlas:** con una tabla de Castro más larga (idealmente de un año, por ejemplo la oficial del SHOA) se corre `node tools/calibrar-mareas.mjs tabla.json` y se pegan los 5 números nuevos en `CALIB`.
+
+## Secciones editables
+El administrador maneja las secciones desde **Menú > Panel de administración > Secciones**: agregar (nombre, ícono y color), editar, subir o bajar para cambiar el orden y eliminar. Puede haber hasta 12. Al eliminar una sección con lugares (o con sugerencias pendientes) hay que elegir a qué sección pasan, así nunca se pierde nada. "Guardados" es especial: siempre va al final y no se edita. Se guardan en Netlify Blobs; mientras no se cambie nada, quedan las 4 de partida.
 
 ## Cosas a saber
 - No hay correo de "olvidé mi contraseña": el administrador crea una contraseña temporal desde Panel > Usuarios.

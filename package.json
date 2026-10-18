@@ -1,6 +1,6 @@
 {
   "name": "guia-chiloe",
-  "version": "1.14.0",
+  "version": "1.15.0",
   "private": true,
   "type": "module",
   "description": "Chiloé a tu Manera: guía interactiva con mapa, cuentas y panel de administración.",

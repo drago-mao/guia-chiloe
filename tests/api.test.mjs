@@ -297,3 +297,146 @@ test('rutas desconocidas y errores no filtran información interna', async () =>
   const bad = await api(new Request('https://guia.test/api/registro', { method: 'POST', headers: { 'x-guia': '1', 'content-type': 'application/json' }, body: '{no es json' }));
   assert.equal(bad.status, 400);
 });
+
+/* ---------- secciones editables (V 1.13) ---------- */
+const sec = (id, n, icon, color) => Object.assign({ n, icon: icon || 'estrella', color: color || '#0E5A6B' }, id ? { id } : {});
+
+test('secciones: todos las ven; solo el administrador las cambia', async () => {
+  const { api, admin } = await withAdmin();
+  const v = browser(api);
+  const l = await v.call('GET', '/lugares');
+  assert.deepEqual(l.body.cats.map((c) => c.id), ['comer', 'visitar', 'comprar', 'servicios']);
+  assert.deepEqual(l.body.cats.map((c) => c.n), ['Comer', 'Visitar', 'Comprar', 'Servicios']);
+  const nuevas = l.body.cats.concat([sec(null, 'Alojamiento')]);
+  assert.equal((await v.call('PUT', '/secciones', { cats: nuevas })).status, 401);
+  const ana = browser(api, '2.2.2.2');
+  await ana.call('POST', '/registro', { name: 'Ana', email: 'ana@correo.cl', password: 'secreta-123' });
+  assert.equal((await ana.call('PUT', '/secciones', { cats: nuevas })).status, 403);
+  assert.equal((await v.call('GET', '/lugares')).body.cats.length, 4); // nada cambió
+  assert.equal((await admin.call('PUT', '/secciones', { cats: nuevas })).status, 200);
+  assert.equal((await v.call('GET', '/lugares')).body.cats.length, 5);
+});
+
+test('secciones: agregar, renombrar sin perder lugares, cambiar ícono y color, reordenar', async () => {
+  const { api, admin } = await withAdmin();
+  const v = browser(api);
+  const cats0 = (await v.call('GET', '/lugares')).body.cats;
+  const add = await admin.call('PUT', '/secciones', { cats: cats0.concat([sec(null, 'Alojamiento y más', 'cama', '#7a3fa0')]) });
+  assert.equal(add.status, 200);
+  const nueva = add.body.cats[4];
+  assert.equal(nueva.id, 'alojamiento-y-mas'); assert.equal(nueva.color, '#7A3FA0'); assert.equal(nueva.icon, 'cama');
+  // se puede publicar un lugar en la sección nueva
+  const p = await admin.call('POST', '/lugares', { place: place({ name: 'Cabañas del Mar', cat: nueva.id }) });
+  assert.equal(p.status, 200);
+  // renombrar: el identificador se mantiene y el lugar sigue en la sección
+  const ren = add.body.cats.map((c) => (c.id === nueva.id ? Object.assign({}, c, { n: 'Dónde dormir', icon: 'casa', color: '#112233' }) : c));
+  const r2 = await admin.call('PUT', '/secciones', { cats: ren });
+  assert.equal(r2.status, 200);
+  assert.equal(r2.body.cats[4].id, nueva.id); assert.equal(r2.body.cats[4].n, 'Dónde dormir');
+  const l = (await v.call('GET', '/lugares')).body;
+  assert.equal(l.places.find((x) => x.name === 'Cabañas del Mar').cat, nueva.id);
+  // reordenar: la nueva pasa al primer lugar
+  const orden = [r2.body.cats[4]].concat(r2.body.cats.slice(0, 4));
+  assert.deepEqual((await admin.call('PUT', '/secciones', { cats: orden })).body.cats.map((c) => c.id), [nueva.id, 'comer', 'visitar', 'comprar', 'servicios']);
+  assert.equal((await v.call('GET', '/lugares')).body.cats[0].id, nueva.id);
+});
+
+test('secciones: validaciones de nombre, ícono, color, cantidad e identificadores', async () => {
+  const { api, admin } = await withAdmin();
+  const cats = (await browser(api).call('GET', '/lugares')).body.cats;
+  const put = (list) => admin.call('PUT', '/secciones', { cats: list });
+  assert.equal((await put([])).status, 400);
+  assert.equal((await put('x')).status, 400);
+  assert.equal((await put(cats.concat([sec(null, 'A')]))).status, 400); // nombre muy corto
+  assert.equal((await put(cats.concat([sec(null, 'comer')]))).status, 400); // repetido
+  assert.equal((await put(cats.concat([sec(null, 'Cómer')]))).status, 400); // repetido sin tildes ni mayúsculas
+  assert.equal((await put(cats.concat([sec(null, 'Playas', 'no-existe')]))).status, 400);
+  assert.equal((await put(cats.concat([sec(null, 'Playas', 'olas', 'rojo')]))).status, 400);
+  assert.equal((await put(cats.concat([sec(null, 'Playas', 'olas', 'javascript:1')]))).status, 400);
+  assert.equal((await put(cats.concat([sec('inventada', 'Playas', 'olas')]))).status, 400); // id que no existe
+  assert.equal((await put(cats.concat([cats[0]]))).status, 400); // misma sección dos veces
+  const trece = cats.slice(); for (let i = 0; i < 9; i++) trece.push(sec(null, 'Sección ' + (i + 1)));
+  assert.equal((await put(trece)).status, 400); // más de 12
+  assert.equal((await put(cats.concat([sec(null, '<b>Hola</b> ' + 'x'.repeat(40))]))).status, 200); // se recorta y limpia
+  const l = (await browser(api).call('GET', '/lugares')).body.cats;
+  assert.ok(l[4].n.length <= 24);
+});
+
+test('secciones: nombres raros no chocan con identificadores existentes ni con "guardados"', async () => {
+  const { api, admin } = await withAdmin();
+  const cats = (await browser(api).call('GET', '/lugares')).body.cats;
+  const r = await admin.call('PUT', '/secciones', { cats: cats.concat([sec(null, 'Guardados'), sec(null, 'Constructor'), sec(null, 'Áéí ñ'), sec(null, '!!!')]) });
+  assert.equal(r.status, 200);
+  const ids = r.body.cats.map((c) => c.id);
+  assert.equal(new Set(ids).size, ids.length);
+  assert.ok(ids.every((id) => /^[a-z0-9-]{1,24}$/.test(id)));
+  assert.ok(!ids.includes('guardados'));
+  assert.equal((await admin.call('PUT', '/secciones', { cats: [sec('constructor', 'X')].concat(cats) })).status, 400);
+});
+
+test('secciones: al eliminar una con lugares hay que elegir a dónde se mueven', async () => {
+  const { api, admin } = await withAdmin();
+  const v = browser(api);
+  const base = (await v.call('GET', '/lugares')).body;
+  const nComprar = base.places.filter((p) => p.cat === 'comprar').length;
+  const nVisitar = base.places.filter((p) => p.cat === 'visitar').length;
+  assert.ok(nComprar > 0);
+  const sinComprar = base.cats.filter((c) => c.id !== 'comprar');
+  const sinMover = await admin.call('PUT', '/secciones', { cats: sinComprar });
+  assert.equal(sinMover.status, 400); assert.match(sinMover.body.error, /Comprar/); assert.match(sinMover.body.error, /moverlos/);
+  assert.equal((await admin.call('PUT', '/secciones', { cats: sinComprar, moves: { comprar: 'no-existe' } })).status, 400);
+  assert.equal((await admin.call('PUT', '/secciones', { cats: sinComprar, moves: { comprar: 'comprar' } })).status, 400); // no puede moverlos a sí misma
+  assert.equal((await v.call('GET', '/lugares')).body.cats.length, 4); // nada cambió
+  const ok = await admin.call('PUT', '/secciones', { cats: sinComprar, moves: { comprar: 'visitar' } });
+  assert.equal(ok.status, 200);
+  const l = (await v.call('GET', '/lugares')).body;
+  assert.deepEqual(l.cats.map((c) => c.id), ['comer', 'visitar', 'servicios']);
+  assert.equal(l.places.length, 65); // no se perdió ningún lugar
+  assert.equal(l.places.filter((p) => p.cat === 'visitar').length, nVisitar + nComprar);
+  assert.equal(l.places.filter((p) => p.cat === 'comprar').length, 0);
+  // ya no se puede publicar en una sección que no existe
+  assert.equal((await admin.call('POST', '/lugares', { place: place({ cat: 'comprar' }) })).status, 400);
+  assert.equal((await admin.call('POST', '/lugares', { place: place({ cat: 'visitar' }) })).status, 200);
+});
+
+test('secciones: una sección vacía se elimina sin pedir destino; no se puede dejar sin secciones', async () => {
+  const { api, admin } = await withAdmin();
+  const cats = (await browser(api).call('GET', '/lugares')).body.cats;
+  const con = (await admin.call('PUT', '/secciones', { cats: cats.concat([sec(null, 'Eventos', 'calendario')]) })).body.cats;
+  const evento = con[4];
+  assert.equal((await admin.call('PUT', '/secciones', { cats })).status, 200); // la vacía se va sin problema
+  assert.equal((await browser(api).call('GET', '/lugares')).body.cats.length, 4);
+  assert.ok(evento.id);
+  assert.equal((await admin.call('PUT', '/secciones', { cats: [] })).status, 400);
+});
+
+test('secciones: las sugerencias pendientes también se mueven y se pueden aprobar', async () => {
+  const { api, admin } = await withAdmin();
+  const ana = browser(api, '2.2.2.2');
+  await ana.call('POST', '/registro', { name: 'Ana', email: 'ana@correo.cl', password: 'secreta-123' });
+  const cats = (await ana.call('GET', '/lugares')).body.cats;
+  const con = (await admin.call('PUT', '/secciones', { cats: cats.concat([sec(null, 'Eventos', 'calendario')]) })).body.cats;
+  const ev = con[4].id;
+  assert.equal((await ana.call('POST', '/sugerencias', { name: 'Feria costumbrista', cat: ev, town: 'Castro' })).status, 200);
+  assert.equal((await ana.call('POST', '/sugerencias', { name: 'Algo', cat: 'no-existe', town: 'Castro' })).status, 400);
+  const sinDestino = await admin.call('PUT', '/secciones', { cats, moves: {} });
+  assert.equal(sinDestino.status, 400); assert.match(sinDestino.body.error, /Eventos/); // la sugerencia pendiente también cuenta
+  assert.equal((await admin.call('PUT', '/secciones', { cats, moves: { [ev]: 'comer' } })).status, 200); // y pasa a la sección elegida
+  const s = (await admin.call('GET', '/sugerencias')).body.suggestions;
+  assert.equal(s.length, 1); assert.equal(s[0].cat, 'comer');
+  const ap = await admin.call('POST', '/sugerencias/' + s[0].id + '/aprobar', { place: place({ name: 'Feria costumbrista', cat: s[0].cat }) });
+  assert.equal(ap.status, 200);
+});
+
+test('secciones: dos cambios al mismo tiempo no se pisan', async () => {
+  const { api, admin } = await withAdmin();
+  const cats = (await browser(api).call('GET', '/lugares')).body.cats;
+  const [a, b] = await Promise.all([
+    admin.call('PUT', '/secciones', { cats: cats.concat([sec(null, 'Uno')]) }),
+    admin.call('PUT', '/secciones', { cats: cats.concat([sec(null, 'Dos')]) })
+  ]);
+  const estados = [a.status, b.status].sort();
+  assert.ok(estados[0] === 200 && (estados[1] === 200 || estados[1] === 409));
+  const final = (await browser(api).call('GET', '/lugares')).body.cats;
+  assert.equal(final.length, 5);
+});
