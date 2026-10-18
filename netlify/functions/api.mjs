@@ -21,22 +21,24 @@ class HttpError extends Error {
 
 /* ---------- almacenamiento (Netlify Blobs) ---------- */
 export function blobKV(name) {
-  const st = getStore({ name, consistency: 'strong' });
+  // Se abre el almacén en cada operación: la credencial de Netlify Blobs vence a los pocos minutos
+  // y, si se guardara entre llamadas, el servidor fallaría con "Token expired".
+  const store = () => getStore({ name, consistency: 'strong' });
   return {
     async getJSON(key) {
-      const r = await st.getWithMetadata(key, { type: 'json' });
+      const r = await store().getWithMetadata(key, { type: 'json' });
       return r ? { data: r.data, etag: r.etag } : null;
     },
-    async setJSON(key, val, opts) { return st.setJSON(key, val, opts || {}); },
-    async del(key) { await st.delete(key); },
-    async list(prefix) { const { blobs } = await st.list({ prefix }); return blobs.map((b) => b.key); },
+    async setJSON(key, val, opts) { return store().setJSON(key, val, opts || {}); },
+    async del(key) { await store().delete(key); },
+    async list(prefix) { const { blobs } = await store().list({ prefix }); return blobs.map((b) => b.key); },
     async getBin(key) {
-      const r = await st.getWithMetadata(key, { type: 'arrayBuffer' });
+      const r = await store().getWithMetadata(key, { type: 'arrayBuffer' });
       return r ? { buf: Buffer.from(r.data), type: (r.metadata && r.metadata.type) || 'image/jpeg' } : null;
     },
     async setBin(key, buf, type) {
       const ab = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
-      await st.set(key, ab, { metadata: { type } });
+      await store().set(key, ab, { metadata: { type } });
     }
   };
 }
