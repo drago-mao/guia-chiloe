@@ -1,4 +1,4 @@
-# Chiloé a tu Manera – V 1.16
+# Chiloé a tu Manera – V 1.17
 
 Guía de Chiloé con mapa, lugares, horarios, teléfonos, valoraciones y mareas de Castro siempre al día.
 Se publica sola en Netlify cada vez que se sube un cambio a la rama `main` de este repositorio.
@@ -9,6 +9,12 @@ Se publica sola en Netlify cada vez que se sube un cambio a la rama `main` de es
 | **Administrador** | Con su correo y contraseña | Editar todo desde la web: agregar, cambiar o quitar lugares (con foto y ubicación en el mapa), crear, renombrar, ordenar o eliminar secciones (Comer, Visitar…), aprobar o rechazar sugerencias, editar las mareas, ver usuarios, cambiar su perfil, darles una contraseña nueva o borrarlos |
 | **Usuario registrado** | Crea su cuenta en la app | Ver todo, guardar favoritos (se sincronizan entre sus aparatos), sugerir lugares y cambiar su contraseña |
 | **Visualizador** | Botón "Solo mirar, sin cuenta" | Solo mirar. Sus favoritos quedan en su teléfono |
+
+## Filtros en el celular (V 1.17)
+- Debajo del título de la lista hay **una sola fila**: a la izquierda el botón del pueblo (ej. "Castro ▾") y a su lado los tipos (Restaurante, Bar, Café…).
+- El botón del pueblo abre un selector con botones grandes que dicen cuántos lugares hay de esa sección en cada pueblo.
+- Si hay más botones de los que caben, la orilla se ve desvanecida: eso indica que se puede deslizar. Al elegir un tipo aparece "Quitar" para borrar el filtro.
+- En el celular no hay botones + y −: se acerca con dos dedos. Si los botones del mapa no caben sobre la lista, se esconden los menos usados (siguen en el menú ⋯).
 
 ## Recorridos con camino (V 1.14) y editor (V 1.16)
 Botón del mapa (o menú ⋯ > "Recorridos con el camino"). Son 12 salidas de un día desde Castro: eliges una y el mapa muestra el camino real, las paradas numeradas, los cruces en barco o lancha (línea punteada) y los lugares de la guía que quedan cerca del camino. Desde ahí se abre la ruta en Google Maps.
